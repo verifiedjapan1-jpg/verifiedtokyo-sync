@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Details - Verified Tokyo</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;600;700&family=Noto+Sans+JP:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+    <script src="products_data.js"></script>
+    <script src="currency-converter.js"></script>
+    <style>
+        .product-detail-container {
+            max-width: 1400px;
+            margin: 100px auto 60px;
+            padding: 0 40px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+        }
+
+        .product-gallery {
+            position: sticky;
+            top: 100px;
+            height: fit-content;
+        }
+
+        .main-image-container {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 1;
+            background: #f8f8f8;
+            border-radius: 12px;
+            overflow: hidden;
+            cursor: zoom-in;
+            margin-bottom: 20px;
+        }
+
+        .main-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .thumbnail-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            gap: 10px;
+        }
+
+        .thumbnail {
+            aspect-ratio: 1;
+            border-radius: 8px;
+            overflow: hidden;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: border-color 0.3s;
+        }
+
+        .thumbnail.active {
+            border-color: #1a1a1a;
+        }
+
+        .thumbnail:hover {
+            border-color: #666;
+        }
+
+        .thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .product-info h1 {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            line-height: 1.2;
+        }
+
+        .product-brand {
+            font-size: 14px;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+        }
+
+        .product-price {
+            font-size: 48px;
+            font-weight: 700;
+            margin: 30px 0;
+        }
+
+        .product-meta {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: 30px 0;
+            padding: 20px;
+            background: #f8f8f8;
+            border-radius: 12px;
+        }
+
+        .meta-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .meta-label {
+            font-size: 12px;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+
+        .meta-value {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .product-actions {
+            margin: 40px 0;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 18px 50px;
+            background: #1a1a1a;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 16px;
+            transition: background 0.3s;
+        }
+
+        .cta-button:hover {
+            background: #333;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            color: #666;
+            text-decoration: none;
+        }
+
+        .back-link:hover {
+            color: #1a1a1a;
+        }
+
+        /* Image zoom modal */
+        .zoom-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .zoom-modal.active {
+            display: flex;
+        }
+
+        .zoom-modal img {
+            max-width: 90%;
+            max-height: 90vh;
+            object-fit: contain;
+        }
+
+        .zoom-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            color: white;
+            font-size: 40px;
+            cursor: pointer;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .no-product {
+            text-align: center;
+            padding: 100px 20px;
+        }
+
+        @media (max-width: 768px) {
+            .product-detail-container {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
+            .product-gallery {
+                position: relative;
+                top: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="main-header">
+            <div class="container">
+                <div class="logo-nav-container">
+                    <h1 class="logo">Verified Tokyo</h1>
+
+                    <nav class="main-nav">
+                        <a href="index.html" class="nav-link">Home</a>
+                        <a href="products.html" class="nav-link">Products</a>
+                        <a href="shopping-guide.html" class="nav-link">Shopping Guide</a>
+                        <a href="contact.html" class="nav-link">Contact</a>
+                    </nav>
+                </div>
+
+                <div class="search-container">
+                    <div class="search-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <circle cx="11" cy="11" r="8" />
+                            <path d="M21 21l-4.35-4.35" />
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div id="product-detail-content">
+        <div class="no-product">
+            <h2>Loading product...</h2>
+        </div>
+    </div>
+
+    <!-- Image Zoom Modal -->
+    <div class="zoom-modal" id="zoomModal">
+        <div class="zoom-close" onclick="closeZoom()">&times;</div>
+        <img id="zoomedImage" src="" alt="Zoomed product">
+    </div>
+
+    <footer style="background: white; padding: 60px 0; border-top: 1px solid #e5e5e5;">
+        <div style="max-width: 1200px; margin: 0 auto; padding: 0 20px; text-align: center;">
+            <p style="font-size: 14px; color: #666;">&copy; 2026 Verified Tokyo. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Products data is now loaded from products_data.js as global variable 'productsData'
+        let products = [];
+
+        // Initialize on page load
+        if (typeof productsData !== 'undefined') {
+            products = productsData;
+            console.log(`Loaded ${products.length} products from productsData`);
+            loadProductDetail();
+        } else {
+            console.error('productsData not found. Make sure products_data.js is loaded.');
+            document.getElementById('product-detail-content').innerHTML =
+                '<div class="no-product"><h2>Error loading product data</h2><p>Please check your connection and try again.</p></div>';
+        }
+
+        // Helper function to convert cm to inches
+        function cmToInches(cm) {
+            const numericValue = parseFloat(cm);
+            if (isNaN(numericValue)) return '';
+            const inches = (numericValue / 2.54).toFixed(2);
+            return inches;
+        }
+
+        function loadProductDetail() {
+            // Get product ID from URL parameter
+            const urlParams = new URLSearchParams(window.location.search);
+            const productId = parseInt(urlParams.get('id'));
+
+            console.log(`Looking for product ID: ${productId}`);
+
+            // Find product by ID
+            const product = products.find(p => p.id === productId);
+
+            // Render product detail
+            const contentDiv = document.getElementById('product-detail-content');
+
+            if (product) {
+                console.log(`Found product: ${product.name}`);
+                console.log('Product data:', product);
+
+                // Generate image gallery HTML (use imageUrl as main image or images array if available)
+                const images = product.images || [product.imageUrl];
+                const mainImage = images[0];
+
+                // Generate thumbnails for all images
+                const thumbnailsHTML = images.map((img, idx) => `
+                    <div class="thumbnail ${idx === 0 ? 'active' : ''}" onclick="changeImage('${img}', this)">
+                        <img src="${img}" alt="${product.name}">
+                    </div>
+                `).join('');
+
+                // Build detail text HTML using source page format  
+                let detailTextHTML = '';
+                if (product.detailText) {
+                    const dt = product.detailText;
+                    const parts = [];
+
+                    // Intro message
+                    if (dt.intro) {
+                        const introText = dt.intro.replace(/\\n/g, '<br>');
+                        parts.push(`<div style="margin-bottom: 20px; line-height: 1.8; color: #555;">${introText}</div>`);
+                    }
+
+                    // Add new formatted dimensions display directly into description
+                    if (product.dimensions && (product.dimensions.height || product.dimensions.width || product.dimensions.depth)) {
+                        let dimsContent = '';
+                        if (product.dimensions.height) {
+                            const inches = cmToInches(product.dimensions.height);
+                            dimsContent += `
+                                <div style="text-align: center; padding: 15px; background: #fafafa; border-radius: 8px;">
+                                    <div style="font-size: 11px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">HEIGHT</div>
+                                    <div style="font-size: 22px; font-weight: 700; color: #1a1a1a; margin-bottom: 4px;">${product.dimensions.height}</div>
+                                    <div style="font-size: 14px; color: #666;">${inches} inches</div>
+                                </div>
+                            `;
+                        }
+                        if (product.dimensions.width) {
+                            const inches = cmToInches(product.dimensions.width);
+                            dimsContent += `
+                                <div style="text-align: center; padding: 15px; background: #fafafa; border-radius: 8px;">
+                                    <div style="font-size: 11px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">WIDTH</div>
+                                    <div style="font-size: 22px; font-weight: 700; color: #1a1a1a; margin-bottom: 4px;">${product.dimensions.width}</div>
+                                    <div style="font-size: 14px; color: #666;">${inches} inches</div>
+                                </div>
+                            `;
+                        }
+                        if (product.dimensions.depth) {
+                            const inches = cmToInches(product.dimensions.depth);
+                            dimsContent += `
+                                <div style="text-align: center; padding: 15px; background: #fafafa; border-radius: 8px;">
+                                    <div style="font-size: 11px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">DEPTH</div>
+                                    <div style="font-size: 22px; font-weight: 700; color: #1a1a1a; margin-bottom: 4px;">${product.dimensions.depth}</div>
+                                    <div style="font-size: 14px; color: #666;">${inches} inches</div>
+                                </div>
+                            `;
+                        }
+
+                        parts.push(`
+                            <div style="margin-bottom: 20px;">
+                                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;">
+                                    ${dimsContent}
+                                </div>
+                            </div>
+                        `);
+                    }
+
+                    // Short description
+                    if (dt.description) {
+                        parts.push(`<div style="margin-bottom: 20px; line-height: 1.8; color: #333; font-weight: 500;">${dt.description}</div>`);
+                    }
+
+                    // Specifications as bullet list
+                    if (dt.specifications && dt.specifications.length > 0) {
+                        const specList = dt.specifications.map(spec => `<div style="margin-bottom: 8px; color: #555;">- ${spec}</div>`).join('');
+                        parts.push(`<div style="margin-bottom: 20px;">${specList}</div>`);
+                    }
+
+                    // Closing message
+                    if (dt.closing) {
+                        parts.push(`<div style="margin-bottom: 20px; line-height: 1.8; color: #555;">${dt.closing}</div>`);
+                    }
+
+                    // Additional info
+                    if (dt.additional) {
+                        parts.push(`<div style="line-height: 1.8; color:  #777; font-size: 14px;">${dt.additional}</div>`);
+                    }
+
+                    if (parts.length > 0) {
+                        detailTextHTML = `
+                            <div style="margin: 30px 0; padding: 25px; background: #f8f8f8; border-radius: 12px;">
+                                <h3 style="font-size: 14px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 20px; color: #1a1a1a;">Product Description</h3>
+                                ${parts.join('')}
+                            </div>
+                        `;
+                    }
+                }
+
+                // Build description HTML (fallback if no detailText)
+                let descriptionHTML = '';
+                if (!product.detailText && product.description) {
+                    const cleanDesc = product.description.replace(/\.\.\.$/, '').trim();
+                    descriptionHTML = `
+                        <div style="margin: 30px 0; padding: 20px; background: #f8f8f8; border-radius: 12px;">
+                            <h3 style="font-size: 14px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px;">Product Description</h3>
+                            <p style="line-height: 1.8; color: #333; white-space: pre-line;">${cleanDesc}</p>
+                        </div>
+                    `;
+                }
+
+                // Build dimensions HTML
+                let dimensionsHTML = '';
+                if (product.dimensions && (product.dimensions.height || product.dimensions.width || product.dimensions.depth)) {
+                    let dimsContent = '';
+                    if (product.dimensions.height) {
+                        const inches = cmToInches(product.dimensions.height);
+                        dimsContent += `
+                            <div style="text-align: center; padding: 15px; background: #fafafa; border-radius: 8px;">
+                                <div style="font-size: 11px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">高さ / Height</div>
+                                <div style="font-size: 22px; font-weight: 700; color: #1a1a1a; margin-bottom: 4px;">${product.dimensions.height}</div>
+                                <div style="font-size: 14px; color: #666;">${inches} inches</div>
+                            </div>
+                        `;
+                    }
+                    if (product.dimensions.width) {
+                        const inches = cmToInches(product.dimensions.width);
+                        dimsContent += `
+                            <div style="text-align: center; padding: 15px; background: #fafafa; border-radius: 8px;">
+                                <div style="font-size: 11px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">幅 / Width</div>
+                                <div style="font-size: 22px; font-weight: 700; color: #1a1a1a; margin-bottom: 4px;">${product.dimensions.width}</div>
+                                <div style="font-size: 14px; color: #666;">${inches} inches</div>
+                            </div>
+                        `;
+                    }
+                    if (product.dimensions.depth) {
+                        const inches = cmToInches(product.dimensions.depth);
+                        dimsContent += `
+                            <div style="text-align: center; padding: 15px; background: #fafafa; border-radius: 8px;">
+                                <div style="font-size: 11px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">奥行 / Depth</div>
+                                <div style="font-size: 22px; font-weight: 700; color: #1a1a1a; margin-bottom: 4px;">${product.dimensions.depth}</div>
+                                <div style="font-size: 14px; color: #666;">${inches} inches</div>
+                            </div>
+                        `;
+                    }
+
+                    dimensionsHTML = `
+                        <div style="margin: 20px 0; padding: 20px; background: #fff; border: 1px solid #e5e5e5; border-radius: 8px;">
+                            <h3 style="font-size: 14px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; color: #1a1a1a;">📏 サイズ / Dimensions</h3>
+                            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;">
+                                ${dimsContent}
+                            </div>
+                        </div>
+                    `;
+                }
+
+                // Build specifications HTML
+                let specificationsHTML = '';
+                if (product.specifications) {
+                    let specsContent = '';
+                    const specs = product.specifications;
+
+                    if (specs.color) {
+                        specsContent += `
+                            <div style="display: flex; padding: 10px 0; border-bottom: 1px solid #f0f0f0;">
+                                <strong style="min-width: 120px; color: #666;">Color:</strong>
+                                <span style="color: #333;">${specs.color}</span>
+                            </div>
+                        `;
+                    }
+                    if (specs.material) {
+                        specsContent += `
+                            <div style="display: flex; padding: 10px 0; border-bottom: 1px solid #f0f0f0;">
+                                <strong style="min-width: 120px; color: #666;">Material:</strong>
+                                <span style="color: #333;">${specs.material}</span>
+                            </div>
+                        `;
+                    }
+                    if (specs.design) {
+                        specsContent += `
+                            <div style="display: flex; padding: 10px 0; border-bottom: 1px solid #f0f0f0;">
+                                <strong style="min-width: 120px; color: #666;">Design:</strong>
+                                <span style="color: #333;">${specs.design}</span>
+                            </div>
+                        `;
+                    }
+                    if (specs.hardware) {
+                        specsContent += `
+                            <div style="display: flex; padding: 10px 0; border-bottom: 1px solid #f0f0f0;">
+                                <strong style="min-width: 120px; color: #666;">Hardware:</strong>
+                                <span style="color: #333;">${specs.hardware}</span>
+                            </div>
+                        `;
+                    }
+                    if (specs.accessories) {
+                        specsContent += `
+                            <div style="display: flex; padding: 10px 0; border-bottom: 1px solid #f0f0f0;">
+                                <strong style="min-width: 120px; color: #666;">Accessories:</strong>
+                                <span style="color: #333;">${specs.accessories}</span>
+                            </div>
+                        `;
+                    }
+
+                    if (specsContent) {
+                        specificationsHTML = `
+                            <div style="margin: 20px 0;">
+                                <h3 style="font-size: 14px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; color: #1a1a1a;">Specifications</h3>
+                                <div style="display: grid; grid-template-columns: 1fr; gap: 12px;">
+                                    ${specsContent}
+                                </div>
+                            </div>
+                        `;
+                    }
+                }
+
+                // Build additional info HTML
+                let additionalInfoHTML = '';
+                if (product.additionalInfo && product.additionalInfo.stainsTears) {
+                    additionalInfoHTML = `
+                        <div style="margin: 20px 0; padding: 15px; background: #fff3cd; border-radius: 8px; font-size: 14px; border-left: 4px solid #ffc107;">
+                            <strong>Condition Note:</strong> ${product.additionalInfo.stainsTears}
+                        </div>
+                    `;
+                }
+
+                // Assemble final HTML
+                contentDiv.innerHTML = `
+                    <div class="product-detail-container">
+                        <div class="product-gallery">
+                            <div class="main-image-container" onclick="openZoom('${mainImage}')">
+                                <img src="${mainImage}" alt="${product.name}" class="main-image" id="mainImage">
+                            </div>
+                            <div class="thumbnail-grid">
+                                ${thumbnailsHTML}
+                            </div>
+                        </div>
+                        
+                        <div class="product-info">
+                            <div class="product-brand">${product.brand}</div>
+                            <div style="font-size: 12px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px;">Product ID: ${product.id}</div>
+                            <h1>${product.name}</h1>
+                            
+                            <div class="product-price">${formatUSD(product.price)}</div>
+                            
+                            <!-- Entrupy Authentication Badge -->
+                            <a href="https://www.entrupy.com/" target="_blank" rel="noopener noreferrer" style="display: block; margin: 25px 0; padding: 18px 24px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; text-decoration: none; border-radius: 10px; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(102, 126, 234, 0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(102, 126, 234, 0.3)'">
+                                <div style="display: flex; align-items: center; gap: 15px;">
+                                    <div style="flex-shrink: 0; width: 40px; height: 40px; background: rgba(255, 255, 255, 0.2); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M9 12L11 14L15 10M20.618 5.984C20.196 5.528 19.461 5.394 18.644 5.127C17.733 4.831 16.597 4.436 15.535 3.756C14.473 3.077 13.815 2.309 13.394 1.733C13.02 1.219 12.684 1 12 1C11.316 1 10.98 1.219 10.606 1.733C10.185 2.309 9.527 3.077 8.465 3.756C7.403 4.436 6.267 4.831 5.356 5.127C4.539 5.394 3.804 5.528 3.382 5.984C2.96 6.439 2.879 7.179 2.803 8.012C2.735 8.764 2.668 9.756 2.668 11C2.668 12.244 2.735 13.236 2.803 13.988C2.879 14.821 2.96 15.561 3.382 16.016C3.804 16.472 4.539 16.606 5.356 16.873C6.267 17.169 7.403 17.564 8.465 18.244C9.527 18.923 10.185 19.691 10.606 20.267C10.98 20.781 11.316 21 12 21C12.684 21 13.02 20.781 13.394 20.267C13.815 19.691 14.473 18.923 15.535 18.244C16.597 17.564 17.733 17.169 18.644 16.873C19.461 16.606 20.196 16.472 20.618 16.016C21.04 15.561 21.121 14.821 21.197 13.988C21.265 13.236 21.332 12.244 21.332 11C21.332 9.756 21.265 8.764 21.197 8.012C21.121 7.179 21.04 6.439 20.618 5.984Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                    </div>
+                                    <div style="flex: 1;">
+                                        <div style="font-weight: 700; font-size: 15px; margin-bottom: 4px;">Entrupy Certified Authentic</div>
+                                        <div style="font-size: 13px; opacity: 0.95;">All products come with Entrupy authentication certificate</div>
+                                    </div>
+                                    <div style="flex-shrink: 0; font-size: 18px; opacity: 0.8;">→</div>
+                                </div>
+                            </a>
+                            
+                            ${detailTextHTML || descriptionHTML}
+                            ${product.detailText ? '' : specificationsHTML}
+                            ${product.detailText ? '' : additionalInfoHTML}
+                            
+                            <div class="product-actions" style="display: flex; gap: 20px; align-items: center; flex-wrap: wrap;">
+                                <a href="products.html" class="back-link">&larr; Back to Products</a>
+                                <a href="mailto:contact@verifiedtokyo.com?subject=${encodeURIComponent(product.name + ' - Purchase Inquiry')}&body=${encodeURIComponent('Product Name: ' + product.name + '\nProduct ID: ' + product.id + '\n\nComments:\n\n\n')}" style="display: inline-flex; align-items: center; gap: 8px; padding: 12px 24px; background: #1a1a1a; color: white; text-decoration: none; border-radius: 6px; font-weight: 600; font-size: 14px; transition: background 0.3s;" onmouseover="this.style.background='#333'" onmouseout="this.style.background='#1a1a1a'">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                                    </svg>
+                                    Purchase Inquiry
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } else {
+                console.log(`Product ID ${productId} not found`);
+                contentDiv.innerHTML = `
+                    <div class="no-product">
+                        <h2>Product Not Found</h2>
+                        <p>The product you're looking for doesn't exist or may have been sold.</p>
+                        <a href="products.html" class="cta-button" style="margin-top: 20px;">
+                            Browse All Products
+                        </a>
+                    </div>
+                `;
+            }
+        }
+
+        function changeImage(imageSrc, thumbnail) {
+            // Update main image
+            document.getElementById('mainImage').src = imageSrc;
+
+            // Update active thumbnail
+            document.querySelectorAll('.thumbnail').forEach(t => t.classList.remove('active'));
+            thumbnail.classList.add('active');
+        }
+
+        function openZoom(imageSrc) {
+            const modal = document.getElementById('zoomModal');
+            const zoomedImg = document.getElementById('zoomedImage');
+            modal.classList.add('active');
+            zoomedImg.src = imageSrc;
+        }
+
+        function closeZoom() {
+            const modal = document.getElementById('zoomModal');
+            modal.classList.remove('active');
+        }
+
+        // Close zoom on click outside image
+        document.getElementById('zoomModal').addEventListener('click', function (e) {
+            if (e.target === this) {
+                closeZoom();
+            }
+        });
+
+        // Close zoom on Escape key
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') {
+                closeZoom();
+            }
+        });
+    </script>
+</body>
+
+</html>

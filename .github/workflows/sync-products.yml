@@ -1,0 +1,73 @@
+name: Auto-Sync & Deploy to Xserver
+
+on:
+  # Run every day at 2 AM UTC (11 AM JST)
+  schedule:
+    - cron: '0 2 * * *'
+  
+  # Allow manual trigger
+  workflow_dispatch:
+
+jobs:
+  sync-and-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: 🐍 Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: 📦 Install dependencies
+        run: |
+          pip install playwright
+          playwright install chromium
+      
+      - name: 🔄 Sync products from t-secondhands.jp
+        run: |
+          python3 sync_products.py
+        continue-on-error: true
+      
+      - name: 📝 Commit changes to GitHub
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          
+          # Check if there are changes
+          if [[ -n $(git status --porcelain) ]]; then
+            git add products_data.json products.html sync_log.json
+            git commit -m "🤖 Auto-sync: Updated products from t-secondhands.jp"
+            git push
+            echo "HAS_CHANGES=true" >> $GITHUB_ENV
+            echo "✅ Changes committed and pushed to GitHub"
+          else
+            echo "HAS_CHANGES=false" >> $GITHUB_ENV
+            echo "✅ No changes to commit"
+          fi
+      
+      - name: 📤 Deploy to Xserver via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          server-dir: /verifiedtokyo.com/public_html/
+          local-dir: ./
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/node_modules/**
+            **/*.py
+            **/*.md
+            **/images/**
+            **/sync_log.json
+            **/.github/**
+      
+      - name: ✅ Deployment complete
+        run: |
+          echo "🎉 Successfully deployed to https://verifiedtokyo.com"
+          echo "📊 Products updated and live!"
+

@@ -1,0 +1,38 @@
+# macOS
+.DS_Store
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+*.egg-info/
+dist/
+build/
+
+# Playwright
+.playwright/
+
+# Logs
+*.log
+sync_log.json
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Test files
+test_*.html
+*_test.py
+*.broken
+
+# Temporary files
+temp/
+tmp/
+*.tmp
