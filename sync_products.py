@@ -112,9 +112,7 @@ async def fetch_latest_products():
                     'price': markup_price,  # Now in USD, not JPY thousands
                     'url': prod['url'],
                     'imageUrl': product_details['imageUrl'],
-                    'productId': prod['url'].split('/')[-1],
-                    'condition': 'good',
-                    'conditionText': 'Good'
+                    'productId': prod['url'].split('/')[-1]
                 }
                 
                 all_products.append(product)
