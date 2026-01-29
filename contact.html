@@ -360,19 +360,49 @@
             }
 
             if (isValid) {
-                // Show success message
-                document.getElementById('success-message').style.display = 'block';
+                // Disable submit button
+                const submitBtn = this.querySelector('.submit-btn');
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'Sending...';
 
-                // Reset form
-                this.reset();
+                // Prepare form data
+                const formData = new FormData(this);
 
-                // Scroll to top to show success message
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-
-                // Hide success message after 5 seconds
-                setTimeout(() => {
-                    document.getElementById('success-message').style.display = 'none';
-                }, 5000);
+                // Send via AJAX
+                fetch('send-email.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Show success message
+                        document.getElementById('success-message').style.display = 'block';
+                        
+                        // Reset form
+                        this.reset();
+                        
+                        // Scroll to top to show success message
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                        
+                        // Hide success message after 5 seconds
+                        setTimeout(() => {
+                            document.getElementById('success-message').style.display = 'none';
+                        }, 5000);
+                    } else {
+                        // Show error message
+                        alert('Failed to send message: ' + (data.errors ? data.errors.join(', ') : 'Unknown error'));
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred while sending your message. Please try again.');
+                })
+                .finally(() => {
+                    // Re-enable submit button
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Send Message';
+                });
             }
         });
     </script>
