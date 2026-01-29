@@ -1,6 +1,11 @@
 name: Auto-Sync & Deploy to Xserver
 
 on:
+  # Auto-deploy on every push to main
+  push:
+    branches:
+      - main
+  
   # Run every day at 2 AM UTC (11 AM JST)
   schedule:
     - cron: '0 2 * * *'
