@@ -162,7 +162,8 @@
                 </div>
 
                 <div class="search-container">
-                    <div class="search-icon" onclick="window.location.href='products.html'">
+                    <input type="text" class="search-input" id="search-input" placeholder="Search products...">
+                    <div class="search-icon" onclick="performSearch()">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                             stroke-width="2">
                             <circle cx="11" cy="11" r="8" />
@@ -281,6 +282,29 @@
                 </div>
             </div>
         </footer>
+
+        <script>
+            // Search functionality
+            function performSearch() {
+                const searchInput = document.getElementById('search-input');
+                const searchTerm = searchInput.value.trim();
+
+                if (searchTerm) {
+                    window.location.href = `products.html?search=${encodeURIComponent(searchTerm)}`;
+                } else {
+                    window.location.href = 'products.html';
+                }
+            }
+
+            // Allow search on Enter key
+            if (document.getElementById('search-input')) {
+                document.getElementById('search-input').addEventListener('keypress', function (e) {
+                    if (e.key === 'Enter') {
+                        performSearch();
+                    }
+                });
+            }
+        </script>
 </body>
 
 </html>

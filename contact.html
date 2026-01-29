@@ -215,7 +215,8 @@
                 </div>
 
                 <div class="search-container">
-                    <div class="search-icon" onclick="window.location.href='products.html'">
+                    <input type="text" class="search-input" id="search-input" placeholder="Search products...">
+                    <div class="search-icon" onclick="performSearch()">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                             stroke-width="2">
                             <circle cx="11" cy="11" r="8" />
@@ -373,38 +374,61 @@
                     method: 'POST',
                     body: formData
                 })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        // Show success message
-                        document.getElementById('success-message').style.display = 'block';
-                        
-                        // Reset form
-                        this.reset();
-                        
-                        // Scroll to top to show success message
-                        window.scrollTo({ top: 0, behavior: 'smooth' });
-                        
-                        // Hide success message after 5 seconds
-                        setTimeout(() => {
-                            document.getElementById('success-message').style.display = 'none';
-                        }, 5000);
-                    } else {
-                        // Show error message
-                        alert('Failed to send message: ' + (data.errors ? data.errors.join(', ') : 'Unknown error'));
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('An error occurred while sending your message. Please try again.');
-                })
-                .finally(() => {
-                    // Re-enable submit button
-                    submitBtn.disabled = false;
-                    submitBtn.textContent = 'Send Message';
-                });
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            // Show success message
+                            document.getElementById('success-message').style.display = 'block';
+
+                            // Reset form
+                            this.reset();
+
+                            // Scroll to top to show success message
+                            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+                            // Hide success message after 5 seconds
+                            setTimeout(() => {
+                                document.getElementById('success-message').style.display = 'none';
+                            }, 5000);
+                        } else {
+                            // Show error message
+                            alert('Failed to send message: ' + (data.errors ? data.errors.join(', ') : 'Unknown error'));
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('An error occurred while sending your message. Please try again.');
+                    })
+                    .finally(() => {
+                        // Re-enable submit button
+                        submitBtn.disabled = false;
+                        submitBtn.textContent = 'Send Message';
+                    });
             }
         });
+    </script>
+
+    <script>
+        // Search functionality
+        function performSearch() {
+            const searchInput = document.getElementById('search-input');
+            const searchTerm = searchInput.value.trim();
+
+            if (searchTerm) {
+                window.location.href = `products.html?search=${encodeURIComponent(searchTerm)}`;
+            } else {
+                window.location.href = 'products.html';
+            }
+        }
+
+        // Allow search on Enter key
+        if (document.getElementById('search-input')) {
+            document.getElementById('search-input').addEventListener('keypress', function (e) {
+                if (e.key === 'Enter') {
+                    performSearch();
+                }
+            });
+        }
     </script>
 </body>
 

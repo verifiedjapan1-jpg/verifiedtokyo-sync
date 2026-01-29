@@ -104,7 +104,9 @@
                                 </div>
 
                                 <div class="search-container">
-                                        <div class="search-icon">
+                                        <input type="text" class="search-input" id="search-input"
+                                                placeholder="Search products...">
+                                        <div class="search-icon" onclick="performSearch()">
                                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
                                                         stroke="currentColor" stroke-width="2">
                                                         <circle cx="11" cy="11" r="8" />
@@ -2637,6 +2639,70 @@
                                 filterProducts();
                         }
                 });
+        </script>
+
+        <script>
+                // Search functionality
+                function performSearch() {
+                        const searchInput = document.getElementById('search-input');
+                        const searchTerm = searchInput.value.trim();
+
+                        if (searchTerm) {
+                                // Reload page with search parameter
+                                window.location.href = `products.html?search=${encodeURIComponent(searchTerm)}`;
+                        } else {
+                                // Clear search
+                                window.location.href = 'products.html';
+                        }
+                }
+
+                // Allow search on Enter key
+                document.addEventListener('DOMContentLoaded', function () {
+                        const searchInput = document.getElementById('search-input');
+                        if (searchInput) {
+                                // Handle Enter key
+                                searchInput.addEventListener('keypress', function (e) {
+                                        if (e.key === 'Enter') {
+                                                performSearch();
+                                        }
+                                });
+
+                                // Apply search from URL parameter
+                                const urlParams = new URLSearchParams(window.location.search);
+                                const searchTerm = urlParams.get('search');
+
+                                if (searchTerm) {
+                                        searchInput.value = searchTerm;
+                                        // Filter products based on search term
+                                        filterProductsBySearch(searchTerm);
+                                }
+                        }
+                });
+
+                // Filter products based on search term
+                function filterProductsBySearch(searchTerm) {
+                        const productCards = document.querySelectorAll('.product-card');
+                        const lowerSearchTerm = searchTerm.toLowerCase();
+                        let visibleCount = 0;
+
+                        productCards.forEach(card => {
+                                const brand = card.querySelector('.product-brand')?.textContent.toLowerCase() || '';
+                                const title = card.querySelector('.product-title')?.textContent.toLowerCase() || '';
+
+                                if (brand.includes(lowerSearchTerm) || title.includes(lowerSearchTerm)) {
+                                        card.style.display = 'block';
+                                        visibleCount++;
+                                } else {
+                                        card.style.display = 'none';
+                                }
+                        });
+
+                        // Update product count
+                        const productCount = document.getElementById('product-count');
+                        if (productCount) {
+                                productCount.textContent = `Showing ${visibleCount} of ${productCards.length} products`;
+                        }
+                }
         </script>
 </body>
 
