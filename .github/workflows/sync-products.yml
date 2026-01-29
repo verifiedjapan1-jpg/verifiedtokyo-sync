@@ -32,6 +32,7 @@ jobs:
         continue-on-error: true
       
       - name: 📝 Commit changes to GitHub
+        continue-on-error: true
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
@@ -49,6 +50,7 @@ jobs:
           fi
       
       - name: 📤 Deploy to Xserver via FTP
+        if: always()
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:
           server: ${{ secrets.FTP_SERVER }}
