@@ -114,9 +114,25 @@
                                                 </svg>
                                         </div>
                                 </div>
+
+                                <!-- Mobile Menu Toggle -->
+                                <div class="mobile-menu-toggle" id="mobile-menu-toggle">
+                                        <span></span>
+                                        <span></span>
+                                        <span></span>
+                                </div>
                         </div>
                 </div>
         </header>
+
+        <!-- Mobile Navigation -->
+        <div class="mobile-overlay" id="mobile-overlay"></div>
+        <nav class="mobile-nav" id="mobile-nav">
+                <a href="index.html">Home</a>
+                <a href="products.html">Products</a>
+                <a href="shopping-guide.html">Shopping Guide</a>
+                <a href="contact.html">Contact</a>
+        </nav>
 
         <div class="products-container">
                 <h1>All Products</h1>
@@ -2637,6 +2653,33 @@
                                 brandFilter.value = brandParam;
                                 // Trigger the filter
                                 filterProducts();
+                        }
+                });
+        </script>
+
+        <script>
+                // Mobile Menu Toggle
+                document.addEventListener('DOMContentLoaded', function () {
+                        const menuToggle = document.getElementById('mobile-menu-toggle');
+                        const mobileNav = document.getElementById('mobile-nav');
+                        const overlay = document.getElementById('mobile-overlay');
+
+                        if (menuToggle) {
+                                menuToggle.addEventListener('click', function () {
+                                        menuToggle.classList.toggle('active');
+                                        mobileNav.classList.toggle('active');
+                                        overlay.classList.toggle('active');
+                                        document.body.style.overflow = mobileNav.classList.contains('active') ? 'hidden' : '';
+                                });
+                        }
+
+                        if (overlay) {
+                                overlay.addEventListener('click', function () {
+                                        menuToggle.classList.remove('active');
+                                        mobileNav.classList.remove('active');
+                                        overlay.classList.remove('active');
+                                        document.body.style.overflow = '';
+                                });
                         }
                 });
         </script>
