@@ -289,10 +289,34 @@
                 <div style="text-align: center; padding: 20px 0;">
                     <p style="font-size: 14px; color: #666;">© 2026 Verified Tokyo</p>
                 </div>
-            </div>
         </footer>
 
         <script>
+            // Mobile Menu Toggle
+            document.addEventListener('DOMContentLoaded', function () {
+                const menuToggle = document.getElementById('mobile-menu-toggle');
+                const mobileNav = document.getElementById('mobile-nav');
+                const overlay = document.getElementById('mobile-overlay');
+
+                if (menuToggle) {
+                    menuToggle.addEventListener('click', function () {
+                        menuToggle.classList.toggle('active');
+                        mobileNav.classList.toggle('active');
+                        overlay.classList.toggle('active');
+                        document.body.style.overflow = mobileNav.classList.contains('active') ? 'hidden' : '';
+                    });
+                }
+
+                if (overlay) {
+                    overlay.addEventListener('click', function () {
+                        menuToggle.classList.remove('active');
+                        mobileNav.classList.remove('active');
+                        overlay.classList.remove('active');
+                        document.body.style.overflow = '';
+                    });
+                }
+            });
+
             // Search functionality
             function performSearch() {
                 const searchInput = document.getElementById('search-input');
