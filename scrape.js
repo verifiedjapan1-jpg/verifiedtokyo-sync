@@ -20,22 +20,24 @@ async function fetchFromShopifyAPI(url) {
 
 async function scrapeProducts() {
   try {
-    console.log('Fetching products from t-secondhands.jp...');
+    console.log('Fetching all products from t-secondhands.jp...');
     
-    // Shopify API エンドポイント
+    // Shopify API - 全商品を取得（制限なし）
     const apiUrl = 'https://t-secondhands.jp/collections/all/products.json?limit=250&sort_by=price-descending';
     
     const data = await fetchFromShopifyAPI(apiUrl);
     const shopifyProducts = data.products || [];
     
-    console.log(`Found ${shopifyProducts.length} products`);
+    console.log(`Found ${shopifyProducts.length} total products`);
     
     // 既存データを読み込み
     const existingProducts = loadExistingData();
     const nextId = (existingProducts[existingProducts.length - 1]?.id || 0) + 1;
     
-    // 商品を変換
+    // **全ての商品を処理（制限なし）**
     const newProducts = shopifyProducts.map((p, idx) => transformProduct(p, nextId + idx));
+    
+    console.log(`Transformed ${newProducts.length} new products`);
     
     // 重複排除
     const allProducts = [...existingProducts, ...newProducts];
