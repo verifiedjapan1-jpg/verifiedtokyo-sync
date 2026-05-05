@@ -1,0 +1,31 @@
+[
+  {
+    "id": 1,
+    "name": "Test Product",
+    "brand": "TEST",
+    "price": 100,
+    "url": "https://t-secondhands.jp/",
+    "imageUrl": "https://via.placeholder.com/300",
+    "productId": "test-product",
+    "description": "Test description",
+    "dimensions": {
+      "height": "10cm",
+      "width": "20cm",
+      "depth": "5cm"
+    },
+    "specifications": {
+      "color": "Black",
+      "material": "Leather",
+      "design": "Classic",
+      "hardware": "Metal"
+    },
+    "images": ["https://via.placeholder.com/300"],
+    "detailText": {
+      "intro": "Test product",
+      "dimensions": {"height": "10cm", "width": "20cm", "depth": "5cm"},
+      "description": "Test description",
+      "specifications": ["Color: Black"],
+      "additional": "Condition: New"
+    }
+  }
+]
