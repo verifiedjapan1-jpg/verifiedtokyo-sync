@@ -240,4 +240,4 @@ async def sync_products():
 
 if __name__ == '__main__':
     changed = asyncio.run(sync_products())
-    exit(0 if changed else 1)
+    exit(0)
