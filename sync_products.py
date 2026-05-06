@@ -10,6 +10,7 @@ BASE_URL = "https://t-secondhands.jp"
 
 def fetch_all_products():
     all_products = []
+    seen_handles = set()  # 重複チェック用
     page = 1
 
     while True:
@@ -25,36 +26,52 @@ def fetch_all_products():
                 print(f"✅ No more products at page {page}")
                 break
 
-            print(f"  Found {len(products)} products")
-
+            new_count = 0
             for p in products:
+                handle = p['handle']
+
+                # 重複スキップ
+                if handle in seen_handles:
+                    continue
+                seen_handles.add(handle)
+                new_count += 1
+
                 variant = p['variants'][0] if p.get('variants') else {}
                 price_jpy = float(variant.get('price', 0))
                 price_usd = round(price_jpy / 155 + 200, 0)
 
-                # 全画像を取得
                 images = [img['src'] for img in p.get('images', [])]
                 image_url = images[0] if images else ''
 
                 title = p.get('title', '').replace(' - T-Family', '').strip()
                 brand = title.split()[0].upper() if title else 'UNKNOWN'
 
-                # 説明文
                 body_html = p.get('body_html', '')
-                description = body_html.replace('<br>', '\n').replace('<br/>', '\n').replace('<p>', '').replace('</p>', '\n') if body_html else ''
+                description = ''
+                if body_html:
+                    import re
+                    description = re.sub('<[^>]+>', ' ', body_html).strip()
+                    description = description[:500]
 
                 product = {
                     'id': len(all_products) + 1,
                     'name': title,
                     'brand': brand,
                     'price': price_usd,
-                    'url': f"{BASE_URL}/ja/products/{p['handle']}",
+                    'url': f"{BASE_URL}/ja/products/{handle}",
                     'imageUrl': image_url,
                     'images': images,
-                    'productId': p['handle'],
-                    'description': description[:500] if description else '',
+                    'productId': handle,
+                    'description': description,
                 }
                 all_products.append(product)
+
+            print(f"  Added {new_count} new products (skipped {len(products) - new_count} duplicates)")
+
+            # 新しく追加されたものが0件なら終了
+            if new_count == 0:
+                print("✅ No new products, stopping.")
+                break
 
             page += 1
 
@@ -62,7 +79,7 @@ def fetch_all_products():
             print(f"❌ Error on page {page}: {e}")
             break
 
-    print(f"\n🎯 Total products fetched: {len(all_products)}")
+    print(f"\n🎯 Total unique products: {len(all_products)}")
     return all_products
 
 def main():
