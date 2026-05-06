@@ -214,7 +214,7 @@
                         const count = document.getElementById('product-count');
                         count.textContent = `Total ${products.length} items`;
                         grid.innerHTML = products.map(product => `
-                            <div class="product-card" onclick="window.location.href='product-detail.html?id=${product.id}'">
+                            <div class="product-card" onclick="window.location.href='product-detail.html?id=${product.productId}'">
                                 <img src="${product.imageUrl}"
                                      alt="${product.name}"
                                      class="product-image"
