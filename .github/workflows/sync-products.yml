@@ -23,21 +23,17 @@ jobs:
 
       - name: 📦 Install dependencies
         run: |
-          pip install playwright beautifulsoup4 requests
-          playwright install chromium
-          playwright install-deps chromium
+          pip install requests
 
       - name: 🔄 Sync products from t-secondhands.jp
         run: |
           python3 sync_products.py
-        continue-on-error: true
 
       - name: 📝 Commit changes to GitHub
         continue-on-error: true
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
-
           if [[ -n $(git status --porcelain) ]]; then
             git add -A
             git commit -m "🤖 Auto-sync: Updated products from t-secondhands.jp"
@@ -68,5 +64,4 @@ jobs:
 
       - name: ✅ Deployment complete
         run: |
-          echo "🎉 Successfully deployed to https://verifiedtokyo.com"
-          echo "📊 Products updated and live!"
+          echo "🎉 Done"
