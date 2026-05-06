@@ -227,16 +227,13 @@ async def sync_products():
         for p in diff['removed'][:10]:
             print(f"   • {p['name']}")
     
-    if diff['added'] or diff['removed']:
-        print(f"\n💾 Updating files...")
-        update_json_file(new_products)
-        update_html_files(new_products)
-        log_sync(diff)
-        print("\n✅ SYNC COMPLETED")
-        return True
-    else:
-        print("\n✅ NO CHANGES")
-        return False
+   # 変更の有無にかかわらず常に更新
+print(f"\n📝 Updating files...")
+update_json_file(new_products)
+update_html_files(new_products)
+log_sync(diff)
+print("\n✅ SYNC COMPLETED")
+return True
 
 if __name__ == '__main__':
     changed = asyncio.run(sync_products())
