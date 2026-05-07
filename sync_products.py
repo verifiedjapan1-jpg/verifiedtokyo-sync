@@ -8,7 +8,6 @@ from datetime import datetime
 import re
 
 BASE_URL = "https://t-secondhands.jp"
-COLLECTION_HANDLE = "all"
 
 def fetch_all_products():
     all_products = []
@@ -16,8 +15,7 @@ def fetch_all_products():
     page = 1
 
     while True:
-        # コレクション専用エンドポイントを使用（本家と同じ353件）
-        url = f"{BASE_URL}/collections/{COLLECTION_HANDLE}/products.json?limit=250&page={page}"
+        url = f"{BASE_URL}/collections/all/products.json?limit=250&page={page}"
         print(f"📦 Fetching page {page}: {url}")
 
         try:
@@ -40,6 +38,9 @@ def fetch_all_products():
                 price_jpy = float(variant.get('price', 0))
                 price_usd = round(price_jpy / 155 + 200, 0)
 
+                # 在庫状態を取得
+                available = any(v.get('available', False) for v in variants)
+
                 images = [img['src'] for img in p.get('images', [])]
                 image_url = images[0] if images else ''
 
@@ -57,6 +58,7 @@ def fetch_all_products():
                     'name': title,
                     'brand': brand,
                     'price': price_usd,
+                    'available': available,
                     'url': f"{BASE_URL}/ja/products/{handle}",
                     'imageUrl': image_url,
                     'images': images,
@@ -72,7 +74,8 @@ def fetch_all_products():
             print(f"❌ Error on page {page}: {e}")
             break
 
-    print(f"\n🎯 Total products: {len(all_products)}")
+    available_count = sum(1 for p in all_products if p['available'])
+    print(f"\n🎯 Total: {len(all_products)} (Available: {available_count}, Sold out: {len(all_products) - available_count})")
     return all_products
 
 def main():
