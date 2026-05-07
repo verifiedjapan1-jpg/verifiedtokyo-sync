@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 """
-Auto-sync products from t-secondhands.jp via Shopify JSON API
+Auto-sync products from t-secondhands.jp via Shopify Collection API
 """
 import json
 import requests
 from datetime import datetime
+import re
 
 BASE_URL = "https://t-secondhands.jp"
+COLLECTION_HANDLE = "all"
 
 def fetch_all_products():
     all_products = []
@@ -14,7 +16,8 @@ def fetch_all_products():
     page = 1
 
     while True:
-        url = f"{BASE_URL}/products.json?limit=250&page={page}"
+        # コレクション専用エンドポイントを使用（本家と同じ353件）
+        url = f"{BASE_URL}/collections/{COLLECTION_HANDLE}/products.json?limit=250&page={page}"
         print(f"📦 Fetching page {page}: {url}")
 
         try:
@@ -26,23 +29,13 @@ def fetch_all_products():
                 print(f"✅ No more products at page {page}")
                 break
 
-            new_count = 0
             for p in products:
                 handle = p['handle']
-
-                # 重複スキップ
                 if handle in seen_handles:
                     continue
                 seen_handles.add(handle)
 
-                # 在庫チェック：available=falseの商品をスキップ
                 variants = p.get('variants', [])
-                available = any(v.get('available', False) for v in variants)
-                if not available:
-                    continue
-
-                new_count += 1
-
                 variant = variants[0] if variants else {}
                 price_jpy = float(variant.get('price', 0))
                 price_usd = round(price_jpy / 155 + 200, 0)
@@ -56,7 +49,6 @@ def fetch_all_products():
                 body_html = p.get('body_html', '')
                 description = ''
                 if body_html:
-                    import re
                     description = re.sub('<[^>]+>', ' ', body_html).strip()
                     description = ' '.join(description.split())[:500]
 
@@ -73,18 +65,14 @@ def fetch_all_products():
                 }
                 all_products.append(product)
 
-            print(f"  Added {new_count} available products")
-
-            if new_count == 0 and len(products) < 250:
-                break
-
+            print(f"  Page {page}: {len(products)} products")
             page += 1
 
         except Exception as e:
             print(f"❌ Error on page {page}: {e}")
             break
 
-    print(f"\n🎯 Total available products: {len(all_products)}")
+    print(f"\n🎯 Total products: {len(all_products)}")
     return all_products
 
 def main():
