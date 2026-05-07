@@ -10,7 +10,7 @@ BASE_URL = "https://t-secondhands.jp"
 
 def fetch_all_products():
     all_products = []
-    seen_handles = set()  # 重複チェック用
+    seen_handles = set()
     page = 1
 
     while True:
@@ -34,9 +34,16 @@ def fetch_all_products():
                 if handle in seen_handles:
                     continue
                 seen_handles.add(handle)
+
+                # 在庫チェック：available=falseの商品をスキップ
+                variants = p.get('variants', [])
+                available = any(v.get('available', False) for v in variants)
+                if not available:
+                    continue
+
                 new_count += 1
 
-                variant = p['variants'][0] if p.get('variants') else {}
+                variant = variants[0] if variants else {}
                 price_jpy = float(variant.get('price', 0))
                 price_usd = round(price_jpy / 155 + 200, 0)
 
@@ -51,7 +58,7 @@ def fetch_all_products():
                 if body_html:
                     import re
                     description = re.sub('<[^>]+>', ' ', body_html).strip()
-                    description = description[:500]
+                    description = ' '.join(description.split())[:500]
 
                 product = {
                     'id': len(all_products) + 1,
@@ -66,11 +73,9 @@ def fetch_all_products():
                 }
                 all_products.append(product)
 
-            print(f"  Added {new_count} new products (skipped {len(products) - new_count} duplicates)")
+            print(f"  Added {new_count} available products")
 
-            # 新しく追加されたものが0件なら終了
-            if new_count == 0:
-                print("✅ No new products, stopping.")
+            if new_count == 0 and len(products) < 250:
                 break
 
             page += 1
@@ -79,7 +84,7 @@ def fetch_all_products():
             print(f"❌ Error on page {page}: {e}")
             break
 
-    print(f"\n🎯 Total unique products: {len(all_products)}")
+    print(f"\n🎯 Total available products: {len(all_products)}")
     return all_products
 
 def main():
