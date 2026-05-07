@@ -33,11 +33,31 @@
                         overflow: hidden;
                         cursor: pointer;
                         transition: transform 0.3s, box-shadow 0.3s;
+                        position: relative;
                 }
 
                 .product-card:hover {
                         transform: translateY(-5px);
                         box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+                }
+
+                .product-card.sold-out {
+                        opacity: 0.6;
+                        cursor: default;
+                }
+
+                .sold-out-badge {
+                        position: absolute;
+                        top: 15px;
+                        left: 15px;
+                        background: #333;
+                        color: white;
+                        padding: 4px 10px;
+                        font-size: 11px;
+                        font-weight: 700;
+                        letter-spacing: 1px;
+                        text-transform: uppercase;
+                        border-radius: 3px;
                 }
 
                 .product-image {
@@ -70,6 +90,12 @@
                         margin-top: 10px;
                 }
 
+                .product-price.sold-out-price {
+                        color: #999;
+                        text-decoration: line-through;
+                        font-size: 16px;
+                }
+
                 .product-condition {
                         font-size: 12px;
                         color: #888;
@@ -81,6 +107,7 @@
                         display: flex;
                         gap: 15px;
                         flex-wrap: wrap;
+                        align-items: center;
                 }
 
                 .filter-select {
@@ -88,6 +115,15 @@
                         border: 1px solid #ddd;
                         border-radius: 5px;
                         font-size: 14px;
+                }
+
+                .availability-filter {
+                        display: flex;
+                        align-items: center;
+                        gap: 8px;
+                        font-size: 14px;
+                        color: #333;
+                        cursor: pointer;
                 }
         </style>
 </head>
@@ -147,6 +183,10 @@
                                 <option value="price-high">Price: High to Low</option>
                                 <option value="brand">Brand</option>
                         </select>
+                        <label class="availability-filter">
+                                <input type="checkbox" id="hide-soldout" checked>
+                                In Stock Only
+                        </label>
                 </div>
 
                 <div class="products-grid" id="products-grid"></div>
@@ -188,7 +228,7 @@
                     .then(data => {
                         allProducts = data;
                         currentProducts = [...allProducts];
-                        displayProducts(currentProducts);
+                        applyFilters();
                         initFilters();
 
                         const urlParams = new URLSearchParams(window.location.search);
@@ -197,7 +237,7 @@
 
                         if (brandParam) {
                             document.getElementById('brand-filter').value = brandParam;
-                            filterProducts();
+                            applyFilters();
                         }
                         if (searchParam) {
                             document.getElementById('search-input').value = searchParam;
@@ -213,20 +253,47 @@
                         const grid = document.getElementById('products-grid');
                         const count = document.getElementById('product-count');
                         count.textContent = `Total ${products.length} items`;
-                        grid.innerHTML = products.map(product => `
-                            <div class="product-card" onclick="window.location.href='product-detail.html?id=${product.productId}'">
-                                <img src="${product.imageUrl}"
-                                     alt="${product.name}"
-                                     class="product-image"
-                                     onerror="this.src='images/placeholder.jpg'">
-                                <div class="product-info">
-                                    <div class="product-brand">${product.brand}</div>
-                                    <h3 class="product-title">${product.name}</h3>
-                                    <div class="product-condition">${product.conditionText || ''}</div>
-                                    <div class="product-price">$${Math.ceil(product.price)}</div>
-                                </div>
-                            </div>
-                        `).join('');
+                        grid.innerHTML = products.map(product => {
+                                const isSoldOut = product.available === false;
+                                const cardClass = isSoldOut ? 'product-card sold-out' : 'product-card';
+                                const onclick = isSoldOut ? '' : `onclick="window.location.href='product-detail.html?id=${product.productId}'"`;
+                                const priceHTML = isSoldOut
+                                        ? `<div class="product-price sold-out-price">$${Math.ceil(product.price)}</div><div style="font-size:13px;color:#999;font-weight:600;">SOLD OUT</div>`
+                                        : `<div class="product-price">$${Math.ceil(product.price)}</div>`;
+                                return `
+                                    <div class="${cardClass}" ${onclick}>
+                                        ${isSoldOut ? '<div class="sold-out-badge">Sold Out</div>' : ''}
+                                        <img src="${product.imageUrl}"
+                                             alt="${product.name}"
+                                             class="product-image"
+                                             onerror="this.src='images/placeholder.jpg'">
+                                        <div class="product-info">
+                                            <div class="product-brand">${product.brand}</div>
+                                            <h3 class="product-title">${product.name}</h3>
+                                            <div class="product-condition">${product.conditionText || ''}</div>
+                                            ${priceHTML}
+                                        </div>
+                                    </div>
+                                `;
+                        }).join('');
+                }
+
+                function applyFilters() {
+                        const brand = document.getElementById('brand-filter').value;
+                        const hideSoldOut = document.getElementById('hide-soldout').checked;
+                        const sort = document.getElementById('sort-filter').value;
+
+                        currentProducts = allProducts.filter(p => {
+                                if (brand && p.brand !== brand) return false;
+                                if (hideSoldOut && p.available === false) return false;
+                                return true;
+                        });
+
+                        if (sort === 'price-low') currentProducts.sort((a, b) => a.price - b.price);
+                        else if (sort === 'price-high') currentProducts.sort((a, b) => b.price - a.price);
+                        else if (sort === 'brand') currentProducts.sort((a, b) => a.brand.localeCompare(b.brand));
+
+                        displayProducts(currentProducts);
                 }
 
                 function initFilters() {
@@ -238,24 +305,17 @@
                                 option.textContent = brand;
                                 brandFilter.appendChild(option);
                         });
-                        brandFilter.addEventListener('change', filterProducts);
-                        document.getElementById('sort-filter').addEventListener('change', sortProducts);
+                        brandFilter.addEventListener('change', applyFilters);
+                        document.getElementById('sort-filter').addEventListener('change', applyFilters);
+                        document.getElementById('hide-soldout').addEventListener('change', applyFilters);
                 }
 
                 function filterProducts() {
-                        const brand = document.getElementById('brand-filter').value;
-                        currentProducts = brand
-                                ? allProducts.filter(p => p.brand === brand)
-                                : [...allProducts];
-                        sortProducts();
+                        applyFilters();
                 }
 
                 function sortProducts() {
-                        const sort = document.getElementById('sort-filter').value;
-                        if (sort === 'price-low') currentProducts.sort((a, b) => a.price - b.price);
-                        else if (sort === 'price-high') currentProducts.sort((a, b) => b.price - a.price);
-                        else if (sort === 'brand') currentProducts.sort((a, b) => a.brand.localeCompare(b.brand));
-                        displayProducts(currentProducts);
+                        applyFilters();
                 }
 
                 function performSearch() {
