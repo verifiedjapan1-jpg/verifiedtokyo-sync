@@ -9,6 +9,37 @@ import re
 
 BASE_URL = "https://t-secondhands.jp"
 
+def html_to_text(html):
+    if not html:
+        return ''
+    # ブロック要素の前後に改行を入れる
+    html = re.sub(r'<br\s*/?>', '\n', html, flags=re.IGNORECASE)
+    html = re.sub(r'<p[^>]*>', '\n', html, flags=re.IGNORECASE)
+    html = re.sub(r'</p>', '\n', html, flags=re.IGNORECASE)
+    html = re.sub(r'<li[^>]*>', '\n• ', html, flags=re.IGNORECASE)
+    html = re.sub(r'</li>', '\n', html, flags=re.IGNORECASE)
+    html = re.sub(r'<h[1-6][^>]*>', '\n', html, flags=re.IGNORECASE)
+    html = re.sub(r'</h[1-6]>', '\n', html, flags=re.IGNORECASE)
+    html = re.sub(r'<div[^>]*>', '\n', html, flags=re.IGNORECASE)
+    html = re.sub(r'</div>', '\n', html, flags=re.IGNORECASE)
+    # 残りのHTMLタグを除去
+    html = re.sub(r'<[^>]+>', '', html)
+    # HTMLエンティティを変換
+    html = html.replace('&nbsp;', ' ').replace('&amp;', '&').replace('&lt;', '<').replace('&gt;', '>').replace('&#39;', "'").replace('&quot;', '"')
+    # 連続する空行を整理
+    lines = [l.strip() for l in html.split('\n')]
+    result = []
+    prev_empty = False
+    for line in lines:
+        if not line:
+            if not prev_empty:
+                result.append('')
+            prev_empty = True
+        else:
+            result.append(line)
+            prev_empty = False
+    return '\n'.join(result).strip()
+
 def fetch_all_products():
     all_products = []
     seen_handles = set()
@@ -38,7 +69,6 @@ def fetch_all_products():
                 price_jpy = float(variant.get('price', 0))
                 price_usd = round(price_jpy / 155 + 200, 0)
 
-                # 在庫状態を取得
                 available = any(v.get('available', False) for v in variants)
 
                 images = [img['src'] for img in p.get('images', [])]
@@ -47,11 +77,7 @@ def fetch_all_products():
                 title = p.get('title', '').replace(' - T-Family', '').strip()
                 brand = title.split()[0].upper() if title else 'UNKNOWN'
 
-                body_html = p.get('body_html', '')
-                description = ''
-                if body_html:
-                    description = re.sub('<[^>]+>', ' ', body_html).strip()
-                    description = ' '.join(description.split())[:2000]
+                description = html_to_text(p.get('body_html', ''))
 
                 product = {
                     'id': len(all_products) + 1,
