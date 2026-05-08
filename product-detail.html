@@ -49,25 +49,28 @@
         .no-product { text-align: center; padding: 100px 20px; }
 
         .desc-section { margin: 30px 0; padding: 25px; background: #f8f8f8; border-radius: 12px; }
-        .desc-section h3 { font-size: 13px; text-transform: uppercase; letter-spacing: 1.5px; color: #1a1a1a; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid #e0e0e0; }
-        .desc-intro { font-size: 14px; line-height: 1.8; color: #555; margin-bottom: 20px; }
+        .desc-section h3 { font-size: 13px; text-transform: uppercase; letter-spacing: 1.5px; color: #1a1a1a; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid #e0e0e0; margin-top: 0; }
+        .desc-intro { font-size: 14px; line-height: 1.8; color: #555; margin-bottom: 16px; }
         .dims-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 20px; }
         .dim-item { text-align: center; padding: 15px 10px; background: white; border-radius: 8px; border: 1px solid #e8e8e8; }
         .dim-label { font-size: 11px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
-        .dim-value { font-size: 20px; font-weight: 700; color: #1a1a1a; margin-bottom: 4px; }
-        .dim-inches { font-size: 13px; color: #888; }
+        .dim-value { font-size: 18px; font-weight: 700; color: #1a1a1a; margin-bottom: 4px; }
+        .dim-inches { font-size: 12px; color: #888; }
         .details-table { width: 100%; border-collapse: collapse; margin-bottom: 15px; }
         .details-table tr { border-bottom: 1px solid #eeeeee; }
-        .details-table td { padding: 10px 0; font-size: 13px; }
-        .details-table td:first-child { color: #888; width: 120px; }
+        .details-table td { padding: 10px 0; font-size: 13px; vertical-align: top; }
+        .details-table td:first-child { color: #888; width: 130px; }
         .details-table td:last-child { color: #1a1a1a; font-weight: 500; }
-        .features-list { list-style: none; padding: 0; margin: 15px 0 0; }
-        .features-list li { padding: 8px 0 8px 16px; border-bottom: 1px solid #eeeeee; font-size: 13px; color: #333; position: relative; }
-        .features-list li::before { content: '•'; position: absolute; left: 0; color: #999; }
+        .features-list { list-style: none; padding: 0; margin: 10px 0 0; }
+        .features-list li { padding: 7px 0 7px 16px; border-bottom: 1px solid #eeeeee; font-size: 13px; color: #333; position: relative; line-height: 1.6; }
+        .features-list li:last-child { border-bottom: none; }
+        .features-list li::before { content: '–'; position: absolute; left: 0; color: #999; }
+        .desc-closing { font-size: 13px; color: #888; margin-top: 15px; font-style: italic; }
 
         @media (max-width: 768px) {
             .product-detail-container { grid-template-columns: 1fr; gap: 30px; padding: 0 20px; }
             .product-gallery { position: relative; top: 0; }
+            .dims-grid { grid-template-columns: repeat(3, 1fr); }
         }
     </style>
 </head>
@@ -126,102 +129,130 @@
                     '<div class="no-product"><h2>Error loading product data</h2></div>';
             });
 
-        function cmToInches(cm) {
-            const n = parseFloat(cm);
+        function cmToInches(val) {
+            const n = parseFloat(val);
             if (isNaN(n)) return '';
-            return (n / 2.54).toFixed(2);
-        }
-
-        function parseDescription(desc) {
-            if (!desc) return null;
-
-            const text = desc.replace(/\\n/g, '\n');
-            const lines = text.split('\n').map(l => l.trim()).filter(l => l);
-
-            const result = { intro: [], size: {}, details: {}, features: [], closing: '' };
-            let section = 'intro';
-
-            for (const line of lines) {
-                const lower = line.toLowerCase();
-
-                if (lower === 'size') { section = 'size'; continue; }
-                if (lower === 'product details' || lower === 'product overview') { section = 'details'; continue; }
-                if (lower === 'features') { section = 'features'; continue; }
-                if (lower.includes('thank you') || lower.includes('appreciate your understanding')) {
-                    result.closing = line; continue;
-                }
-
-                const dimMatch = line.match(/^(width|height|depth)[:\s]+(.+)/i);
-                const detailMatch = line.match(/^(brand|model|material|color|hardware|style|accessories)[:\s]+(.+)/i);
-
-                if (dimMatch) {
-                    result.size[dimMatch[1].toLowerCase()] = dimMatch[2].trim();
-                } else if (detailMatch) {
-                    result.details[detailMatch[1]] = detailMatch[2].trim();
-                    if (section === 'intro') section = 'details';
-                } else if (section === 'intro') {
-                    result.intro.push(line);
-                } else if (section === 'features') {
-                    result.features.push(line.replace(/^[-•]\s*/, ''));
-                }
-            }
-
-            return result;
+            return (n / 2.54).toFixed(1);
         }
 
         function buildDescriptionHTML(product) {
-            const parsed = parseDescription(product.description);
-            if (!parsed) return '';
+            const desc = product.description;
+            if (!desc) return '';
 
-            const hasSize = Object.keys(parsed.size).length > 0;
-            const hasDetails = Object.keys(parsed.details).length > 0;
-            const hasFeatures = parsed.features.length > 0;
-            const hasIntro = parsed.intro.length > 0;
+            const lines = desc.split('\n').map(l => l.trim());
 
-            if (!hasSize && !hasDetails && !hasFeatures && !hasIntro) return '';
+            // セクションを分類
+            const introLines = [];
+            const sizeLines = [];
+            const detailLines = [];
+            const featureLines = [];
+            let closing = '';
+
+            let section = 'intro';
+
+            for (const line of lines) {
+                if (!line) continue;
+                const lower = line.toLowerCase();
+
+                // セクション見出しの検出
+                if (/^size\s*$/i.test(line)) { section = 'size'; continue; }
+                if (/^product details?\s*$/i.test(line)) { section = 'details'; continue; }
+                if (/^features?\s*$/i.test(line)) { section = 'features'; continue; }
+                if (/^(thank you|we appreciate)/i.test(line)) { closing = line; continue; }
+
+                // 寸法パターン（どのセクションでも）
+                if (/^(height|width|depth)[:\s]/i.test(line)) {
+                    sizeLines.push(line);
+                    if (section === 'intro') section = 'size';
+                    continue;
+                }
+
+                // 詳細パターン（- Key: Value または Key: Value）
+                if (/^[-•]\s*(brand|color|material|model|hardware|style|inner|design|shape|accessories)[:\s]/i.test(line) ||
+                    /^(brand|color|material|model|hardware|style|inner|design|shape|accessories)[:\s]/i.test(line)) {
+                    detailLines.push(line.replace(/^[-•]\s*/, ''));
+                    if (section === 'intro') section = 'details';
+                    continue;
+                }
+
+                // 箇条書きパターン
+                if (/^[-•]/.test(line)) {
+                    featureLines.push(line.replace(/^[-•]\s*/, ''));
+                    continue;
+                }
+
+                // セクション別振り分け
+                if (section === 'intro') {
+                    introLines.push(line);
+                } else if (section === 'size') {
+                    sizeLines.push(line);
+                } else if (section === 'details') {
+                    detailLines.push(line);
+                } else if (section === 'features') {
+                    featureLines.push(line);
+                }
+            }
 
             let html = '<div class="desc-section"><h3>Product Description</h3>';
 
             // イントロ
-            if (hasIntro) {
-                html += `<p class="desc-intro">${parsed.intro.join(' ')}</p>`;
+            if (introLines.length > 0) {
+                html += `<p class="desc-intro">${introLines.join('<br>')}</p>`;
             }
 
             // サイズ
-            if (hasSize) {
-                html += '<div class="dims-grid">';
-                ['width', 'height', 'depth'].forEach(key => {
-                    if (parsed.size[key]) {
-                        const val = parsed.size[key];
-                        const numMatch = val.match(/[\d.]+/);
-                        const inches = numMatch ? cmToInches(numMatch[0]) : '';
-                        html += `
-                            <div class="dim-item">
-                                <div class="dim-label">${key.charAt(0).toUpperCase() + key.slice(1)}</div>
-                                <div class="dim-value">${val}</div>
-                                ${inches ? `<div class="dim-inches">${inches} inches</div>` : ''}
-                            </div>`;
-                    }
+            if (sizeLines.length > 0) {
+                const sizeMap = {};
+                sizeLines.forEach(line => {
+                    const m = line.match(/^(height|width|depth)[:\s]+(.+)/i);
+                    if (m) sizeMap[m[1].toLowerCase()] = m[2].trim();
                 });
-                html += '</div>';
+
+                if (Object.keys(sizeMap).length > 0) {
+                    html += '<div class="dims-grid">';
+                    ['height', 'width', 'depth'].forEach(key => {
+                        if (sizeMap[key]) {
+                            const val = sizeMap[key];
+                            const numMatch = val.match(/[\d.]+/);
+                            const inches = numMatch ? cmToInches(numMatch[0]) : '';
+                            html += `
+                                <div class="dim-item">
+                                    <div class="dim-label">${key.charAt(0).toUpperCase() + key.slice(1)}</div>
+                                    <div class="dim-value">${val}</div>
+                                    ${inches ? `<div class="dim-inches">${inches} in</div>` : ''}
+                                </div>`;
+                        }
+                    });
+                    html += '</div>';
+                }
             }
 
-            // 商品詳細テーブル
-            if (hasDetails) {
+            // 詳細テーブル
+            if (detailLines.length > 0) {
                 html += '<table class="details-table">';
-                Object.entries(parsed.details).forEach(([key, val]) => {
-                    html += `<tr><td>${key}</td><td>${val}</td></tr>`;
+                detailLines.forEach(line => {
+                    const m = line.match(/^([^:]+):\s*(.+)/);
+                    if (m) {
+                        html += `<tr><td>${m[1].trim()}</td><td>${m[2].trim()}</td></tr>`;
+                    } else {
+                        html += `<tr><td colspan="2">${line}</td></tr>`;
+                    }
                 });
                 html += '</table>';
             }
 
             // 特徴リスト
-            if (hasFeatures) {
+            if (featureLines.length > 0) {
                 html += '<ul class="features-list">';
-                parsed.features.forEach(f => {
+                featureLines.forEach(f => {
                     html += `<li>${f}</li>`;
                 });
                 html += '</ul>';
+            }
+
+            // クロージング
+            if (closing) {
+                html += `<p class="desc-closing">${closing}</p>`;
             }
 
             html += '</div>';
