@@ -8,11 +8,14 @@
     <link rel="stylesheet" href="styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;600;700&family=Noto+Sans+JP:wght@300;400;500;600&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;600;700&family=Noto+Sans+JP:wght@300;400;500;600&display=swap" rel="stylesheet">
     <script src="currency-converter.js"></script>
     <style>
+        .mobile-nav { display: none; }
+        .mobile-nav.active { display: flex; flex-direction: column; }
+        .mobile-overlay { display: none; }
+        .mobile-overlay.active { display: block; }
+
         .product-detail-container {
             max-width: 1400px;
             margin: 100px auto 60px;
@@ -21,13 +24,11 @@
             grid-template-columns: 1fr 1fr;
             gap: 60px;
         }
-
         .product-gallery {
             position: sticky;
             top: 100px;
             height: fit-content;
         }
-
         .main-image-container {
             position: relative;
             width: 100%;
@@ -38,19 +39,12 @@
             cursor: zoom-in;
             margin-bottom: 20px;
         }
-
-        .main-image {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
+        .main-image { width: 100%; height: 100%; object-fit: cover; }
         .thumbnail-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
             gap: 10px;
         }
-
         .thumbnail {
             aspect-ratio: 1;
             border-radius: 8px;
@@ -59,153 +53,94 @@
             border: 2px solid transparent;
             transition: border-color 0.3s;
         }
+        .thumbnail.active { border-color: #1a1a1a; }
+        .thumbnail:hover { border-color: #666; }
+        .thumbnail img { width: 100%; height: 100%; object-fit: cover; }
+        .product-info h1 { font-size: 36px; font-weight: 700; margin-bottom: 10px; line-height: 1.2; }
+        .product-brand { font-size: 14px; color: #666; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 20px; }
+        .product-price { font-size: 48px; font-weight: 700; margin: 30px 0; }
+        .cta-button { display: inline-block; padding: 18px 50px; background: #1a1a1a; color: white; text-decoration: none; border-radius: 8px; font-weight: 700; font-size: 16px; transition: background 0.3s; }
+        .cta-button:hover { background: #333; }
+        .back-link { display: inline-block; margin-top: 20px; color: #666; text-decoration: none; }
+        .back-link:hover { color: #1a1a1a; }
+        .zoom-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 10000; justify-content: center; align-items: center; }
+        .zoom-modal.active { display: flex; }
+        .zoom-modal img { max-width: 90%; max-height: 90vh; object-fit: contain; }
+        .zoom-close { position: absolute; top: 20px; right: 20px; color: white; font-size: 40px; cursor: pointer; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; }
+        .no-product { text-align: center; padding: 100px 20px; }
 
-        .thumbnail.active {
-            border-color: #1a1a1a;
-        }
-
-        .thumbnail:hover {
-            border-color: #666;
-        }
-
-        .thumbnail img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .product-info h1 {
-            font-size: 36px;
-            font-weight: 700;
-            margin-bottom: 10px;
-            line-height: 1.2;
-        }
-
-        .product-brand {
-            font-size: 14px;
-            color: #666;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 20px;
-        }
-
-        .product-price {
-            font-size: 48px;
-            font-weight: 700;
+        /* 商品詳細の綺麗な表示 */
+        .desc-section {
             margin: 30px 0;
-        }
-
-        .product-meta {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-            margin: 30px 0;
-            padding: 20px;
+            padding: 25px;
             background: #f8f8f8;
             border-radius: 12px;
         }
-
-        .meta-item {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .meta-label {
-            font-size: 12px;
-            color: #666;
+        .desc-section h3 {
+            font-size: 13px;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 5px;
-        }
-
-        .meta-value {
-            font-size: 16px;
-            font-weight: 600;
-        }
-
-        .product-actions {
-            margin: 40px 0;
-        }
-
-        .cta-button {
-            display: inline-block;
-            padding: 18px 50px;
-            background: #1a1a1a;
-            color: white;
-            text-decoration: none;
-            border-radius: 8px;
-            font-weight: 700;
-            font-size: 16px;
-            transition: background 0.3s;
-        }
-
-        .cta-button:hover {
-            background: #333;
-        }
-
-        .back-link {
-            display: inline-block;
-            margin-top: 20px;
-            color: #666;
-            text-decoration: none;
-        }
-
-        .back-link:hover {
+            letter-spacing: 1.5px;
             color: #1a1a1a;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #e0e0e0;
         }
-
-        .zoom-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.95);
-            z-index: 10000;
-            justify-content: center;
-            align-items: center;
+        .desc-intro {
+            font-size: 14px;
+            line-height: 1.8;
+            color: #666;
+            margin-bottom: 20px;
         }
-
-        .zoom-modal.active {
-            display: flex;
+        .dims-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
         }
-
-        .zoom-modal img {
-            max-width: 90%;
-            max-height: 90vh;
-            object-fit: contain;
-        }
-
-        .zoom-close {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            color: white;
-            font-size: 40px;
-            cursor: pointer;
-            width: 50px;
-            height: 50px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .no-product {
+        .dim-item {
             text-align: center;
-            padding: 100px 20px;
+            padding: 15px 10px;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #e8e8e8;
+        }
+        .dim-label { font-size: 11px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+        .dim-value { font-size: 20px; font-weight: 700; color: #1a1a1a; margin-bottom: 4px; }
+        .dim-inches { font-size: 13px; color: #888; }
+        .details-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
+        }
+        .detail-row {
+            display: flex;
+            padding: 10px 0;
+            border-bottom: 1px solid #eeeeee;
+            gap: 10px;
+        }
+        .detail-label { font-size: 13px; color: #888; min-width: 100px; }
+        .detail-value { font-size: 13px; color: #1a1a1a; font-weight: 500; }
+        .features-list { list-style: none; padding: 0; margin: 0; }
+        .features-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid #eeeeee;
+            font-size: 13px;
+            color: #333;
+            padding-left: 16px;
+            position: relative;
+        }
+        .features-list li::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: #999;
         }
 
         @media (max-width: 768px) {
-            .product-detail-container {
-                grid-template-columns: 1fr;
-                gap: 30px;
-            }
-
-            .product-gallery {
-                position: relative;
-                top: 0;
-            }
+            .product-detail-container { grid-template-columns: 1fr; gap: 30px; }
+            .product-gallery { position: relative; top: 0; }
+            .dims-grid { grid-template-columns: repeat(3, 1fr); }
+            .details-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -225,8 +160,7 @@
                 </div>
                 <div class="search-container">
                     <div class="search-icon">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <circle cx="11" cy="11" r="8" />
                             <path d="M21 21l-4.35-4.35" />
                         </svg>
@@ -237,9 +171,7 @@
     </header>
 
     <div id="product-detail-content">
-        <div class="no-product">
-            <h2>Loading product...</h2>
-        </div>
+        <div class="no-product"><h2>Loading product...</h2></div>
     </div>
 
     <div class="zoom-modal" id="zoomModal">
@@ -256,42 +188,134 @@
     <script>
         let products = [];
 
-        // products_data.json から読み込む
         fetch('products_data.json')
             .then(res => res.json())
             .then(data => {
                 products = data;
-                console.log(`Loaded ${products.length} products`);
                 loadProductDetail();
             })
             .catch(err => {
-                console.error('Failed to load products_data.json:', err);
                 document.getElementById('product-detail-content').innerHTML =
-                    '<div class="no-product"><h2>Error loading product data</h2><p>Please check your connection and try again.</p></div>';
+                    '<div class="no-product"><h2>Error loading product data</h2></div>';
             });
 
         function cmToInches(cm) {
-            const numericValue = parseFloat(cm);
-            if (isNaN(numericValue)) return '';
-            const inches = (numericValue / 2.54).toFixed(2);
-            return inches;
+            const n = parseFloat(cm);
+            if (isNaN(n)) return '';
+            return (n / 2.54).toFixed(2);
+        }
+
+        function parseDescription(desc) {
+            if (!desc) return null;
+
+            const result = {
+                intro: '',
+                size: {},
+                details: {},
+                features: [],
+                closing: ''
+            };
+
+            // \n を改行として扱う
+            const text = desc.replace(/\\n/g, '\n');
+            const lines = text.split('\n').map(l => l.trim()).filter(l => l);
+
+            let section = 'intro';
+            for (const line of lines) {
+                const lower = line.toLowerCase();
+
+                if (lower === 'size' || lower.startsWith('size ')) { section = 'size'; continue; }
+                if (lower === 'product details' || lower === 'details') { section = 'details'; continue; }
+                if (lower === 'features') { section = 'features'; continue; }
+                if (lower.includes('thank you') || lower.includes('appreciate')) { result.closing = line; continue; }
+
+                if (section === 'intro') {
+                    result.intro += (result.intro ? ' ' : '') + line;
+                } else if (section === 'size') {
+                    const match = line.match(/^(width|height|depth)[:\s]+(.+)/i);
+                    if (match) result.size[match[1].toLowerCase()] = match[2].trim();
+                } else if (section === 'details') {
+                    const match = line.match(/^([^:]+):\s*(.+)/);
+                    if (match) result.details[match[1].trim()] = match[2].trim();
+                } else if (section === 'features') {
+                    if (line.startsWith('-') || line.startsWith('•')) {
+                        result.features.push(line.replace(/^[-•]\s*/, ''));
+                    } else if (line.match(/^[A-Z]/)) {
+                        result.features.push(line);
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        function buildDescriptionHTML(product) {
+            const parsed = parseDescription(product.description);
+            if (!parsed) return '';
+
+            let html = '<div class="desc-section">';
+            html += '<h3>Product Description</h3>';
+
+            // イントロ
+            if (parsed.intro) {
+                html += `<p class="desc-intro">${parsed.intro}</p>`;
+            }
+
+            // サイズ
+            const hasSize = Object.keys(parsed.size).length > 0;
+            if (hasSize) {
+                html += '<div class="dims-grid">';
+                ['width', 'height', 'depth'].forEach(key => {
+                    if (parsed.size[key]) {
+                        const val = parsed.size[key];
+                        const numMatch = val.match(/[\d.]+/);
+                        const inches = numMatch ? cmToInches(numMatch[0]) : '';
+                        html += `
+                            <div class="dim-item">
+                                <div class="dim-label">${key.charAt(0).toUpperCase() + key.slice(1)}</div>
+                                <div class="dim-value">${val}</div>
+                                ${inches ? `<div class="dim-inches">${inches} inches</div>` : ''}
+                            </div>`;
+                    }
+                });
+                html += '</div>';
+            }
+
+            // 商品詳細
+            const hasDetails = Object.keys(parsed.details).length > 0;
+            if (hasDetails) {
+                html += '<div class="details-grid">';
+                Object.entries(parsed.details).forEach(([key, val]) => {
+                    html += `
+                        <div class="detail-row">
+                            <span class="detail-label">${key}</span>
+                            <span class="detail-value">${val}</span>
+                        </div>`;
+                });
+                html += '</div>';
+            }
+
+            // 特徴
+            if (parsed.features.length > 0) {
+                html += '<ul class="features-list" style="margin-top: 15px;">';
+                parsed.features.forEach(f => {
+                    html += `<li>${f}</li>`;
+                });
+                html += '</ul>';
+            }
+
+            html += '</div>';
+            return html;
         }
 
         function loadProductDetail() {
             const urlParams = new URLSearchParams(window.location.search);
             const productId = urlParams.get('id');
-
-            console.log(`Looking for product ID: ${productId}`);
-
-            // productId（文字列のhandle）で検索、なければ数字IDでも検索
             const product = products.find(p => p.productId === productId) ||
                             products.find(p => String(p.id) === productId);
-
             const contentDiv = document.getElementById('product-detail-content');
 
             if (product) {
-                console.log(`Found product: ${product.name}`);
-
                 const images = product.images || [product.imageUrl];
                 const mainImage = images[0];
 
@@ -301,165 +325,7 @@
                     </div>
                 `).join('');
 
-                let detailTextHTML = '';
-                if (product.detailText) {
-                    const dt = product.detailText;
-                    const parts = [];
-
-                    if (dt.intro) {
-                        const introText = dt.intro.replace(/\\n/g, '<br>');
-                        parts.push(`<div style="margin-bottom: 20px; line-height: 1.8; color: #555;">${introText}</div>`);
-                    }
-
-                    if (product.dimensions && (product.dimensions.height || product.dimensions.width || product.dimensions.depth)) {
-                        let dimsContent = '';
-                        if (product.dimensions.height) {
-                            const inches = cmToInches(product.dimensions.height);
-                            dimsContent += `
-                                <div style="text-align: center; padding: 15px; background: #fafafa; border-radius: 8px;">
-                                    <div style="font-size: 11px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">HEIGHT</div>
-                                    <div style="font-size: 22px; font-weight: 700; color: #1a1a1a; margin-bottom: 4px;">${product.dimensions.height}</div>
-                                    <div style="font-size: 14px; color: #666;">${inches} inches</div>
-                                </div>
-                            `;
-                        }
-                        if (product.dimensions.width) {
-                            const inches = cmToInches(product.dimensions.width);
-                            dimsContent += `
-                                <div style="text-align: center; padding: 15px; background: #fafafa; border-radius: 8px;">
-                                    <div style="font-size: 11px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">WIDTH</div>
-                                    <div style="font-size: 22px; font-weight: 700; color: #1a1a1a; margin-bottom: 4px;">${product.dimensions.width}</div>
-                                    <div style="font-size: 14px; color: #666;">${inches} inches</div>
-                                </div>
-                            `;
-                        }
-                        if (product.dimensions.depth) {
-                            const inches = cmToInches(product.dimensions.depth);
-                            dimsContent += `
-                                <div style="text-align: center; padding: 15px; background: #fafafa; border-radius: 8px;">
-                                    <div style="font-size: 11px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">DEPTH</div>
-                                    <div style="font-size: 22px; font-weight: 700; color: #1a1a1a; margin-bottom: 4px;">${product.dimensions.depth}</div>
-                                    <div style="font-size: 14px; color: #666;">${inches} inches</div>
-                                </div>
-                            `;
-                        }
-                        parts.push(`
-                            <div style="margin-bottom: 20px;">
-                                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;">
-                                    ${dimsContent}
-                                </div>
-                            </div>
-                        `);
-                    }
-
-                    if (dt.description) {
-                        parts.push(`<div style="margin-bottom: 20px; line-height: 1.8; color: #333; font-weight: 500;">${dt.description}</div>`);
-                    }
-
-                    if (dt.specifications && dt.specifications.length > 0) {
-                        const specList = dt.specifications.map(spec => `<div style="margin-bottom: 8px; color: #555;">- ${spec}</div>`).join('');
-                        parts.push(`<div style="margin-bottom: 20px;">${specList}</div>`);
-                    }
-
-                    if (dt.closing) {
-                        parts.push(`<div style="margin-bottom: 20px; line-height: 1.8; color: #555;">${dt.closing}</div>`);
-                    }
-
-                    if (dt.additional) {
-                        parts.push(`<div style="line-height: 1.8; color: #777; font-size: 14px;">${dt.additional}</div>`);
-                    }
-
-                    if (parts.length > 0) {
-                        detailTextHTML = `
-                            <div style="margin: 30px 0; padding: 25px; background: #f8f8f8; border-radius: 12px;">
-                                <h3 style="font-size: 14px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 20px; color: #1a1a1a;">Product Description</h3>
-                                ${parts.join('')}
-                            </div>
-                        `;
-                    }
-                }
-
-                let descriptionHTML = '';
-                if (!product.detailText && product.description) {
-                    const cleanDesc = product.description.replace(/\.\.\.$/, '').trim();
-                    descriptionHTML = `
-                        <div style="margin: 30px 0; padding: 20px; background: #f8f8f8; border-radius: 12px;">
-                            <h3 style="font-size: 14px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px;">Product Description</h3>
-                            <p style="line-height: 1.8; color: #333; white-space: pre-line;">${cleanDesc}</p>
-                        </div>
-                    `;
-                }
-
-                let dimensionsHTML = '';
-                if (product.dimensions && (product.dimensions.height || product.dimensions.width || product.dimensions.depth)) {
-                    let dimsContent = '';
-                    if (product.dimensions.height) {
-                        const inches = cmToInches(product.dimensions.height);
-                        dimsContent += `
-                            <div style="text-align: center; padding: 15px; background: #fafafa; border-radius: 8px;">
-                                <div style="font-size: 11px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">高さ / Height</div>
-                                <div style="font-size: 22px; font-weight: 700; color: #1a1a1a; margin-bottom: 4px;">${product.dimensions.height}</div>
-                                <div style="font-size: 14px; color: #666;">${inches} inches</div>
-                            </div>
-                        `;
-                    }
-                    if (product.dimensions.width) {
-                        const inches = cmToInches(product.dimensions.width);
-                        dimsContent += `
-                            <div style="text-align: center; padding: 15px; background: #fafafa; border-radius: 8px;">
-                                <div style="font-size: 11px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">幅 / Width</div>
-                                <div style="font-size: 22px; font-weight: 700; color: #1a1a1a; margin-bottom: 4px;">${product.dimensions.width}</div>
-                                <div style="font-size: 14px; color: #666;">${inches} inches</div>
-                            </div>
-                        `;
-                    }
-                    if (product.dimensions.depth) {
-                        const inches = cmToInches(product.dimensions.depth);
-                        dimsContent += `
-                            <div style="text-align: center; padding: 15px; background: #fafafa; border-radius: 8px;">
-                                <div style="font-size: 11px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">奥行 / Depth</div>
-                                <div style="font-size: 22px; font-weight: 700; color: #1a1a1a; margin-bottom: 4px;">${product.dimensions.depth}</div>
-                                <div style="font-size: 14px; color: #666;">${inches} inches</div>
-                            </div>
-                        `;
-                    }
-                    dimensionsHTML = `
-                        <div style="margin: 20px 0; padding: 20px; background: #fff; border: 1px solid #e5e5e5; border-radius: 8px;">
-                            <h3 style="font-size: 14px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; color: #1a1a1a;">📏 サイズ / Dimensions</h3>
-                            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;">
-                                ${dimsContent}
-                            </div>
-                        </div>
-                    `;
-                }
-
-                let specificationsHTML = '';
-                if (product.specifications) {
-                    let specsContent = '';
-                    const specs = product.specifications;
-                    if (specs.color) specsContent += `<div style="display: flex; padding: 10px 0; border-bottom: 1px solid #f0f0f0;"><strong style="min-width: 120px; color: #666;">Color:</strong><span style="color: #333;">${specs.color}</span></div>`;
-                    if (specs.material) specsContent += `<div style="display: flex; padding: 10px 0; border-bottom: 1px solid #f0f0f0;"><strong style="min-width: 120px; color: #666;">Material:</strong><span style="color: #333;">${specs.material}</span></div>`;
-                    if (specs.design) specsContent += `<div style="display: flex; padding: 10px 0; border-bottom: 1px solid #f0f0f0;"><strong style="min-width: 120px; color: #666;">Design:</strong><span style="color: #333;">${specs.design}</span></div>`;
-                    if (specs.hardware) specsContent += `<div style="display: flex; padding: 10px 0; border-bottom: 1px solid #f0f0f0;"><strong style="min-width: 120px; color: #666;">Hardware:</strong><span style="color: #333;">${specs.hardware}</span></div>`;
-                    if (specs.accessories) specsContent += `<div style="display: flex; padding: 10px 0; border-bottom: 1px solid #f0f0f0;"><strong style="min-width: 120px; color: #666;">Accessories:</strong><span style="color: #333;">${specs.accessories}</span></div>`;
-                    if (specsContent) {
-                        specificationsHTML = `
-                            <div style="margin: 20px 0;">
-                                <h3 style="font-size: 14px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; color: #1a1a1a;">Specifications</h3>
-                                <div style="display: grid; grid-template-columns: 1fr; gap: 12px;">${specsContent}</div>
-                            </div>
-                        `;
-                    }
-                }
-
-                let additionalInfoHTML = '';
-                if (product.additionalInfo && product.additionalInfo.stainsTears) {
-                    additionalInfoHTML = `
-                        <div style="margin: 20px 0; padding: 15px; background: #fff3cd; border-radius: 8px; font-size: 14px; border-left: 4px solid #ffc107;">
-                            <strong>Condition Note:</strong> ${product.additionalInfo.stainsTears}
-                        </div>
-                    `;
-                }
+                const descHTML = buildDescriptionHTML(product);
 
                 contentDiv.innerHTML = `
                     <div class="product-detail-container">
@@ -467,33 +333,36 @@
                             <div class="main-image-container" onclick="openZoom('${mainImage}')">
                                 <img src="${mainImage}" alt="${product.name}" class="main-image" id="mainImage">
                             </div>
-                            <div class="thumbnail-grid">
-                                ${thumbnailsHTML}
-                            </div>
+                            <div class="thumbnail-grid">${thumbnailsHTML}</div>
                         </div>
                         <div class="product-info">
                             <div class="product-brand">${product.brand}</div>
-                            <div style="font-size: 12px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px;">PRODUCT ID: ${product.id}</div>
                             <h1>${product.name}</h1>
                             <div class="product-price">${formatUSD(product.price)}</div>
-                            <a href="https://www.entrupy.com/" target="_blank" rel="noopener noreferrer" style="display: block; margin: 25px 0; padding: 18px 24px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; text-decoration: none; border-radius: 10px; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(102, 126, 234, 0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(102, 126, 234, 0.3)'">
+
+                            <a href="https://www.entrupy.com/" target="_blank" rel="noopener noreferrer"
+                               style="display: block; margin: 25px 0; padding: 18px 24px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; text-decoration: none; border-radius: 10px; box-shadow: 0 4px 15px rgba(102,126,234,0.3);"
+                               onmouseover="this.style.transform='translateY(-2px)'"
+                               onmouseout="this.style.transform='translateY(0)'">
                                 <div style="display: flex; align-items: center; gap: 15px;">
-                                    <div style="flex-shrink: 0; width: 40px; height: 40px; background: rgba(255,255,255,0.2); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
-                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 12L11 14L15 10M20.618 5.984C20.196 5.528 19.461 5.394 18.644 5.127C17.733 4.831 16.597 4.436 15.535 3.756C14.473 3.077 13.815 2.309 13.394 1.733C13.02 1.219 12.684 1 12 1C11.316 1 10.98 1.219 10.606 1.733C10.185 2.309 9.527 3.077 8.465 3.756C7.403 4.436 6.267 4.831 5.356 5.127C4.539 5.394 3.804 5.528 3.382 5.984C2.96 6.439 2.879 7.179 2.803 8.012C2.735 8.764 2.668 9.756 2.668 11C2.668 12.244 2.735 13.236 2.803 13.988C2.879 14.821 2.96 15.561 3.382 16.016C3.804 16.472 4.539 16.606 5.356 16.873C6.267 17.169 7.403 17.564 8.465 18.244C9.527 18.923 10.185 19.691 10.606 20.267C10.98 20.781 11.316 21 12 21C12.684 21 13.02 20.781 13.394 20.267C13.815 19.691 14.473 18.923 15.535 18.244C16.597 17.564 17.733 17.169 18.644 16.873C19.461 16.606 20.196 16.472 20.618 16.016C21.04 15.561 21.121 14.821 21.197 13.988C21.265 13.236 21.332 12.244 21.332 11C21.332 9.756 21.265 8.764 21.197 8.012C21.121 7.179 21.04 6.439 20.618 5.984Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                    <div style="flex-shrink:0; width:40px; height:40px; background:rgba(255,255,255,0.2); border-radius:8px; display:flex; align-items:center; justify-content:center;">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M9 12L11 14L15 10M20.618 5.984C20.196 5.528 19.461 5.394 18.644 5.127C17.733 4.831 16.597 4.436 15.535 3.756C14.473 3.077 13.815 2.309 13.394 1.733C13.02 1.219 12.684 1 12 1C11.316 1 10.98 1.219 10.606 1.733C10.185 2.309 9.527 3.077 8.465 3.756C7.403 4.436 6.267 4.831 5.356 5.127C4.539 5.394 3.804 5.528 3.382 5.984C2.96 6.439 2.879 7.179 2.803 8.012C2.735 8.764 2.668 9.756 2.668 11C2.668 12.244 2.735 13.236 2.803 13.988C2.879 14.821 2.96 15.561 3.382 16.016C3.804 16.472 4.539 16.606 5.356 16.873C6.267 17.169 7.403 17.564 8.465 18.244C9.527 18.923 10.185 19.691 10.606 20.267C10.98 20.781 11.316 21 12 21C12.684 21 13.02 20.781 13.394 20.267C13.815 19.691 14.473 18.923 15.535 18.244C16.597 17.564 17.733 17.169 18.644 16.873C19.461 16.606 20.196 16.472 20.618 16.016C21.04 15.561 21.121 14.821 21.197 13.988C21.265 13.236 21.332 12.244 21.332 11C21.332 9.756 21.265 8.764 21.197 8.012C21.121 7.179 21.04 6.439 20.618 5.984Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
                                     </div>
-                                    <div style="flex: 1;">
-                                        <div style="font-weight: 700; font-size: 15px; margin-bottom: 4px;">Entrupy Certified Authentic</div>
-                                        <div style="font-size: 13px; opacity: 0.95;">All products come with Entrupy authentication certificate</div>
+                                    <div style="flex:1;">
+                                        <div style="font-weight:700; font-size:15px; margin-bottom:4px;">Entrupy Certified Authentic</div>
+                                        <div style="font-size:13px; opacity:0.95;">All products come with Entrupy authentication certificate</div>
                                     </div>
-                                    <div style="flex-shrink: 0; font-size: 18px; opacity: 0.8;">→</div>
+                                    <div style="font-size:18px; opacity:0.8;">→</div>
                                 </div>
                             </a>
-                            ${detailTextHTML || descriptionHTML}
-                            ${product.detailText ? '' : specificationsHTML}
-                            ${product.detailText ? '' : additionalInfoHTML}
-                            <div class="product-actions" style="display: flex; gap: 20px; align-items: center; flex-wrap: wrap;">
+
+                            ${descHTML}
+
+                            <div style="display: flex; gap: 20px; align-items: center; flex-wrap: wrap; margin-top: 30px;">
                                 <a href="products.html" class="back-link">&larr; Back to Products</a>
-                                <a href="mailto:contact@verifiedtokyo.com?subject=${encodeURIComponent(product.name + ' - Purchase Inquiry')}&body=${encodeURIComponent('Product Name: ' + product.name + '\nProduct ID: ' + product.id + '\n\nComments:\n\n\n')}" style="display: inline-flex; align-items: center; gap: 8px; padding: 12px 24px; background: #1a1a1a; color: white; text-decoration: none; border-radius: 6px; font-weight: 600; font-size: 14px; transition: background 0.3s;" onmouseover="this.style.background='#333'" onmouseout="this.style.background='#1a1a1a'">
+                                <a href="mailto:contact@verifiedtokyo.com?subject=${encodeURIComponent(product.name + ' - Purchase Inquiry')}&body=${encodeURIComponent('Product Name: ' + product.name + '\nProduct ID: ' + product.productId + '\n\nComments:\n\n\n')}"
+                                   style="display:inline-flex; align-items:center; gap:8px; padding:12px 24px; background:#1a1a1a; color:white; text-decoration:none; border-radius:6px; font-weight:600; font-size:14px;"
+                                   onmouseover="this.style.background='#333'" onmouseout="this.style.background='#1a1a1a'">
                                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
                                     Purchase Inquiry
                                 </a>
@@ -502,12 +371,11 @@
                     </div>
                 `;
             } else {
-                console.log(`Product ID ${productId} not found`);
                 contentDiv.innerHTML = `
                     <div class="no-product">
                         <h2>Product Not Found</h2>
                         <p>The product you're looking for doesn't exist or may have been sold.</p>
-                        <a href="products.html" class="cta-button" style="margin-top: 20px;">Browse All Products</a>
+                        <a href="products.html" class="cta-button" style="margin-top:20px;">Browse All Products</a>
                     </div>
                 `;
             }
@@ -520,25 +388,21 @@
         }
 
         function openZoom(imageSrc) {
-            const modal = document.getElementById('zoomModal');
-            const zoomedImg = document.getElementById('zoomedImage');
-            modal.classList.add('active');
-            zoomedImg.src = imageSrc;
+            document.getElementById('zoomModal').classList.add('active');
+            document.getElementById('zoomedImage').src = imageSrc;
         }
 
         function closeZoom() {
-            const modal = document.getElementById('zoomModal');
-            modal.classList.remove('active');
+            document.getElementById('zoomModal').classList.remove('active');
         }
 
-        document.getElementById('zoomModal').addEventListener('click', function (e) {
+        document.getElementById('zoomModal').addEventListener('click', function(e) {
             if (e.target === this) closeZoom();
         });
 
-        document.addEventListener('keydown', function (e) {
+        document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') closeZoom();
         });
     </script>
 </body>
-
 </html>
