@@ -125,6 +125,21 @@
                         color: #333;
                         cursor: pointer;
                 }
+
+                /* mobile-nav を確実に非表示 */
+                .mobile-nav {
+                        display: none;
+                }
+                .mobile-nav.active {
+                        display: flex;
+                        flex-direction: column;
+                }
+                .mobile-overlay {
+                        display: none;
+                }
+                .mobile-overlay.active {
+                        display: block;
+                }
         </style>
 </head>
 
@@ -223,10 +238,19 @@
                 let allProducts = [];
                 let currentProducts = [];
 
+                // バッグ以外を除外するキーワード
+                const NON_BAG_KEYWORDS = ['jacket', 'coat', 'dress', 'top', 'shirt', 'pants', 'skirt', 'shoes', 'boots', 'sneaker', 'scarf', 'belt', 'watch', 'jewelry', 'ring', 'necklace', 'bracelet', 'earring'];
+
+                function isBagProduct(product) {
+                        const name = (product.name || '').toLowerCase();
+                        return !NON_BAG_KEYWORDS.some(kw => name.includes(kw));
+                }
+
                 fetch('products_data.json')
                     .then(res => res.json())
                     .then(data => {
-                        allProducts = data;
+                        // バッグのみフィルタリング
+                        allProducts = data.filter(isBagProduct);
                         currentProducts = [...allProducts];
                         applyFilters();
                         initFilters();
@@ -308,14 +332,6 @@
                         brandFilter.addEventListener('change', applyFilters);
                         document.getElementById('sort-filter').addEventListener('change', applyFilters);
                         document.getElementById('hide-soldout').addEventListener('change', applyFilters);
-                }
-
-                function filterProducts() {
-                        applyFilters();
-                }
-
-                function sortProducts() {
-                        applyFilters();
                 }
 
                 function performSearch() {
