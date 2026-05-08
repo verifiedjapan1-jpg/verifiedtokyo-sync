@@ -51,7 +51,7 @@ def fetch_all_products():
                 description = ''
                 if body_html:
                     description = re.sub('<[^>]+>', ' ', body_html).strip()
-                    description = ' '.join(description.split())[:500]
+                    description = ' '.join(description.split())[:2000]
 
                 product = {
                     'id': len(all_products) + 1,
