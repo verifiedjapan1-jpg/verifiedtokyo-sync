@@ -74,7 +74,7 @@
             gap: 10px;
             width: 100%;
             padding: 18px 30px;
-            background: #635bff;
+            background: #1a1a1a;
             color: white;
             border: none;
             border-radius: 8px;
@@ -85,7 +85,7 @@
             text-decoration: none;
             margin-bottom: 12px;
         }
-        .buy-now-btn:hover { background: #5a52e8; transform: translateY(-1px); }
+        .buy-now-btn:hover { background: #333; transform: translateY(-1px); }
         .buy-now-btn:disabled { background: #aaa; cursor: not-allowed; transform: none; }
         .buy-now-btn svg { width: 20px; height: 20px; }
 
@@ -289,7 +289,6 @@
 
                 const descHTML = buildDescriptionHTML(product);
                 const priceInt = Math.ceil(product.price);
-                const imageUrl = encodeURIComponent(mainImage || '');
 
                 contentDiv.innerHTML = `
                     <div class="product-detail-container">
@@ -304,7 +303,6 @@
                             <h1>${product.name}</h1>
                             <div class="product-price">${formatUSD(product.price)}</div>
 
-                            <!-- Buy Now ボタン -->
                             <button id="buy-now-btn" class="buy-now-btn"
                                 onclick="buyNow('${product.name.replace(/'/g, "\\'")}', '${product.productId}', ${priceInt}, '${mainImage}')">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
