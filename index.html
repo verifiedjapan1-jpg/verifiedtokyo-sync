@@ -10,20 +10,66 @@
     <link rel="stylesheet" href="styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;600;700&family=Noto+Sans+JP:wght@300;400;500;600&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;600;700&family=Noto+Sans+JP:wght@300;400;500;600&display=swap" rel="stylesheet">
     <script src="currency-converter.js"></script>
+    <style>
+        .featured-product-card {
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            background: white;
+        }
+        .featured-product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        .featured-product-card .product-image {
+            width: 100%;
+            aspect-ratio: 1;
+            overflow: hidden;
+            background: #f8f8f8;
+        }
+        .featured-product-card .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .featured-product-card .product-title {
+            font-size: 14px;
+            font-weight: 500;
+            color: #333;
+            padding: 12px 15px 5px;
+            margin: 0;
+        }
+        .featured-product-card .product-brand-label {
+            font-size: 11px;
+            color: #999;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 8px 15px 0;
+        }
+        .featured-product-card .product-price {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1a1a1a;
+            padding: 5px 15px 15px;
+        }
+        #featured-loading {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+        }
+    </style>
 </head>
 
 <body>
-    <!-- Header -->
     <header class="header">
         <div class="main-header">
             <div class="container">
                 <div class="logo-nav-container">
                     <h1 class="logo">Verified Tokyo</h1>
-
                     <nav class="main-nav">
                         <a href="#" class="nav-link">Home</a>
                         <a href="products.html" class="nav-link">Products</a>
@@ -31,19 +77,15 @@
                         <a href="contact.html" class="nav-link">Contact</a>
                     </nav>
                 </div>
-
                 <div class="search-container">
                     <input type="text" class="search-input" id="search-input" placeholder="Search products...">
                     <div class="search-icon" onclick="performSearch()">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <circle cx="11" cy="11" r="8" />
                             <path d="M21 21l-4.35-4.35" />
                         </svg>
                     </div>
                 </div>
-
-                <!-- Mobile Menu Toggle -->
                 <div class="mobile-menu-toggle" id="mobile-menu-toggle">
                     <span></span>
                     <span></span>
@@ -53,7 +95,6 @@
         </div>
     </header>
 
-    <!-- Mobile Navigation -->
     <div class="mobile-overlay" id="mobile-overlay"></div>
     <nav class="mobile-nav" id="mobile-nav">
         <a href="index.html">Home</a>
@@ -62,7 +103,6 @@
         <a href="contact.html">Contact</a>
     </nav>
 
-    <!-- Hero Section -->
     <section class="hero">
         <div class="hero-carousel">
             <div class="hero-slide active">
@@ -89,18 +129,14 @@
     </section>
 
     <script>
-        // Automatic carousel - wait for DOM to load
         document.addEventListener('DOMContentLoaded', function () {
             let currentSlide = 0;
             const slides = document.querySelectorAll('.hero-slide');
             const totalSlides = slides.length;
 
-            console.log('Carousel loaded with', totalSlides, 'slides');
-
             function showSlide(index) {
                 slides.forEach(slide => slide.classList.remove('active'));
                 slides[index].classList.add('active');
-                console.log('Showing slide', index);
             }
 
             function nextSlide() {
@@ -108,93 +144,64 @@
                 showSlide(currentSlide);
             }
 
-            // Change slide every 3.5 seconds
             setInterval(nextSlide, 3500);
         });
     </script>
-
-
 
     <!-- Featured Products Section -->
     <section class="products-section">
         <div class="container">
             <h2 class="section-title">Featured Collection</h2>
-            <div class="product-grid">
-                <!-- Product 1: ID=94, HERMES Birkin $12,387.50 -->
-                <div class="product-card" onclick="window.location.href='product-detail.html?id=94'">
-                    <div class="product-image">
-                        <img src="https://t-secondhands.jp/cdn/shop/files/6FBC9BA3-2B84-4ECB-B49E-23FFE63E7B5F.jpg"
-                            alt="HERMES Birkin Verso 25 Togo Rouge">
-                    </div>
-                    <h3 class="product-title">HERMES Birkin Verso 25 Togo Rouge</h3>
-                    <p class="product-price">$12,388</p>
-                </div>
-                <!-- Product 2: ID=33, CHANEL Classic Wallet $3,012.50 -->
-                <div class="product-card" onclick="window.location.href='product-detail.html?id=33'">
-                    <div class="product-image">
-                        <img src="https://t-secondhands.jp/cdn/shop/files/IMG-0962.jpg"
-                            alt="CHANEL Classic Wallet Chain Bag">
-                    </div>
-                    <h3 class="product-title">CHANEL Classic Wallet Chain Bag</h3>
-                    <p class="product-price">$3,013</p>
-                </div>
-                <!-- Product 3: ID=26, CHANEL Black Vintage $3,262.50 -->
-                <div class="product-card" onclick="window.location.href='product-detail.html?id=26'">
-                    <div class="product-image">
-                        <img src="https://t-secondhands.jp/cdn/shop/files/IMG-1255.jpg"
-                            alt="CHANEL Black Vintage Leather Shoulder Bag">
-                    </div>
-                    <h3 class="product-title">CHANEL Black Vintage Leather Shoulder Bag</h3>
-                    <p class="product-price">$3,263</p>
-                </div>
-                <!-- Product 4: ID=36, CHANEL Fur Mini $2,262.50 -->
-                <div class="product-card" onclick="window.location.href='product-detail.html?id=36'">
-                    <div class="product-image">
-                        <img src="https://t-secondhands.jp/cdn/shop/files/IMG-0968.jpg"
-                            alt="CHANEL Fur Mini Shoulder Pouch">
-                    </div>
-                    <h3 class="product-title">CHANEL Fur Mini Shoulder Pouch</h3>
-                    <p class="product-price">$2,263</p>
-                </div>
-                <!-- Product 5: ID=39, CHANEL Matelassé $2,825 -->
-                <div class="product-card" onclick="window.location.href='product-detail.html?id=39'">
-                    <div class="product-image">
-                        <img src="https://t-secondhands.jp/cdn/shop/files/IMG-1121.jpg"
-                            alt="CHANEL Matelassé Black Lambskin Shoulder Handbag">
-                    </div>
-                    <h3 class="product-title">CHANEL Matelassé Black Lambskin Shoulder Handbag</h3>
-                    <p class="product-price">$2,825</p>
-                </div>
-                <!-- Product 6: ID=34, CHANEL Coral Pink $3,012.50 -->
-                <div class="product-card" onclick="window.location.href='product-detail.html?id=34'">
-                    <div class="product-image">
-                        <img src="https://t-secondhands.jp/cdn/shop/files/IMG-1207.jpg"
-                            alt="CHANEL Coral Pink Shoulder Bag">
-                    </div>
-                    <h3 class="product-title">CHANEL Coral Pink Shoulder Bag</h3>
-                    <p class="product-price">$3,013</p>
-                </div>
-                <!-- Product 7: ID=35, CHANEL Deauville $3,200 -->
-                <div class="product-card" onclick="window.location.href='product-detail.html?id=35'">
-                    <div class="product-image">
-                        <img src="https://t-secondhands.jp/cdn/shop/files/IMG-0895.jpg"
-                            alt="CHANEL Deauville Tweed Bucket Bag">
-                    </div>
-                    <h3 class="product-title">CHANEL Deauville Tweed Bucket Bag</h3>
-                    <p class="product-price">$3,200</p>
-                </div>
-                <!-- Product 8: ID=62, CHANEL White Leather $2,837.50 -->
-                <div class="product-card" onclick="window.location.href='product-detail.html?id=62'">
-                    <div class="product-image">
-                        <img src="https://t-secondhands.jp/cdn/shop/files/IMG-1128.jpg"
-                            alt="CHANEL White Leather 2-Way Shoulder Bag">
-                    </div>
-                    <h3 class="product-title">CHANEL White Leather 2-Way Shoulder Bag</h3>
-                    <p class="product-price">$2,838</p>
-                </div>
-            </div>
+            <div id="featured-loading">Loading featured products...</div>
+            <div class="product-grid" id="featured-grid" style="display:none;"></div>
         </div>
     </section>
+
+    <script>
+        // Featured CollectionをLOUIS VUITTON、HERMES、PRADA、CHANELの各Top2から動的に生成
+        const FEATURED_BRANDS = ['LOUIS', 'HERMES', 'PRADA', 'CHANEL'];
+
+        fetch('products_data.json')
+            .then(res => res.json())
+            .then(data => {
+                const featuredProducts = [];
+
+                FEATURED_BRANDS.forEach(brandKey => {
+                    // ブランド名でフィルタリング（available=trueのみ）
+                    const brandProducts = data
+                        .filter(p => p.available !== false && p.brand && p.brand.toUpperCase().includes(brandKey))
+                        .sort((a, b) => b.price - a.price)
+                        .slice(0, 2);
+                    featuredProducts.push(...brandProducts);
+                });
+
+                const grid = document.getElementById('featured-grid');
+                const loading = document.getElementById('featured-loading');
+
+                if (featuredProducts.length === 0) {
+                    loading.textContent = 'No featured products available.';
+                    return;
+                }
+
+                grid.innerHTML = featuredProducts.map(product => `
+                    <div class="featured-product-card" onclick="window.location.href='product-detail.html?id=${product.productId}'">
+                        <div class="product-image">
+                            <img src="${product.imageUrl}" alt="${product.name}" onerror="this.src='images/placeholder.jpg'">
+                        </div>
+                        <div class="product-brand-label">${product.brand}</div>
+                        <h3 class="product-title">${product.name}</h3>
+                        <p class="product-price">$${Math.ceil(product.price).toLocaleString()}</p>
+                    </div>
+                `).join('');
+
+                loading.style.display = 'none';
+                grid.style.display = 'grid';
+            })
+            .catch(err => {
+                document.getElementById('featured-loading').textContent = 'Failed to load products.';
+                console.error(err);
+            });
+    </script>
 
     <!-- Brands Section -->
     <section class="brands-section" id="products">
@@ -202,140 +209,98 @@
             <h2 class="section-title">Brands</h2>
             <div class="product-grid">
                 <div class="brand-card" onclick="window.location.href='products.html?brand=LOUIS'">
-                    <div class="brand-image">
-                        <img src="images/louis_vuitton_bag_1768065452796.png" alt="Louis Vuitton">
-                    </div>
+                    <div class="brand-image"><img src="images/louis_vuitton_bag_1768065452796.png" alt="Louis Vuitton"></div>
                     <h3 class="brand-name">LOUIS VUITTON</h3>
                 </div>
                 <div class="brand-card" onclick="window.location.href='products.html?brand=CHANEL'">
-                    <div class="brand-image">
-                        <img src="images/chanel_black_bag_1768065437552.png" alt="Chanel">
-                    </div>
+                    <div class="brand-image"><img src="images/chanel_black_bag_1768065437552.png" alt="Chanel"></div>
                     <h3 class="brand-name">CHANEL</h3>
                 </div>
                 <div class="brand-card" onclick="window.location.href='products.html?brand=HERMES'">
-                    <div class="brand-image">
-                        <img src="images/hermes_tote_bag_1768065485173.png" alt="Hermes">
-                    </div>
+                    <div class="brand-image"><img src="images/hermes_tote_bag_1768065485173.png" alt="Hermes"></div>
                     <h3 class="brand-name">HERMES</h3>
                 </div>
                 <div class="brand-card" onclick="window.location.href='products.html?brand=CHRISTIAN'">
-                    <div class="brand-image">
-                        <img src="images/dior_bag_white_1768362530041.png" alt="Christian Dior">
-                    </div>
+                    <div class="brand-image"><img src="images/dior_bag_white_1768362530041.png" alt="Christian Dior"></div>
                     <h3 class="brand-name">CHRISTIAN DIOR</h3>
                 </div>
                 <div class="brand-card" onclick="window.location.href='products.html?brand=FENDI'">
-                    <div class="brand-image">
-                        <img src="images/fendi_bag_1768361365048.png" alt="Fendi">
-                    </div>
+                    <div class="brand-image"><img src="images/fendi_bag_1768361365048.png" alt="Fendi"></div>
                     <h3 class="brand-name">FENDI</h3>
                 </div>
                 <div class="brand-card" onclick="window.location.href='products.html?brand=YVES'">
-                    <div class="brand-image">
-                        <img src="images/ysl_bag_white_1768362544108.png" alt="YSL">
-                    </div>
+                    <div class="brand-image"><img src="images/ysl_bag_white_1768362544108.png" alt="YSL"></div>
                     <h3 class="brand-name">YVES SAINT LAURENT</h3>
                 </div>
                 <div class="brand-card" onclick="window.location.href='products.html?brand=PRADA'">
-                    <div class="brand-image">
-                        <img src="images/prada_nylon_bag_1768068487712.png" alt="Prada">
-                    </div>
+                    <div class="brand-image"><img src="images/prada_nylon_bag_1768068487712.png" alt="Prada"></div>
                     <h3 class="brand-name">PRADA</h3>
                 </div>
                 <div class="brand-card" onclick="window.location.href='products.html?brand=BVLGARI'">
-                    <div class="brand-image">
-                        <img src="images/bvlgari_bag_white_1768362561912.png" alt="Bvlgari">
-                    </div>
+                    <div class="brand-image"><img src="images/bvlgari_bag_white_1768362561912.png" alt="Bvlgari"></div>
                     <h3 class="brand-name">BVLGARI</h3>
                 </div>
                 <div class="brand-card" onclick="window.location.href='products.html?brand=LOEWE'">
-                    <div class="brand-image">
-                        <img src="images/loewe_bag_white_1768362579910.png" alt="Loewe">
-                    </div>
+                    <div class="brand-image"><img src="images/loewe_bag_white_1768362579910.png" alt="Loewe"></div>
                     <h3 class="brand-name">LOEWE</h3>
                 </div>
                 <div class="brand-card" onclick="window.location.href='products.html?brand=MCM'">
-                    <div class="brand-image">
-                        <img src="images/mcm_bag_white_1768362599157.png" alt="MCM">
-                    </div>
+                    <div class="brand-image"><img src="images/mcm_bag_white_1768362599157.png" alt="MCM"></div>
                     <h3 class="brand-name">MCM</h3>
                 </div>
                 <div class="brand-card" onclick="window.location.href='products.html?brand=VALENTINO'">
-                    <div class="brand-image">
-                        <img src="images/valentino_bag_1768361454255.png" alt="Valentino">
-                    </div>
+                    <div class="brand-image"><img src="images/valentino_bag_1768361454255.png" alt="Valentino"></div>
                     <h3 class="brand-name">VALENTINO</h3>
                 </div>
                 <div class="brand-card" onclick="window.location.href='products.html?brand=ARMANI'">
-                    <div class="brand-image">
-                        <img src="images/armani_bag_white_1768362614573.png" alt="Armani">
-                    </div>
+                    <div class="brand-image"><img src="images/armani_bag_white_1768362614573.png" alt="Armani"></div>
                     <h3 class="brand-name">ARMANI</h3>
                 </div>
                 <div class="brand-card" onclick="window.location.href='products.html?brand=BOTTEGA'">
-                    <div class="brand-image">
-                        <img src="images/bottega_veneta_fixed_1768362516027.png" alt="Bottega Veneta">
-                    </div>
+                    <div class="brand-image"><img src="images/bottega_veneta_fixed_1768362516027.png" alt="Bottega Veneta"></div>
                     <h3 class="brand-name">BOTTEGA VENETA</h3>
                 </div>
                 <div class="brand-card" onclick="window.location.href='products.html?brand=BURBERRY'">
-                    <div class="brand-image">
-                        <img src="images/burberry_check_bag_1768065499499.png" alt="Burberry">
-                    </div>
+                    <div class="brand-image"><img src="images/burberry_check_bag_1768065499499.png" alt="Burberry"></div>
                     <h3 class="brand-name">BURBERRY</h3>
                 </div>
                 <div class="brand-card" onclick="window.location.href='products.html?brand=CELINE'">
-                    <div class="brand-image">
-                        <img src="images/celine_bag_white_1768362630124.png" alt="Celine">
-                    </div>
+                    <div class="brand-image"><img src="images/celine_bag_white_1768362630124.png" alt="Celine"></div>
                     <h3 class="brand-name">CELINE</h3>
                 </div>
                 <div class="brand-card" onclick="window.location.href='products.html?brand=DOLCE'">
-                    <div class="brand-image">
-                        <img src="images/dolce_gabbana_bag_1768361527013.png" alt="Dolce&Gabbana">
-                    </div>
+                    <div class="brand-image"><img src="images/dolce_gabbana_bag_1768361527013.png" alt="Dolce&Gabbana"></div>
                     <h3 class="brand-name">DOLCE & GABBANA</h3>
                 </div>
                 <div class="brand-card" onclick="window.location.href='products.html?brand=FERRAGAMO'">
-                    <div class="brand-image">
-                        <img src="images/ferragamo_bag_1768361542644.png" alt="Ferragamo">
-                    </div>
+                    <div class="brand-image"><img src="images/ferragamo_bag_1768361542644.png" alt="Ferragamo"></div>
                     <h3 class="brand-name">FERRAGAMO</h3>
                 </div>
                 <div class="brand-card" onclick="window.location.href='products.html?brand=GUCCI'">
-                    <div class="brand-image">
-                        <img src="images/gucci_soho_bag_1768068420974.png" alt="Gucci">
-                    </div>
+                    <div class="brand-image"><img src="images/gucci_soho_bag_1768068420974.png" alt="Gucci"></div>
                     <h3 class="brand-name">GUCCI</h3>
                 </div>
                 <div class="brand-card" onclick="window.location.href='products.html?brand=BALENCIAGA'">
-                    <div class="brand-image">
-                        <img src="images/balenciaga_bag_1768361559526.png" alt="Balenciaga">
-                    </div>
+                    <div class="brand-image"><img src="images/balenciaga_bag_1768361559526.png" alt="Balenciaga"></div>
                     <h3 class="brand-name">BALENCIAGA</h3>
                 </div>
             </div>
+        </div>
     </section>
 
-
-    <!-- Footer -->
     <footer style="background: #ffffff; padding: 40px 0; margin-top: 80px; border-top: 1px solid #e5e5e5;">
         <div style="max-width: 1400px; margin: 0 auto; padding: 0 40px;">
             <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 40px; margin-bottom: 30px;">
                 <div>
-                    <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 15px; color: #1a1a1a;">Verified Tokyo
-                    </h3>
-                    <p style="font-size: 14px; color: #666; line-height: 1.8;">We offer high-quality secondhand brand
-                        bags<br>at trustworthy prices.</p>
+                    <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 15px; color: #1a1a1a;">Verified Tokyo</h3>
+                    <p style="font-size: 14px; color: #666; line-height: 1.8;">We offer high-quality secondhand brand bags<br>at trustworthy prices.</p>
                 </div>
                 <div>
                     <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 15px; color: #1a1a1a;">Contact</h3>
                     <p style="font-size: 14px; color: #666; line-height: 1.8;">Email: contact@verifiedtokyo.com</p>
                 </div>
                 <div style="text-align: right;">
-                    <img src="images/payment-methods.png" alt="Accepted Payment Methods"
-                        style="max-width: 300px; height: auto;">
+                    <img src="images/payment-methods.png" alt="Accepted Payment Methods" style="max-width: 300px; height: auto;">
                 </div>
             </div>
             <div style="text-align: center; padding-top: 20px; border-top: 1px solid #e5e5e5;">
@@ -345,7 +310,6 @@
     </footer>
 
     <script>
-        // Mobile Menu Toggle
         document.addEventListener('DOMContentLoaded', function () {
             const menuToggle = document.getElementById('mobile-menu-toggle');
             const mobileNav = document.getElementById('mobile-nav');
@@ -370,25 +334,19 @@
             }
         });
 
-        // Search functionality
         function performSearch() {
             const searchInput = document.getElementById('search-input');
             const searchTerm = searchInput.value.trim();
-
             if (searchTerm) {
-                // Redirect to products page with search parameter
                 window.location.href = `products.html?search=${encodeURIComponent(searchTerm)}`;
             }
         }
 
-        // Allow search on Enter key
         document.addEventListener('DOMContentLoaded', function () {
             const searchInput = document.getElementById('search-input');
             if (searchInput) {
                 searchInput.addEventListener('keypress', function (e) {
-                    if (e.key === 'Enter') {
-                        performSearch();
-                    }
+                    if (e.key === 'Enter') performSearch();
                 });
             }
         });
