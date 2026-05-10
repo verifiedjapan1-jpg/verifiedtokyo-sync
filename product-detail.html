@@ -185,6 +185,10 @@
             form.submit();
         }
 
+        // 不要なセクションのキーワード（表示しない）
+        const SKIP_SECTION_KEYWORDS = /^(vendor|category|tags|vendor \/ category \/ tags)\s*$/i;
+        const SKIP_LINE_KEYWORDS = /^(vendor|category|tags)[:\s]/i;
+
         function buildDescriptionHTML(product) {
             const desc = product.description;
             if (!desc) return '';
@@ -196,31 +200,56 @@
             const featureLines = [];
             let closing = '';
             let section = 'intro';
+            let skipSection = false;
 
             for (const line of lines) {
                 if (!line) continue;
+
+                // 不要セクション見出しの検出→以降をスキップ
+                if (SKIP_SECTION_KEYWORDS.test(line)) { skipSection = true; continue; }
+                if (skipSection) continue;
+
                 if (/^size\s*$/i.test(line)) { section = 'size'; continue; }
                 if (/^product details?\s*$/i.test(line)) { section = 'details'; continue; }
                 if (/^features?\s*$/i.test(line)) { section = 'features'; continue; }
                 if (/^(thank you|we appreciate)/i.test(line)) { closing = line; continue; }
 
+                // 不要な行をスキップ（Vendor:, Category:, Tags:）
+                if (SKIP_LINE_KEYWORDS.test(line)) continue;
+
+                // 寸法パターン
                 if (/^(height|width|depth)[:\s]/i.test(line)) {
                     sizeLines.push(line);
                     if (section === 'intro') section = 'size';
                     continue;
                 }
-                if (/^[-•]\s*(brand|color|material|model|hardware|style|inner|design|shape|accessories)[:\s]/i.test(line) ||
+
+                // 詳細パターン
+                if (/^[-•]\s*(brand|color|material|model|hardware|style|inner|design|shape|accessories|features)[:\s]/i.test(line) ||
                     /^(brand|color|material|model|hardware|style|inner|design|shape|accessories)[:\s]/i.test(line)) {
                     detailLines.push(line.replace(/^[-•]\s*/, ''));
                     if (section === 'intro') section = 'details';
                     continue;
                 }
-                if (/^[-•]/.test(line)) { featureLines.push(line.replace(/^[-•]\s*/, '')); continue; }
+
+                // 箇条書きパターン（空の「–」だけの行はスキップ）
+                if (/^[-•]/.test(line)) {
+                    const content = line.replace(/^[-•]\s*/, '').trim();
+                    if (content) featureLines.push(content);
+                    continue;
+                }
 
                 if (section === 'intro') introLines.push(line);
                 else if (section === 'size') sizeLines.push(line);
                 else if (section === 'details') detailLines.push(line);
-                else if (section === 'features') featureLines.push(line);
+                else if (section === 'features') {
+                    if (line.trim()) featureLines.push(line);
+                }
+            }
+
+            // 何も表示するものがなければ空を返す
+            if (!introLines.length && !sizeLines.length && !detailLines.length && !featureLines.length && !closing) {
+                return '';
             }
 
             let html = '<div class="desc-section"><h3>Product Description</h3>';
@@ -228,6 +257,7 @@
             if (introLines.length > 0) {
                 html += `<p class="desc-intro">${introLines.join('<br>')}</p>`;
             }
+
             if (sizeLines.length > 0) {
                 const sizeMap = {};
                 sizeLines.forEach(line => {
@@ -251,20 +281,23 @@
                     html += '</div>';
                 }
             }
+
             if (detailLines.length > 0) {
                 html += '<table class="details-table">';
                 detailLines.forEach(line => {
                     const m = line.match(/^([^:]+):\s*(.+)/);
                     if (m) html += `<tr><td>${m[1].trim()}</td><td>${m[2].trim()}</td></tr>`;
-                    else html += `<tr><td colspan="2">${line}</td></tr>`;
+                    else if (line.trim()) html += `<tr><td colspan="2">${line}</td></tr>`;
                 });
                 html += '</table>';
             }
+
             if (featureLines.length > 0) {
                 html += '<ul class="features-list">';
-                featureLines.forEach(f => { html += `<li>${f}</li>`; });
+                featureLines.forEach(f => { if (f.trim()) html += `<li>${f}</li>`; });
                 html += '</ul>';
             }
+
             if (closing) html += `<p class="desc-closing">${closing}</p>`;
             html += '</div>';
             return html;
