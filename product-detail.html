@@ -89,10 +89,124 @@
         .buy-now-btn:disabled { background: #aaa; cursor: not-allowed; transform: none; }
         .buy-now-btn svg { width: 20px; height: 20px; }
 
+        /* ===== MOBILE OVERRIDES ===== */
         @media (max-width: 768px) {
-            .product-detail-container { grid-template-columns: 1fr; gap: 30px; padding: 0 20px; }
-            .product-gallery { position: relative; top: 0; }
-            .dims-grid { grid-template-columns: repeat(3, 1fr); }
+
+            /* Layout: single column */
+            .product-detail-container {
+                grid-template-columns: 1fr;
+                gap: 20px;
+                padding: 0 16px;
+                margin: 72px auto 40px; /* reduced top margin for mobile header */
+            }
+
+            /* Gallery: un-sticky on mobile */
+            .product-gallery {
+                position: relative;
+                top: 0;
+            }
+
+            /* Main image: slightly smaller */
+            .main-image-container {
+                margin-bottom: 12px;
+                border-radius: 10px;
+            }
+
+            /* Thumbnails: bigger tap targets */
+            .thumbnail-grid {
+                grid-template-columns: repeat(auto-fill, minmax(68px, 1fr));
+                gap: 8px;
+            }
+            .thumbnail {
+                border-radius: 6px;
+            }
+
+            /* Product info */
+            .product-info h1 {
+                font-size: 24px;
+                margin-bottom: 6px;
+            }
+            .product-brand {
+                font-size: 12px;
+                letter-spacing: 1.5px;
+                margin-bottom: 0;
+            }
+            .product-price {
+                font-size: 32px;
+                margin: 16px 0;
+            }
+
+            /* Buy Now button: full width, good tap height */
+            .buy-now-btn {
+                padding: 16px 20px;
+                font-size: 15px;
+                border-radius: 10px;
+                margin-bottom: 10px;
+            }
+
+            /* Entrupy banner */
+            .entrupy-banner {
+                margin: 10px 0 20px !important;
+                padding: 14px 16px !important;
+                border-radius: 10px !important;
+            }
+            .entrupy-banner .entrupy-icon {
+                width: 34px !important;
+                height: 34px !important;
+            }
+            .entrupy-banner .entrupy-title {
+                font-size: 13px !important;
+            }
+            .entrupy-banner .entrupy-sub {
+                font-size: 12px !important;
+            }
+
+            /* Description section */
+            .desc-section {
+                margin: 20px 0;
+                padding: 18px 16px;
+                border-radius: 10px;
+            }
+            .dims-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 8px;
+            }
+            .dim-item {
+                padding: 10px 6px;
+            }
+            .dim-value {
+                font-size: 15px;
+            }
+            .details-table td {
+                font-size: 13px;
+                padding: 9px 0;
+            }
+            .details-table td:first-child {
+                width: 110px;
+                min-width: 110px;
+            }
+
+            /* Bottom action row */
+            .product-actions-row {
+                flex-direction: column !important;
+                gap: 12px !important;
+                margin-top: 20px !important;
+            }
+            .product-actions-row a {
+                width: 100%;
+                text-align: center;
+                justify-content: center !important;
+                padding: 14px 20px !important;
+            }
+            .back-link {
+                padding: 14px 0 !important;
+                text-align: center;
+            }
+
+            /* Logo */
+            .logo {
+                font-size: 20px !important;
+            }
         }
     </style>
 </head>
@@ -179,6 +293,12 @@
         const SKIP_SECTION_KEYWORDS = /^(vendor|category|tags|vendor \/ category \/ tags|product overview)\s*$/i;
         const SKIP_LINE_KEYWORDS = /^(vendor|category|tags)[:\s]/i;
 
+        // ・・・ 区切りを除去してKey: Value形式に変換
+        function normalizeDotSeparator(line) {
+            // "Key・・・Value" または "Key...Value" パターンを "Key: Value" に変換
+            return line.replace(/^([^・\.]+)[・\.]{2,}(.+)$/, (_, key, value) => `${key.trim()}: ${value.trim()}`);
+        }
+
         function buildDescriptionHTML(product) {
             const desc = product.description;
             if (!desc) return '';
@@ -193,15 +313,16 @@
             let skipSection = false;
 
             for (let i = 0; i < lines.length; i++) {
-                const line = lines[i];
+                let line = lines[i];
                 if (!line) continue;
 
-                // 不要セクションをスキップ
+                // ・・・ 区切りを正規化
+                line = normalizeDotSeparator(line);
+
                 if (SKIP_SECTION_KEYWORDS.test(line)) { skipSection = true; continue; }
                 if (skipSection) continue;
                 if (SKIP_LINE_KEYWORDS.test(line)) continue;
 
-                // 「Product Overview」で始まる行は「Product Overview」部分を削除して本文として扱う
                 if (/^product overview\s+/i.test(line)) {
                     const cleaned = line.replace(/^product overview\s+/i, '').trim();
                     if (cleaned) introLines.push(cleaned);
@@ -214,37 +335,29 @@
                 if (/^features?\s*$/i.test(line)) { section = 'features'; continue; }
                 if (/^(thank you|we appreciate)/i.test(line)) { closing = line; continue; }
 
-                // 寸法パターン
                 if (/^(height|width|depth)[:\s]/i.test(line)) {
                     sizeLines.push(line);
                     if (section === 'intro') section = 'size';
                     continue;
                 }
 
-                // 詳細パターン（Key: Value形式）
                 if (/^[-•]\s*(brand|color|material|model|hardware|style|inner|design|shape|accessories|features)[:\s]/i.test(line) ||
-                    /^(brand|color|material|model|hardware|style|inner|design|shape|accessories)[:\s]/i.test(line)) {
+                    /^(brand|color|material|model|hardware|style|inner|design|shape|accessories|size|neck|stains?|tears?|odor)[:\s]/i.test(line)) {
                     detailLines.push(line.replace(/^[-•]\s*/, ''));
                     if (section === 'intro') section = 'details';
                     continue;
                 }
 
-                // 箇条書きパターン
                 if (/^[-•]/.test(line)) {
                     const content = line.replace(/^[-•]\s*/, '').trim();
                     if (content) featureLines.push(content);
                     continue;
                 }
 
-                // イントロが長い1行の場合、文末のピリオドで分割して複数行に
                 if (section === 'intro') {
-                    // 文章を文単位で分割
                     const sentences = line.match(/[^.!?]+[.!?]+/g);
                     if (sentences && sentences.length > 1) {
-                        sentences.forEach(s => {
-                            const t = s.trim();
-                            if (t) introLines.push(t);
-                        });
+                        sentences.forEach(s => { const t = s.trim(); if (t) introLines.push(t); });
                     } else {
                         introLines.push(line);
                     }
@@ -260,7 +373,6 @@
 
             let html = '<div class="desc-section"><h3>Product Description</h3>';
 
-            // イントロを箇条書きで表示
             if (introLines.length > 0) {
                 if (introLines.length === 1) {
                     html += `<p class="desc-intro">${introLines[0]}</p>`;
@@ -271,7 +383,6 @@
                 }
             }
 
-            // サイズ
             if (sizeLines.length > 0) {
                 const sizeMap = {};
                 sizeLines.forEach(line => {
@@ -296,7 +407,6 @@
                 }
             }
 
-            // 詳細テーブル
             if (detailLines.length > 0) {
                 html += '<table class="details-table">';
                 detailLines.forEach(line => {
@@ -307,7 +417,6 @@
                 html += '</table>';
             }
 
-            // 特徴リスト
             if (featureLines.length > 0) {
                 html += '<ul class="features-list">';
                 featureLines.forEach(f => { if (f.trim()) html += `<li>${f}</li>`; });
@@ -361,16 +470,17 @@
                             </button>
 
                             <a href="https://www.entrupy.com/" target="_blank" rel="noopener noreferrer"
+                               class="entrupy-banner"
                                style="display:block; margin:15px 0 25px; padding:18px 24px; background:linear-gradient(135deg,#667eea 0%,#764ba2 100%); color:white; text-decoration:none; border-radius:10px; box-shadow:0 4px 15px rgba(102,126,234,0.3);"
                                onmouseover="this.style.transform='translateY(-2px)'"
                                onmouseout="this.style.transform='translateY(0)'">
                                 <div style="display:flex; align-items:center; gap:15px;">
-                                    <div style="flex-shrink:0; width:40px; height:40px; background:rgba(255,255,255,0.2); border-radius:8px; display:flex; align-items:center; justify-content:center;">
+                                    <div class="entrupy-icon" style="flex-shrink:0; width:40px; height:40px; background:rgba(255,255,255,0.2); border-radius:8px; display:flex; align-items:center; justify-content:center;">
                                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M9 12L11 14L15 10M20.618 5.984C20.196 5.528 19.461 5.394 18.644 5.127C17.733 4.831 16.597 4.436 15.535 3.756C14.473 3.077 13.815 2.309 13.394 1.733C13.02 1.219 12.684 1 12 1C11.316 1 10.98 1.219 10.606 1.733C10.185 2.309 9.527 3.077 8.465 3.756C7.403 4.436 6.267 4.831 5.356 5.127C4.539 5.394 3.804 5.528 3.382 5.984C2.96 6.439 2.879 7.179 2.803 8.012C2.735 8.764 2.668 9.756 2.668 11C2.668 12.244 2.735 13.236 2.803 13.988C2.879 14.821 2.96 15.561 3.382 16.016C3.804 16.472 4.539 16.606 5.356 16.873C6.267 17.169 7.403 17.564 8.465 18.244C9.527 18.923 10.185 19.691 10.606 20.267C10.98 20.781 11.316 21 12 21C12.684 21 13.02 20.781 13.394 20.267C13.815 19.691 14.473 18.923 15.535 18.244C16.597 17.564 17.733 17.169 18.644 16.873C19.461 16.606 20.196 16.472 20.618 16.016C21.04 15.561 21.121 14.821 21.197 13.988C21.265 13.236 21.332 12.244 21.332 11C21.332 9.756 21.265 8.764 21.197 8.012C21.121 7.179 21.04 6.439 20.618 5.984Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
                                     </div>
                                     <div style="flex:1;">
-                                        <div style="font-weight:700; font-size:15px; margin-bottom:4px;">Entrupy Certified Authentic</div>
-                                        <div style="font-size:13px; opacity:0.95;">All products come with Entrupy authentication certificate</div>
+                                        <div class="entrupy-title" style="font-weight:700; font-size:15px; margin-bottom:4px;">Entrupy Certified Authentic</div>
+                                        <div class="entrupy-sub" style="font-size:13px; opacity:0.95;">All products come with Entrupy authentication certificate</div>
                                     </div>
                                     <div style="font-size:18px; opacity:0.8;">→</div>
                                 </div>
@@ -378,7 +488,7 @@
 
                             ${descHTML}
 
-                            <div style="display:flex; gap:20px; align-items:center; flex-wrap:wrap; margin-top:30px;">
+                            <div class="product-actions-row" style="display:flex; gap:20px; align-items:center; flex-wrap:wrap; margin-top:30px;">
                                 <a href="products.html" class="back-link">&larr; Back to Products</a>
                                 <a href="mailto:contact@verifiedtokyo.com?subject=${encodeURIComponent(product.name + ' - Purchase Inquiry')}&body=${encodeURIComponent('Product Name: ' + product.name + '\nProduct ID: ' + product.productId + '\nPrice: $' + priceInt + '\n\nComments:\n\n\n')}"
                                    style="display:inline-flex; align-items:center; gap:8px; padding:12px 24px; background:#1a1a1a; color:white; text-decoration:none; border-radius:6px; font-weight:600; font-size:14px;"
