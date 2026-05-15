@@ -197,12 +197,11 @@
                                 letter-spacing: 0.5px;
                         }
                         .product-title {
-                                font-size: 13px;
+                                font-size: 12px;
                                 margin: 5px 0;
                                 line-height: 1.4;
-                                /* Clamp to 2 lines */
                                 display: -webkit-box;
-                                -webkit-line-clamp: 2;
+                                -webkit-line-clamp: 3;
                                 -webkit-box-orient: vertical;
                                 overflow: hidden;
                         }
@@ -497,6 +496,17 @@
                     });
                 }
 
+                function cleanProductTitle(product) {
+                    const brand = resolveDisplayBrand(product).toUpperCase();
+                    let name = product.name || '';
+                    // 先頭が "Authentic BrandName " or "BrandName " なら除去
+                    name = name.replace(/^authentic\s+/i, '');
+                    if (name.toUpperCase().startsWith(brand)) {
+                        name = name.slice(brand.length).replace(/^\s+/, '');
+                    }
+                    return name || product.name;
+                }
+
                 function isBagProduct(product) {
                         const name = (product.name || '').toLowerCase();
                         return !NON_BAG_KEYWORDS.some(kw => name.includes(kw));
@@ -548,7 +558,7 @@
                                              onerror="this.src='images/placeholder.jpg'">
                                         <div class="product-info">
                                             <div class="product-brand">${resolveDisplayBrand(product)}</div>
-                                            <h3 class="product-title">${product.name}</h3>
+                                            <h3 class="product-title">${cleanProductTitle(product)}</h3>
                                             ${priceHTML}
                                         </div>
                                     </div>
