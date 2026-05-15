@@ -31,7 +31,7 @@
         .order-card-btn { display: inline-block; padding: 10px 22px; background: #1a1a1a; color: white; text-decoration: none; border-radius: 6px; font-weight: 600; font-size: 14px; }
         .order-card-btn:hover { background: #333; }
     
-        .guide-container { padding-top: 20px; }
+        .guide-container { padding-top: 10px; }
         @media (max-width: 768px) {
             .guide-container { padding: 16px; }
             .guide-header h1 { font-size: 26px; }
@@ -61,32 +61,30 @@
                 top: 0; left: 0; right: 0;
                 z-index: 1000;
                 background: white;
-                box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+                box-shadow: 0 1px 4px rgba(0,0,0,0.10);
             }
 
-            /* container: 縦2段 */
             .main-header .container {
                 display: flex !important;
                 flex-direction: column !important;
                 align-items: stretch !important;
                 padding: 0 !important;
                 height: auto !important;
-                gap: 0 !important;
             }
 
-            /* 1段目: ロゴ＋検索 横並び */
+            /* 1段目: ロゴ＋検索 */
             .logo-nav-container {
                 display: flex !important;
                 flex-direction: row !important;
                 align-items: center !important;
                 justify-content: space-between !important;
                 padding: 10px 16px 8px !important;
-                border-bottom: 1px solid #eeeeee !important;
+                border-bottom: none !important;
                 box-sizing: border-box !important;
             }
 
             .logo {
-                font-size: 17px !important;
+                font-size: 18px !important;
                 white-space: nowrap !important;
                 margin: 0 !important;
                 padding: 0 !important;
@@ -94,16 +92,13 @@
                 letter-spacing: 0 !important;
             }
 
-            /* 検索: 1段目右端 */
             .search-container {
                 flex-shrink: 0 !important;
                 display: flex !important;
                 align-items: center !important;
                 margin: 0 !important;
             }
-            .search-input {
-                display: none !important;
-            }
+            .search-input { display: none !important; }
             .search-input.mobile-expanded {
                 display: block !important;
                 position: fixed !important;
@@ -122,7 +117,7 @@
                 outline: none !important;
             }
 
-            /* 2段目: ナビ 横幅いっぱいに均等配置 */
+            /* 2段目: ナビ — ボーダーは上のみ1本 */
             .main-nav {
                 display: flex !important;
                 flex-direction: row !important;
@@ -132,31 +127,27 @@
                 padding: 0 !important;
                 margin: 0 !important;
                 box-sizing: border-box !important;
-                border-bottom: 1px solid #eeeeee !important;
+                border-top: 1px solid #e8e8e8 !important;
+                border-bottom: none !important;
             }
 
             .nav-link {
                 flex: 1 !important;
                 text-align: center !important;
                 font-size: 11px !important;
-                padding: 9px 4px !important;
+                padding: 8px 4px !important;
                 white-space: nowrap !important;
                 line-height: 1 !important;
                 letter-spacing: 0.04em !important;
             }
 
-            /* ハンバーガー不要 */
             .mobile-menu-toggle { display: none !important; }
             .mobile-nav { display: none !important; }
             .mobile-overlay { display: none !important; }
 
-            /* body: ヘッダー2段分(約84px)下げる */
+            /* body: ヘッダー高さ分(約68px)下げる */
             body { padding-top: 68px !important; }
-
-            /* product-detail page specific */
-            .product-detail-container {
-                margin-top: 20px !important;
-            }
+        }
 
     </style>
 </head>
