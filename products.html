@@ -496,6 +496,8 @@
                         return scoreB - scoreA;
                     });
                 }
+
+                function isBagProduct(product) {
                         const name = (product.name || '').toLowerCase();
                         return !NON_BAG_KEYWORDS.some(kw => name.includes(kw));
                 }
