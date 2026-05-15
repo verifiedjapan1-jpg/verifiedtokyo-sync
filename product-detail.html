@@ -212,7 +212,7 @@
             }
         }
     
-        /* ===== MOBILE: 2-ROW FIXED HEADER (logo row + nav row) ===== */
+        /* ===== MOBILE: 2-ROW FIXED HEADER ===== */
         @media (max-width: 768px) {
 
             .header {
@@ -220,10 +220,10 @@
                 top: 0; left: 0; right: 0;
                 z-index: 1000;
                 background: white;
-                box-shadow: 0 1px 6px rgba(0,0,0,0.08);
+                box-shadow: 0 2px 8px rgba(0,0,0,0.08);
             }
 
-            /* Outer container: vertical stack */
+            /* container: 縦積み */
             .main-header .container {
                 display: flex !important;
                 flex-direction: column !important;
@@ -233,14 +233,31 @@
                 gap: 0 !important;
             }
 
-            /* Row 1: logo + search icon */
+            /* 1行目: ロゴ + 検索アイコン */
             .logo-nav-container {
                 display: flex !important;
                 flex-direction: row !important;
                 align-items: center !important;
                 justify-content: space-between !important;
-                padding: 8px 16px 6px !important;
-                border-bottom: 1px solid #f0f0f0 !important;
+                padding: 10px 16px 8px !important;
+                border-bottom: 1px solid #eeeeee !important;
+                width: 100% !important;
+                box-sizing: border-box !important;
+            }
+
+            /* main-navをlogo-nav-containerの外に出す */
+            .main-nav {
+                display: flex !important;
+                flex-direction: row !important;
+                align-items: center !important;
+                justify-content: space-between !important;
+                width: 100% !important;
+                padding: 0 12px !important;
+                margin: 0 !important;
+                box-sizing: border-box !important;
+                overflow: visible !important;
+                flex-wrap: nowrap !important;
+                border-bottom: 1px solid #eeeeee !important;
             }
 
             .logo {
@@ -250,38 +267,26 @@
                 padding: 0 !important;
                 line-height: 1 !important;
                 letter-spacing: 0 !important;
+                flex-shrink: 0 !important;
             }
 
-            /* Row 1 search icon (moves into logo row) */
+            .nav-link {
+                font-size: 11px !important;
+                padding: 8px 0 !important;
+                white-space: nowrap !important;
+                line-height: 1 !important;
+                flex: 1 !important;
+                text-align: center !important;
+                letter-spacing: 0.03em !important;
+            }
+
+            /* 検索アイコン: 1行目の右端 */
             .search-container {
-                order: 2 !important;
                 flex-shrink: 0 !important;
                 display: flex !important;
                 align-items: center !important;
                 width: auto !important;
                 margin: 0 !important;
-            }
-
-            /* Row 2: nav links full width */
-            .main-nav {
-                display: flex !important;
-                flex-direction: row !important;
-                align-items: center !important;
-                justify-content: space-around !important;
-                width: 100% !important;
-                padding: 0 8px !important;
-                margin: 0 !important;
-                overflow-x: visible !important;
-                flex-wrap: nowrap !important;
-            }
-
-            .nav-link {
-                font-size: 11px !important;
-                padding: 7px 4px !important;
-                white-space: nowrap !important;
-                line-height: 1 !important;
-                flex: 1 !important;
-                text-align: center !important;
             }
 
             .search-input {
@@ -290,7 +295,7 @@
             .search-input.mobile-expanded {
                 display: block !important;
                 position: fixed !important;
-                top: 80px !important;
+                top: 84px !important;
                 left: 0 !important; right: 0 !important;
                 width: 100% !important;
                 padding: 12px 16px !important;
@@ -305,13 +310,13 @@
                 outline: none !important;
             }
 
-            /* Hide hamburger */
+            /* ハンバーガー非表示 */
             .mobile-menu-toggle { display: none !important; }
             .mobile-nav { display: none !important; }
             .mobile-overlay { display: none !important; }
 
-            /* Push body down for 2-row fixed header (~80px) */
-            body { padding-top: 80px !important; }
+            /* body: 2段ヘッダー分下げる */
+            body { padding-top: 84px !important; }
 
             /* product-detail page specific */
             .product-detail-container {
