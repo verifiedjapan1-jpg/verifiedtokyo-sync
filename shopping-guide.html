@@ -1,322 +1,299 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Verified Tokyo | Secondhand Luxury Bags Store/secondhandshop/thriftstore</title>
-    <meta name="description"
-        content="Secondhand luxury bags store with international shipping available. Purchase popular brand bags like LOUIS VUITTON, CHANEL, PRADA at great prices.">
+    <title>Shopping Guide | Verified Tokyo</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;600;700&family=Noto+Sans+JP:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
-        /* モバイルナビを確実に非表示 */
+        .guide-container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
+        .guide-header { text-align: center; margin-bottom: 60px; }
+        .guide-header h1 { font-size: 36px; font-weight: 600; color: #1a1a1a; margin-bottom: 15px; }
+        .guide-header p { font-size: 16px; color: #666; }
+        .guide-section { background: white; border: 1px solid #e5e5e5; border-radius: 8px; padding: 40px; margin-bottom: 30px; }
+        .guide-section h2 { font-size: 24px; font-weight: 600; color: #1a1a1a; margin-bottom: 25px; padding-bottom: 15px; border-bottom: 2px solid #1a1a1a; }
+        .guide-list { list-style: none; padding: 0; }
+        .guide-list li { padding: 15px 0; border-bottom: 1px solid #e5e5e5; font-size: 15px; color: #333; }
+        .guide-list li:last-child { border-bottom: none; }
+        .guide-list li strong { color: #1a1a1a; font-weight: 600; }
+        .info-box { background: #f0f7ff; border-left: 4px solid #1a1a1a; padding: 20px; margin: 20px 0; border-radius: 4px; }
+        .info-box h3 { font-size: 16px; font-weight: 600; color: #1a1a1a; margin-bottom: 10px; }
+        .info-box p { font-size: 14px; color: #666; line-height: 1.6; }
+        .order-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; margin-top: 30px; }
+        .order-card { text-align: center; padding: 36px 28px; background: #f9f9f9; border-radius: 8px; border: 2px solid #1a1a1a; }
+        .order-card-icon { width: 60px; height: 60px; background: #1a1a1a; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 26px; margin: 0 auto 20px; }
+        .order-card-title { font-size: 20px; font-weight: 600; color: #1a1a1a; margin-bottom: 14px; }
+        .order-card-desc { font-size: 14px; color: #555; line-height: 1.7; margin-bottom: 22px; }
+        .order-card-tag { display: inline-block; background: #e8f5e9; color: #2e7d32; font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 20px; margin-bottom: 16px; }
+        .order-card-btn { display: inline-block; padding: 10px 22px; background: #1a1a1a; color: white; text-decoration: none; border-radius: 6px; font-weight: 600; font-size: 14px; }
+        .order-card-btn:hover { background: #333; }
+    
+        .guide-container { padding-top: 20px; }
+        @media (max-width: 768px) {
+            .guide-container { padding: 16px; }
+            .guide-header h1 { font-size: 26px; }
+            .guide-section { padding: 24px 16px; }
+            .order-cards { grid-template-columns: 1fr; }
+            .guide-header { margin-bottom: 30px; }
+        }
+
         .mobile-nav { display: none; }
         .mobile-nav.active { display: flex; flex-direction: column; }
         .mobile-overlay { display: none; }
         .mobile-overlay.active { display: block; }
 
-        .guide-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 40px 20px;
+        /* nav-full/nav-short */
+        .nav-full { display: inline; }
+        .nav-short { display: none; }
+        @media (max-width: 768px) {
+            .nav-full { display: none !important; }
+            .nav-short { display: inline !important; }
         }
-        .guide-header {
-            text-align: center;
-            margin-bottom: 60px;
-        }
-        .guide-header h1 {
-            font-size: 36px;
-            font-weight: 600;
-            color: #1a1a1a;
-            margin-bottom: 15px;
-        }
-        .guide-header p {
-            font-size: 16px;
-            color: #666;
-        }
-        .guide-section {
-            background: white;
-            border: 1px solid #e5e5e5;
-            border-radius: 8px;
-            padding: 40px;
-            margin-bottom: 30px;
-        }
-        .guide-section h2 {
-            font-size: 24px;
-            font-weight: 600;
-            color: #1a1a1a;
-            margin-bottom: 25px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid #1a1a1a;
-        }
-        .guide-list {
-            list-style: none;
-            padding: 0;
-        }
-        .guide-list li {
-            padding: 15px 0;
-            border-bottom: 1px solid #e5e5e5;
-            font-size: 15px;
-            color: #333;
-        }
-        .guide-list li:last-child { border-bottom: none; }
-        .guide-list li strong {
-            color: #1a1a1a;
-            font-weight: 600;
-        }
-        .info-box {
-            background: #f0f7ff;
-            border-left: 4px solid #1a1a1a;
-            padding: 20px;
-            margin: 20px 0;
-            border-radius: 4px;
-        }
-        .info-box h3 {
-            font-size: 16px;
-            font-weight: 600;
-            color: #1a1a1a;
-            margin-bottom: 10px;
-        }
-        .info-box p {
-            font-size: 14px;
-            color: #666;
-            line-height: 1.6;
-        }
-        .order-cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 24px;
-            margin-top: 30px;
-        }
-        .order-card {
-            text-align: center;
-            padding: 36px 28px;
-            background: #f9f9f9;
-            border-radius: 8px;
-            border: 2px solid #1a1a1a;
-        }
-        .order-card-icon {
-            width: 60px;
-            height: 60px;
-            background: #1a1a1a;
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 26px;
-            margin: 0 auto 20px;
-        }
-        .order-card-title {
-            font-size: 20px;
-            font-weight: 600;
-            color: #1a1a1a;
-            margin-bottom: 14px;
-        }
-        .order-card-desc {
-            font-size: 14px;
-            color: #555;
-            line-height: 1.7;
-            margin-bottom: 22px;
-        }
-        .order-card-tag {
-            display: inline-block;
-            background: #e8f5e9;
-            color: #2e7d32;
-            font-size: 12px;
-            font-weight: 600;
-            padding: 4px 10px;
-            border-radius: 20px;
-            margin-bottom: 16px;
-        }
-        .order-card-btn {
-            display: inline-block;
-            padding: 10px 22px;
-            background: #1a1a1a;
-            color: white;
-            text-decoration: none;
-            border-radius: 6px;
-            font-weight: 600;
-            font-size: 14px;
-            transition: background 0.3s;
-        }
-        .order-card-btn:hover { background: #333; }
+
+        /* ===== MOBILE: 2-ROW FIXED HEADER ===== */
+        @media (max-width: 768px) {
+
+            .header {
+                position: fixed !important;
+                top: 0; left: 0; right: 0;
+                z-index: 1000;
+                background: white;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            }
+
+            /* container: 縦2段 */
+            .main-header .container {
+                display: flex !important;
+                flex-direction: column !important;
+                align-items: stretch !important;
+                padding: 0 !important;
+                height: auto !important;
+                gap: 0 !important;
+            }
+
+            /* 1段目: ロゴ＋検索 横並び */
+            .logo-nav-container {
+                display: flex !important;
+                flex-direction: row !important;
+                align-items: center !important;
+                justify-content: space-between !important;
+                padding: 10px 16px 8px !important;
+                border-bottom: 1px solid #eeeeee !important;
+                box-sizing: border-box !important;
+            }
+
+            .logo {
+                font-size: 17px !important;
+                white-space: nowrap !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                line-height: 1 !important;
+                letter-spacing: 0 !important;
+            }
+
+            /* 検索: 1段目右端 */
+            .search-container {
+                flex-shrink: 0 !important;
+                display: flex !important;
+                align-items: center !important;
+                margin: 0 !important;
+            }
+            .search-input {
+                display: none !important;
+            }
+            .search-input.mobile-expanded {
+                display: block !important;
+                position: fixed !important;
+                top: 68px !important;
+                left: 0 !important; right: 0 !important;
+                width: 100% !important;
+                padding: 12px 16px !important;
+                font-size: 16px !important;
+                border: none !important;
+                border-bottom: 2px solid #1a1a1a !important;
+                background: white !important;
+                z-index: 999 !important;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.1) !important;
+                border-radius: 0 !important;
+                box-sizing: border-box !important;
+                outline: none !important;
+            }
+
+            /* 2段目: ナビ 横幅いっぱいに均等配置 */
+            .main-nav {
+                display: flex !important;
+                flex-direction: row !important;
+                align-items: center !important;
+                justify-content: space-around !important;
+                width: 100% !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                box-sizing: border-box !important;
+                border-bottom: 1px solid #eeeeee !important;
+            }
+
+            .nav-link {
+                flex: 1 !important;
+                text-align: center !important;
+                font-size: 11px !important;
+                padding: 9px 4px !important;
+                white-space: nowrap !important;
+                line-height: 1 !important;
+                letter-spacing: 0.04em !important;
+            }
+
+            /* ハンバーガー不要 */
+            .mobile-menu-toggle { display: none !important; }
+            .mobile-nav { display: none !important; }
+            .mobile-overlay { display: none !important; }
+
+            /* body: ヘッダー2段分(約84px)下げる */
+            body { padding-top: 68px !important; }
+
+            /* product-detail page specific */
+            .product-detail-container {
+                margin-top: 20px !important;
+            }
+
     </style>
 </head>
-
 <body>
-    <header class="header">
+        <header class="header">
         <div class="main-header">
             <div class="container">
                 <div class="logo-nav-container">
                     <h1 class="logo">Verified Tokyo</h1>
-                    <nav class="main-nav">
-                        <a href="index.html" class="nav-link">Home</a>
-                        <a href="products.html" class="nav-link">Products</a>
-                        <a href="shopping-guide.html" class="nav-link active">Shopping Guide</a>
-                        <a href="contact.html" class="nav-link">Contact</a>
-                    </nav>
-                </div>
-                <div class="search-container">
-                    <input type="text" class="search-input" id="search-input" placeholder="Search products...">
-                    <div class="search-icon" onclick="performSearch()">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="11" cy="11" r="8" />
-                            <path d="M21 21l-4.35-4.35" />
-                        </svg>
+                    <div class="search-container">
+                        <input type="text" class="search-input" id="search-input" placeholder="Search products...">
+                        <div class="search-icon" onclick="performSearch()">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="11" cy="11" r="8" /><path d="M21 21l-4.35-4.35" />
+                            </svg>
+                        </div>
                     </div>
                 </div>
+                <nav class="main-nav">
+                    <a href="index.html" class="nav-link"><span class="nav-full">Home</span><span class="nav-short">Home</span></a>
+                    <a href="products.html" class="nav-link"><span class="nav-full">Products</span><span class="nav-short">Products</span></a>
+                    <a href="shopping-guide.html" class="nav-link active"><span class="nav-full">Shopping Guide</span><span class="nav-short">Guide</span></a>
+                    <a href="contact.html" class="nav-link"><span class="nav-full">Contact</span><span class="nav-short">Contact</span></a>
+                </nav>
                 <div class="mobile-menu-toggle" id="mobile-menu-toggle">
-                    <span></span>
-                    <span></span>
-                    <span></span>
+                    <span></span><span></span><span></span>
                 </div>
             </div>
         </div>
     </header>
-
     <div class="mobile-overlay" id="mobile-overlay"></div>
     <nav class="mobile-nav" id="mobile-nav">
         <a href="index.html">Home</a>
         <a href="products.html">Products</a>
         <a href="shopping-guide.html">Shopping Guide</a>
         <a href="contact.html">Contact</a>
-    </nav>
+    </nav></div><div class="search-container"><input type="text" class="search-input" id="search-input" placeholder="Search products..."><div class="search-icon" onclick="performSearch()"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8" /><path d="M21 21l-4.35-4.35" /></svg></div></div><div class="mobile-menu-toggle" id="mobile-menu-toggle"><span></span><span></span><span></span></div></div></div></header>
+    <div class="mobile-overlay" id="mobile-overlay"></div>
+    <nav class="mobile-nav" id="mobile-nav"><a href="index.html">Home</a><a href="products.html">Products</a><a href="shopping-guide.html">Shopping Guide</a><a href="contact.html">Contact</a></nav>
 
     <div class="guide-container">
         <div class="guide-header">
             <h1>Shopping Guide</h1>
             <p>Easy steps to complete your purchase</p>
         </div>
-
-        <!-- How to Order Section -->
         <div class="guide-section">
             <h2>How to Order</h2>
-            <p style="font-size: 16px; color: #333; line-height: 1.8; margin-bottom: 10px;">
-                Choose the method that works best for you:
-            </p>
-
+            <p style="font-size:16px;color:#333;line-height:1.8;margin-bottom:10px;">Choose the method that works best for you:</p>
             <div class="order-cards">
-                <!-- Card 1: Buy Now -->
                 <div class="order-card">
                     <div class="order-card-icon">🛒</div>
                     <div class="order-card-tag">Recommended</div>
                     <div class="order-card-title">Buy Now</div>
-                    <div class="order-card-desc">
-                        The fastest way to purchase. On the product page, click the <strong>"Buy Now"</strong> button to go directly to secure checkout. Pay instantly with your credit card via Stripe.
-                    </div>
+                    <div class="order-card-desc">The fastest way to purchase. On the product page, click the <strong>"Buy Now"</strong> button to go directly to secure checkout. Pay instantly with your credit card via Stripe.</div>
                     <a href="products.html" class="order-card-btn">Browse Products</a>
                 </div>
-
-                <!-- Card 2: Purchase Inquiry -->
                 <div class="order-card">
                     <div class="order-card-icon">📧</div>
                     <div class="order-card-title">Purchase Inquiry</div>
-                    <div class="order-card-desc">
-                        On the product detail page, click the <strong>"Purchase Inquiry"</strong> button. Your email will be pre-filled with the product details. Great for questions before purchasing.
-                    </div>
+                    <div class="order-card-desc">On the product detail page, click the <strong>"Purchase Inquiry"</strong> button. Your email will be pre-filled with the product details.</div>
                     <a href="products.html" class="order-card-btn">Browse Products</a>
                 </div>
-
-                <!-- Card 3: Bulk / Special Inquiry -->
                 <div class="order-card">
                     <div class="order-card-icon">💼</div>
-                    <div class="order-card-title">Bulk & Special Orders</div>
-                    <div class="order-card-desc">
-                        Looking to purchase multiple items? We welcome <strong>bulk orders, trade inquiries, and discount negotiations</strong>. Contact us directly to discuss pricing and availability tailored to your needs.
-                    </div>
+                    <div class="order-card-title">Bulk &amp; Special Orders</div>
+                    <div class="order-card-desc">Looking to purchase multiple items? We welcome <strong>bulk orders, trade inquiries, and discount negotiations</strong>.</div>
                     <a href="contact.html" class="order-card-btn">Contact Us</a>
                 </div>
             </div>
-
-            <div class="info-box" style="margin-top: 30px;">
+            <div class="info-box" style="margin-top:30px;">
                 <h3>💡 Response Time</h3>
-                <p>We typically respond within <strong>24-48 hours</strong>. Email: <a href="mailto:contact@verifiedtokyo.com" style="color: #1a1a1a; font-weight: 600;">contact@verifiedtokyo.com</a></p>
+                <p>We typically respond within <strong>24-48 hours</strong>. Email: <a href="mailto:contact@verifiedtokyo.com" style="color:#1a1a1a;font-weight:600;">contact@verifiedtokyo.com</a></p>
             </div>
         </div>
-
-        <!-- Payment Methods Section -->
         <div class="guide-section">
             <h2>Payment Methods</h2>
             <ul class="guide-list">
-                <li><strong>Credit Card (Stripe):</strong> We accept Visa, MasterCard, American Express and more — secure instant checkout via Stripe</li>
-                <li><strong>Bank Transfer:</strong> Direct bank transfer available — please contact us for details</li>
+                <li><strong>Credit Card (Stripe):</strong> Visa, MasterCard, American Express — secure instant checkout</li>
+                <li><strong>Bank Transfer:</strong> Direct bank transfer available — please contact us</li>
                 <li><strong>PayPal:</strong> Secure payment through PayPal upon request</li>
             </ul>
             <div class="info-box">
                 <h3>🔒 Secure Payment</h3>
-                <p>All transactions are encrypted and secure via Stripe. We do not store your credit card information on our servers.</p>
+                <p>All transactions are encrypted and secure via Stripe.</p>
             </div>
         </div>
-
-        <!-- Shipping Information Section -->
         <div class="guide-section">
             <h2>Shipping Information</h2>
             <ul class="guide-list">
-                <li><strong>Domestic Shipping (Japan):</strong> 2-3 business days via Japan Post or Yamato Transport</li>
-                <li><strong>International Shipping:</strong> 5-10 business days depending on destination</li>
-                <li><strong>Express Shipping:</strong> Available for urgent orders (additional fees apply)</li>
-                <li><strong>Free Shipping:</strong> Orders over ¥100,000 qualify for free domestic shipping</li>
+                <li><strong>Domestic (Japan):</strong> 2-3 business days</li>
+                <li><strong>International:</strong> 5-10 business days</li>
+                <li><strong>Express:</strong> Available for urgent orders</li>
+                <li><strong>Free Shipping:</strong> Orders over ¥100,000</li>
             </ul>
             <div class="info-box">
                 <h3>📦 Track Your Order</h3>
-                <p>Once your order ships, you will receive a tracking number via email to monitor your delivery status.</p>
+                <p>Tracking number sent via email once shipped.</p>
             </div>
         </div>
     </div>
-
-    <footer>
-        <div class="container">
-            <div style="text-align: center; padding: 20px 0;">
-                <p style="font-size: 14px; color: #666;">© 2026 Verified Tokyo</p>
-            </div>
-        </div>
-    </footer>
-
+    <footer><div class="container"><div style="text-align:center;padding:20px 0;"><p style="font-size:14px;color:#666;">© 2026 Verified Tokyo</p></div></div></footer>
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const menuToggle = document.getElementById('mobile-menu-toggle');
-            const mobileNav = document.getElementById('mobile-nav');
-            const overlay = document.getElementById('mobile-overlay');
-
-            if (menuToggle) {
-                menuToggle.addEventListener('click', function () {
-                    menuToggle.classList.toggle('active');
-                    mobileNav.classList.toggle('active');
-                    overlay.classList.toggle('active');
-                    document.body.style.overflow = mobileNav.classList.contains('active') ? 'hidden' : '';
-                });
-            }
-
-            if (overlay) {
-                overlay.addEventListener('click', function () {
-                    menuToggle.classList.remove('active');
-                    mobileNav.classList.remove('active');
-                    overlay.classList.remove('active');
-                    document.body.style.overflow = '';
-                });
-            }
-        });
-
         function performSearch() {
-            const searchInput = document.getElementById('search-input');
-            const searchTerm = searchInput.value.trim();
-            if (searchTerm) {
-                window.location.href = `products.html?search=${encodeURIComponent(searchTerm)}`;
-            } else {
-                window.location.href = 'products.html';
-            }
-        }
-
-        if (document.getElementById('search-input')) {
-            document.getElementById('search-input').addEventListener('keypress', function (e) {
-                if (e.key === 'Enter') performSearch();
-            });
+            const v = document.getElementById('search-input').value.trim();
+            window.location.href = v ? 'products.html?search=' + encodeURIComponent(v) : 'products.html';
         }
     </script>
-</body>
+<script>
+        // Mobile search toggle
+        (function() {
+            var isMobile = window.innerWidth <= 768;
+            if (!isMobile) return;
+            var searchIcon = document.querySelector('.search-icon');
+            var searchInput = document.getElementById('search-input');
+            if (!searchIcon || !searchInput) return;
+            searchIcon.style.cursor = 'pointer';
+            searchIcon.addEventListener('click', function(e) {
+                if (searchInput.classList.contains('mobile-expanded')) {
+                    var val = searchInput.value.trim();
+                    if (val) {
+                        window.location.href = 'products.html?search=' + encodeURIComponent(val);
+                    } else {
+                        searchInput.classList.remove('mobile-expanded');
+                        searchInput.blur();
+                    }
+                } else {
+                    searchInput.classList.add('mobile-expanded');
+                    setTimeout(function(){ searchInput.focus(); }, 50);
+                }
+            });
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.search-container')) {
+                    searchInput.classList.remove('mobile-expanded');
+                }
+            });
+        })();
+        </script>
 
+</body>
 </html>
