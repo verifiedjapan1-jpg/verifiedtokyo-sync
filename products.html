@@ -238,6 +238,110 @@
                                 height: 240px;
                         }
                 }
+        
+        /* ===== MOBILE: PC-STYLE FIXED TOP NAV BAR ===== */
+        @media (max-width: 768px) {
+
+            .header {
+                position: fixed !important;
+                top: 0; left: 0; right: 0;
+                z-index: 1000;
+                background: white;
+                box-shadow: 0 1px 6px rgba(0,0,0,0.08);
+            }
+
+            .main-header .container {
+                display: flex !important;
+                flex-direction: row !important;
+                align-items: center !important;
+                padding: 0 12px !important;
+                height: 52px !important;
+                gap: 0 !important;
+            }
+
+            .logo-nav-container {
+                display: flex !important;
+                flex-direction: row !important;
+                align-items: center !important;
+                flex: 1 !important;
+                min-width: 0 !important;
+                overflow: hidden !important;
+            }
+
+            .logo {
+                font-size: 15px !important;
+                white-space: nowrap !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                line-height: 1 !important;
+                flex-shrink: 0 !important;
+                letter-spacing: 0 !important;
+            }
+
+            .main-nav {
+                display: flex !important;
+                flex-direction: row !important;
+                align-items: center !important;
+                overflow-x: auto !important;
+                -webkit-overflow-scrolling: touch !important;
+                scrollbar-width: none !important;
+                margin-left: 8px !important;
+                flex: 1 !important;
+                min-width: 0 !important;
+                padding-bottom: 2px !important;
+            }
+            .main-nav::-webkit-scrollbar { display: none !important; }
+
+            .nav-link {
+                font-size: 12px !important;
+                padding: 6px 7px !important;
+                white-space: nowrap !important;
+                line-height: 1 !important;
+            }
+
+            /* Search: icon only, tap to expand */
+            .search-container {
+                flex-shrink: 0 !important;
+                margin-left: 6px !important;
+                display: flex !important;
+                align-items: center !important;
+                width: auto !important;
+            }
+            .search-input {
+                display: none !important;
+            }
+            .search-input.mobile-expanded {
+                display: block !important;
+                position: fixed !important;
+                top: 52px !important;
+                left: 0 !important; right: 0 !important;
+                width: 100% !important;
+                padding: 12px 16px !important;
+                font-size: 16px !important;
+                border: none !important;
+                border-bottom: 2px solid #1a1a1a !important;
+                background: white !important;
+                z-index: 999 !important;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.1) !important;
+                border-radius: 0 !important;
+                box-sizing: border-box !important;
+                outline: none !important;
+            }
+
+            /* Hide hamburger */
+            .mobile-menu-toggle { display: none !important; }
+            .mobile-nav { display: none !important; }
+            .mobile-overlay { display: none !important; }
+
+            /* Push body down for fixed header */
+            body { padding-top: 52px !important; }
+
+            /* product-detail page specific */
+            .product-detail-container {
+                margin-top: 20px !important;
+            }
+        }
+
         </style>
 </head>
 
@@ -338,6 +442,34 @@
 
                 const NON_BAG_KEYWORDS = ['jacket', 'coat', 'dress', 'top', 'shirt', 'pants', 'skirt', 'shoes', 'boots', 'sneaker', 'scarf', 'belt', 'watch', 'jewelry', 'ring', 'necklace', 'bracelet', 'earring'];
 
+                // brand フィールドが "AUTHENTIC" 等の汎用ワードの場合、商品名から本来のブランド名を抽出
+                const GENERIC_BRAND_WORDS = /^(authentic|genuine|real|verified)\s*$/i;
+                const KNOWN_BRANDS = [
+                    'LOUIS VUITTON','LV','CHANEL','HERMES','GUCCI','PRADA','FENDI',
+                    'YVES SAINT LAURENT','YSL','BVLGARI','BULGARI','LOEWE','MCM',
+                    'VALENTINO','ARMANI','BOTTEGA VENETA','BURBERRY','CELINE',
+                    'DOLCE','FERRAGAMO','BALENCIAGA','DIOR','CHRISTIAN DIOR',
+                    'COACH','KATE SPADE','MICHAEL KORS','TORY BURCH','GIVENCHY',
+                    'ALEXANDER MCQUEEN','SAINT LAURENT','MIUMIU','MIU MIU','VERSACE',
+                    'VIVIENNE WESTWOOD','MULBERRY','LONGCHAMP','FURLA','TOD\'S'
+                ];
+
+                function resolveDisplayBrand(product) {
+                    const raw = (product.brand || '').trim();
+                    // ブランドフィールドが正常なら使う
+                    if (raw && !GENERIC_BRAND_WORDS.test(raw)) return raw;
+                    // 商品名から既知ブランド名を探す
+                    const name = (product.name || '').toUpperCase();
+                    for (const b of KNOWN_BRANDS) {
+                        if (name.includes(b)) return b;
+                    }
+                    // 商品名の最初の単語群（最大2語）をブランドとして使う
+                    const words = (product.name || '').trim().split(/\s+/);
+                    // "Authentic"/"Genuine" で始まる場合は次の語から取得
+                    const start = /^(authentic|genuine|real|verified)$/i.test(words[0]) ? 1 : 0;
+                    return words.slice(start, start + 2).join(' ') || raw;
+                }
+
                 function isBagProduct(product) {
                         const name = (product.name || '').toLowerCase();
                         return !NON_BAG_KEYWORDS.some(kw => name.includes(kw));
@@ -388,7 +520,7 @@
                                              class="product-image"
                                              onerror="this.src='images/placeholder.jpg'">
                                         <div class="product-info">
-                                            <div class="product-brand">${product.brand}</div>
+                                            <div class="product-brand">${resolveDisplayBrand(product)}</div>
                                             <h3 class="product-title">${product.name}</h3>
                                             <div class="product-condition">${product.conditionText || ''}</div>
                                             ${priceHTML}
@@ -477,6 +609,36 @@
                         }
                 });
         </script>
+
+        // Mobile search toggle
+        (function() {
+            var isMobile = window.innerWidth <= 768;
+            if (!isMobile) return;
+            var searchIcon = document.querySelector('.search-icon');
+            var searchInput = document.getElementById('search-input');
+            if (!searchIcon || !searchInput) return;
+            searchIcon.style.cursor = 'pointer';
+            searchIcon.addEventListener('click', function(e) {
+                if (searchInput.classList.contains('mobile-expanded')) {
+                    var val = searchInput.value.trim();
+                    if (val) {
+                        window.location.href = 'products.html?search=' + encodeURIComponent(val);
+                    } else {
+                        searchInput.classList.remove('mobile-expanded');
+                        searchInput.blur();
+                    }
+                } else {
+                    searchInput.classList.add('mobile-expanded');
+                    setTimeout(function(){ searchInput.focus(); }, 50);
+                }
+            });
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.search-container')) {
+                    searchInput.classList.remove('mobile-expanded');
+                }
+            });
+        })();
+
 </body>
 
 </html>
