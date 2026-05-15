@@ -123,8 +123,11 @@
 
             /* Product info */
             .product-info h1 {
-                font-size: 24px;
+                font-size: 22px;
                 margin-bottom: 6px;
+                line-height: 1.4;
+                word-break: break-word;
+                overflow-wrap: break-word;
             }
             .product-brand {
                 font-size: 12px;
@@ -416,6 +419,16 @@
             return words.slice(start, start + 2).join(' ') || raw;
         }
 
+        function cleanProductTitle(product) {
+            const brand = resolveDisplayBrand(product).toUpperCase();
+            let name = product.name || '';
+            name = name.replace(/^authentic\s+/i, '');
+            if (name.toUpperCase().startsWith(brand)) {
+                name = name.slice(brand.length).replace(/^\s+/, '');
+            }
+            return name || product.name;
+        }
+
         const SKIP_SECTION_KEYWORDS = /^(vendor|category|tags|vendor \/ category \/ tags|product overview)\s*$/i;
         const SKIP_LINE_KEYWORDS = /^(vendor|category|tags)[:\s]/i;
 
@@ -584,7 +597,7 @@
                         </div>
                         <div class="product-info">
                             <div class="product-brand">${resolveDisplayBrand(product)}</div>
-                            <h1>${product.name}</h1>
+                            <h1>${cleanProductTitle(product)}</h1>
                             <div class="product-price">${formatUSD(product.price)}</div>
 
                             <button id="buy-now-btn" class="buy-now-btn"
