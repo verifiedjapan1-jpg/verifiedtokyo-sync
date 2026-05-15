@@ -443,7 +443,7 @@
                 const NON_BAG_KEYWORDS = ['jacket', 'coat', 'dress', 'top', 'shirt', 'pants', 'skirt', 'shoes', 'boots', 'sneaker', 'scarf', 'belt', 'watch', 'jewelry', 'ring', 'necklace', 'bracelet', 'earring'];
 
                 // brand フィールドが "AUTHENTIC" 等の汎用ワードの場合、商品名から本来のブランド名を抽出
-                const GENERIC_BRAND_WORDS = /^(authentic|genuine|real|verified)\s*$/i;
+                const GENERIC_BRAND_WORDS = /^(authentic|genuine|real|verified|condition|pre.?owned|secondhand|used)\s*$/i;
                 const KNOWN_BRANDS = [
                     'LOUIS VUITTON','LV','CHANEL','HERMES','GUCCI','PRADA','FENDI',
                     'YVES SAINT LAURENT','YSL','BVLGARI','BULGARI','LOEWE','MCM',
@@ -451,23 +451,23 @@
                     'DOLCE','FERRAGAMO','BALENCIAGA','DIOR','CHRISTIAN DIOR',
                     'COACH','KATE SPADE','MICHAEL KORS','TORY BURCH','GIVENCHY',
                     'ALEXANDER MCQUEEN','SAINT LAURENT','MIUMIU','MIU MIU','VERSACE',
-                    'VIVIENNE WESTWOOD','MULBERRY','LONGCHAMP','FURLA','TOD\'S'
+                    'VIVIENNE WESTWOOD','MULBERRY','LONGCHAMP','FURLA','MONCLER'
                 ];
 
                 function resolveDisplayBrand(product) {
                     const raw = (product.brand || '').trim();
-                    // ブランドフィールドが正常なら使う
+                    // ブランドフィールドが正常（汎用ワードでない）なら使う
                     if (raw && !GENERIC_BRAND_WORDS.test(raw)) return raw;
                     // 商品名から既知ブランド名を探す
                     const name = (product.name || '').toUpperCase();
                     for (const b of KNOWN_BRANDS) {
                         if (name.includes(b)) return b;
                     }
-                    // 商品名の最初の単語群（最大2語）をブランドとして使う
+                    // 商品名の先頭から "Authentic" 等を除いた最初の1語だけをブランドとして使う
                     const words = (product.name || '').trim().split(/\s+/);
-                    // "Authentic"/"Genuine" で始まる場合は次の語から取得
                     const start = /^(authentic|genuine|real|verified)$/i.test(words[0]) ? 1 : 0;
-                    return words.slice(start, start + 2).join(' ') || raw;
+                    // 次の語が既知ブランドの一部かどうかに関わらず1語のみ返す
+                    return words[start] || raw;
                 }
 
                 function isBagProduct(product) {
@@ -522,7 +522,6 @@
                                         <div class="product-info">
                                             <div class="product-brand">${resolveDisplayBrand(product)}</div>
                                             <h3 class="product-title">${product.name}</h3>
-                                            <div class="product-condition">${product.conditionText || ''}</div>
                                             ${priceHTML}
                                         </div>
                                     </div>
