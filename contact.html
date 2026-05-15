@@ -1,245 +1,220 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Verified Tokyo | Secondhand Luxury Bags Store/secondhandshop/thriftstore</title>
-    <meta name="description"
-        content="Secondhand luxury bags store with international shipping available. Purchase popular brand bags like LOUIS VUITTON, CHANEL, PRADA at great prices.">
+    <title>Contact | Verified Tokyo</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;600;700&family=Noto+Sans+JP:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
-        /* モバイルナビを確実に非表示 */
+        .contact-container { max-width: 1200px; margin: 40px auto; padding: 0 20px; }
+        .contact-header { text-align: center; margin-bottom: 50px; }
+        .contact-header h1 { font-size: 36px; color: #2c3e50; margin-bottom: 10px; }
+        .contact-header p { color: #666; font-size: 16px; }
+        .contact-content { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-bottom: 50px; }
+        .contact-form { background: #fff; padding: 40px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .contact-form h2 { font-size: 24px; color: #2c3e50; margin-bottom: 30px; }
+        .form-group { margin-bottom: 25px; }
+        .form-group label { display: block; font-weight: 500; color: #333; margin-bottom: 8px; font-size: 14px; }
+        .form-group label.required::after { content: " *"; color: #e74c3c; }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 12px 15px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px; font-family: inherit; box-sizing: border-box; }
+        .form-group textarea { resize: vertical; min-height: 150px; }
+        .form-group small { display: block; color: #999; margin-top: 5px; font-size: 12px; }
+        .error-message { color: #e74c3c; font-size: 12px; margin-top: 5px; display: none; }
+        .submit-btn { background-color: #2c3e50; color: white; padding: 14px 40px; border: none; border-radius: 4px; font-size: 16px; font-weight: 500; cursor: pointer; width: 100%; }
+        .submit-btn:hover { background-color: #1a252f; }
+        .submit-btn:disabled { background-color: #ccc; cursor: not-allowed; }
+        .contact-info { background: #f8f9fa; padding: 40px; border-radius: 8px; }
+        .contact-info h2 { font-size: 24px; color: #2c3e50; margin-bottom: 30px; }
+        .info-item { margin-bottom: 25px; }
+        .info-item h3 { font-size: 14px; color: #666; text-transform: uppercase; margin-bottom: 8px; font-weight: 500; }
+        .info-item p { color: #333; font-size: 16px; line-height: 1.6; }
+        .info-item a { color: #2c3e50; text-decoration: underline; }
+        .success-message { background: #d4edda; color: #155724; padding: 15px 20px; border-radius: 4px; margin-bottom: 20px; display: none; }
+        .error-banner { background: #f8d7da; color: #721c24; padding: 15px 20px; border-radius: 4px; margin-bottom: 20px; display: none; }
+    
+        @media (max-width: 768px) {
+            .contact-container { padding: 16px; margin-top: 10px; }
+            .contact-content { grid-template-columns: 1fr; gap: 20px; }
+            .contact-form, .contact-info { padding: 24px 16px; }
+            .contact-header h1 { font-size: 26px; }
+            .contact-header { margin-bottom: 30px; }
+        }
+
         .mobile-nav { display: none; }
         .mobile-nav.active { display: flex; flex-direction: column; }
         .mobile-overlay { display: none; }
         .mobile-overlay.active { display: block; }
 
-        .contact-container {
-            max-width: 1200px;
-            margin: 40px auto;
-            padding: 0 20px;
-        }
-        .contact-header {
-            text-align: center;
-            margin-bottom: 50px;
-        }
-        .contact-header h1 {
-            font-size: 36px;
-            color: #2c3e50;
-            margin-bottom: 10px;
-        }
-        .contact-header p {
-            color: #666;
-            font-size: 16px;
-        }
-        .contact-content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 40px;
-            margin-bottom: 50px;
-        }
-        .contact-form {
-            background: #fff;
-            padding: 40px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-        }
-        .contact-form h2 {
-            font-size: 24px;
-            color: #2c3e50;
-            margin-bottom: 30px;
-        }
-        .form-group {
-            margin-bottom: 25px;
-        }
-        .form-group label {
-            display: block;
-            font-weight: 500;
-            color: #333;
-            margin-bottom: 8px;
-            font-size: 14px;
-        }
-        .form-group label.required::after {
-            content: " *";
-            color: #e74c3c;
-        }
-        .form-group input,
-        .form-group select,
-        .form-group textarea {
-            width: 100%;
-            padding: 12px 15px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 14px;
-            font-family: inherit;
-            transition: border-color 0.3s;
-            box-sizing: border-box;
-        }
-        .form-group input:focus,
-        .form-group select:focus,
-        .form-group textarea:focus {
-            outline: none;
-            border-color: #2c3e50;
-        }
-        .form-group textarea {
-            resize: vertical;
-            min-height: 150px;
-        }
-        .form-group small {
-            display: block;
-            color: #999;
-            margin-top: 5px;
-            font-size: 12px;
-        }
-        .error-message {
-            color: #e74c3c;
-            font-size: 12px;
-            margin-top: 5px;
-            display: none;
-        }
-        .submit-btn {
-            background-color: #2c3e50;
-            color: white;
-            padding: 14px 40px;
-            border: none;
-            border-radius: 4px;
-            font-size: 16px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: background-color 0.3s;
-            width: 100%;
-        }
-        .submit-btn:hover { background-color: #1a252f; }
-        .submit-btn:disabled { background-color: #ccc; cursor: not-allowed; }
-        .contact-info {
-            background: #f8f9fa;
-            padding: 40px;
-            border-radius: 8px;
-        }
-        .contact-info h2 {
-            font-size: 24px;
-            color: #2c3e50;
-            margin-bottom: 30px;
-        }
-        .info-item { margin-bottom: 25px; }
-        .info-item h3 {
-            font-size: 14px;
-            color: #666;
-            text-transform: uppercase;
-            margin-bottom: 8px;
-            font-weight: 500;
-        }
-        .info-item p {
-            color: #333;
-            font-size: 16px;
-            line-height: 1.6;
-        }
-        .info-item a {
-            color: #2c3e50;
-            text-decoration: underline;
-        }
-        .info-item a:hover { color: #1a252f; }
-        .success-message {
-            background: #d4edda;
-            color: #155724;
-            padding: 15px 20px;
-            border-radius: 4px;
-            margin-bottom: 20px;
-            display: none;
-        }
-        .error-banner {
-            background: #f8d7da;
-            color: #721c24;
-            padding: 15px 20px;
-            border-radius: 4px;
-            margin-bottom: 20px;
-            display: none;
-        }
+        /* nav-full/nav-short */
+        .nav-full { display: inline; }
+        .nav-short { display: none; }
         @media (max-width: 768px) {
-            .contact-content { grid-template-columns: 1fr; }
-            .contact-form, .contact-info { padding: 30px 20px; }
-            .contact-header h1 { font-size: 28px; }
+            .nav-full { display: none !important; }
+            .nav-short { display: inline !important; }
         }
+
+        /* ===== MOBILE: 2-ROW FIXED HEADER ===== */
+        @media (max-width: 768px) {
+
+            .header {
+                position: fixed !important;
+                top: 0; left: 0; right: 0;
+                z-index: 1000;
+                background: white;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            }
+
+            /* container: 縦2段 */
+            .main-header .container {
+                display: flex !important;
+                flex-direction: column !important;
+                align-items: stretch !important;
+                padding: 0 !important;
+                height: auto !important;
+                gap: 0 !important;
+            }
+
+            /* 1段目: ロゴ＋検索 横並び */
+            .logo-nav-container {
+                display: flex !important;
+                flex-direction: row !important;
+                align-items: center !important;
+                justify-content: space-between !important;
+                padding: 10px 16px 8px !important;
+                border-bottom: 1px solid #eeeeee !important;
+                box-sizing: border-box !important;
+            }
+
+            .logo {
+                font-size: 17px !important;
+                white-space: nowrap !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                line-height: 1 !important;
+                letter-spacing: 0 !important;
+            }
+
+            /* 検索: 1段目右端 */
+            .search-container {
+                flex-shrink: 0 !important;
+                display: flex !important;
+                align-items: center !important;
+                margin: 0 !important;
+            }
+            .search-input {
+                display: none !important;
+            }
+            .search-input.mobile-expanded {
+                display: block !important;
+                position: fixed !important;
+                top: 68px !important;
+                left: 0 !important; right: 0 !important;
+                width: 100% !important;
+                padding: 12px 16px !important;
+                font-size: 16px !important;
+                border: none !important;
+                border-bottom: 2px solid #1a1a1a !important;
+                background: white !important;
+                z-index: 999 !important;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.1) !important;
+                border-radius: 0 !important;
+                box-sizing: border-box !important;
+                outline: none !important;
+            }
+
+            /* 2段目: ナビ 横幅いっぱいに均等配置 */
+            .main-nav {
+                display: flex !important;
+                flex-direction: row !important;
+                align-items: center !important;
+                justify-content: space-around !important;
+                width: 100% !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                box-sizing: border-box !important;
+                border-bottom: 1px solid #eeeeee !important;
+            }
+
+            .nav-link {
+                flex: 1 !important;
+                text-align: center !important;
+                font-size: 11px !important;
+                padding: 9px 4px !important;
+                white-space: nowrap !important;
+                line-height: 1 !important;
+                letter-spacing: 0.04em !important;
+            }
+
+            /* ハンバーガー不要 */
+            .mobile-menu-toggle { display: none !important; }
+            .mobile-nav { display: none !important; }
+            .mobile-overlay { display: none !important; }
+
+            /* body: ヘッダー2段分(約84px)下げる */
+            body { padding-top: 68px !important; }
+
+            /* product-detail page specific */
+            .product-detail-container {
+                margin-top: 20px !important;
+            }
+
     </style>
 </head>
-
 <body>
-    <header class="header">
+        <header class="header">
         <div class="main-header">
             <div class="container">
                 <div class="logo-nav-container">
                     <h1 class="logo">Verified Tokyo</h1>
-                    <nav class="main-nav">
-                        <a href="index.html" class="nav-link">Home</a>
-                        <a href="products.html" class="nav-link">Products</a>
-                        <a href="shopping-guide.html" class="nav-link">Shopping Guide</a>
-                        <a href="contact.html" class="nav-link active">Contact</a>
-                    </nav>
-                </div>
-                <div class="search-container">
-                    <input type="text" class="search-input" id="search-input" placeholder="Search products...">
-                    <div class="search-icon" onclick="performSearch()">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="11" cy="11" r="8" />
-                            <path d="M21 21l-4.35-4.35" />
-                        </svg>
+                    <div class="search-container">
+                        <input type="text" class="search-input" id="search-input" placeholder="Search products...">
+                        <div class="search-icon" onclick="performSearch()">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="11" cy="11" r="8" /><path d="M21 21l-4.35-4.35" />
+                            </svg>
+                        </div>
                     </div>
                 </div>
+                <nav class="main-nav">
+                    <a href="index.html" class="nav-link"><span class="nav-full">Home</span><span class="nav-short">Home</span></a>
+                    <a href="products.html" class="nav-link"><span class="nav-full">Products</span><span class="nav-short">Products</span></a>
+                    <a href="shopping-guide.html" class="nav-link"><span class="nav-full">Shopping Guide</span><span class="nav-short">Guide</span></a>
+                    <a href="contact.html" class="nav-link active"><span class="nav-full">Contact</span><span class="nav-short">Contact</span></a>
+                </nav>
                 <div class="mobile-menu-toggle" id="mobile-menu-toggle">
-                    <span></span>
-                    <span></span>
-                    <span></span>
+                    <span></span><span></span><span></span>
                 </div>
             </div>
         </div>
     </header>
-
     <div class="mobile-overlay" id="mobile-overlay"></div>
     <nav class="mobile-nav" id="mobile-nav">
         <a href="index.html">Home</a>
         <a href="products.html">Products</a>
         <a href="shopping-guide.html">Shopping Guide</a>
         <a href="contact.html">Contact</a>
-    </nav>
+    </nav></div><div class="search-container"><input type="text" class="search-input" id="search-input" placeholder="Search products..."><div class="search-icon" onclick="performSearch()"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8" /><path d="M21 21l-4.35-4.35" /></svg></div></div><div class="mobile-menu-toggle" id="mobile-menu-toggle"><span></span><span></span><span></span></div></div></div></header>
+    <div class="mobile-overlay" id="mobile-overlay"></div>
+    <nav class="mobile-nav" id="mobile-nav"><a href="index.html">Home</a><a href="products.html">Products</a><a href="shopping-guide.html">Shopping Guide</a><a href="contact.html">Contact</a></nav>
 
     <div class="contact-container">
         <div class="contact-header">
             <h1>Contact Us</h1>
             <p>Please fill in the following fields. Fields marked with * are required.</p>
         </div>
-
-        <div class="success-message" id="success-message">
-            ✅ Thank you for your inquiry! We will get back to you within 24-48 hours.
-        </div>
-        <div class="error-banner" id="error-banner">
-            ❌ Failed to send message. Please try again or email us directly at <a href="mailto:contact@verifiedtokyo.com">contact@verifiedtokyo.com</a>
-        </div>
-
+        <div class="success-message" id="success-message">✅ Thank you! We will get back to you within 24-48 hours.</div>
+        <div class="error-banner" id="error-banner">❌ Failed to send. Please email <a href="mailto:contact@verifiedtokyo.com">contact@verifiedtokyo.com</a></div>
         <div class="contact-content">
             <div class="contact-form">
                 <h2>Send us a message</h2>
                 <form id="contact-form" novalidate>
-                    <div class="form-group">
-                        <label for="name" class="required">Full Name</label>
-                        <input type="text" id="name" name="name" required>
-                        <span class="error-message" id="name-error">Please enter your full name</span>
-                    </div>
-                    <div class="form-group">
-                        <label for="email" class="required">Email Address</label>
-                        <input type="email" id="email" name="email" required>
-                        <span class="error-message" id="email-error">Please enter a valid email address</span>
-                    </div>
-                    <div class="form-group">
-                        <label for="phone">Phone Number</label>
-                        <input type="tel" id="phone" name="phone">
-                        <small>Optional - for faster response</small>
-                    </div>
-                    <div class="form-group">
-                        <label for="subject" class="required">Subject</label>
+                    <div class="form-group"><label for="name" class="required">Full Name</label><input type="text" id="name" name="name" required><span class="error-message" id="name-error">Please enter your full name</span></div>
+                    <div class="form-group"><label for="email" class="required">Email Address</label><input type="email" id="email" name="email" required><span class="error-message" id="email-error">Please enter a valid email</span></div>
+                    <div class="form-group"><label for="phone">Phone Number</label><input type="tel" id="phone" name="phone"><small>Optional - for faster response</small></div>
+                    <div class="form-group"><label for="subject" class="required">Subject</label>
                         <select id="subject" name="subject" required>
                             <option value="">-- Please Select --</option>
                             <option value="product-inquiry">Product Inquiry</option>
@@ -251,153 +226,79 @@
                         </select>
                         <span class="error-message" id="subject-error">Please select a subject</span>
                     </div>
-                    <div class="form-group">
-                        <label for="message" class="required">Message</label>
-                        <textarea id="message" name="message" required></textarea>
-                        <span class="error-message" id="message-error">Please enter your message</span>
-                    </div>
+                    <div class="form-group"><label for="message" class="required">Message</label><textarea id="message" name="message" required></textarea><span class="error-message" id="message-error">Please enter your message</span></div>
                     <button type="submit" class="submit-btn">Send Message</button>
                 </form>
             </div>
-
             <div class="contact-info">
                 <h2>Contact Information</h2>
-                <div class="info-item">
-                    <h3>Email</h3>
-                    <p><a href="mailto:contact@verifiedtokyo.com">contact@verifiedtokyo.com</a></p>
-                </div>
-                <div class="info-item">
-                    <h3>Business Hours</h3>
-                    <p>Monday - Sunday: 9:00 - 21:00</p>
-                </div>
-                <div class="info-item">
-                    <h3>Response Time</h3>
-                    <p>We typically respond to all inquiries within 24-48 hours during business days.</p>
-                </div>
+                <div class="info-item"><h3>Email</h3><p><a href="mailto:contact@verifiedtokyo.com">contact@verifiedtokyo.com</a></p></div>
+                <div class="info-item"><h3>Business Hours</h3><p>Monday - Sunday: 9:00 - 21:00</p></div>
+                <div class="info-item"><h3>Response Time</h3><p>Within 24-48 hours during business days.</p></div>
             </div>
         </div>
     </div>
-
-    <footer>
-        <div class="footer-container">
-            <div style="text-align: center; padding: 20px 0;">
-                <p style="font-size: 14px; color: #666;">© 2026 Verified Tokyo</p>
-            </div>
-        </div>
-    </footer>
-
+    <footer><div class="footer-container"><div style="text-align:center;padding:20px 0;"><p style="font-size:14px;color:#666;">© 2026 Verified Tokyo</p></div></div></footer>
     <script>
-        document.getElementById('contact-form').addEventListener('submit', function (e) {
+        document.getElementById('contact-form').addEventListener('submit', function(e) {
             e.preventDefault();
-
-            document.querySelectorAll('.error-message').forEach(msg => msg.style.display = 'none');
-            document.getElementById('success-message').style.display = 'none';
-            document.getElementById('error-banner').style.display = 'none';
-
-            let isValid = true;
-
+            document.querySelectorAll('.error-message').forEach(m => m.style.display='none');
+            document.getElementById('success-message').style.display='none';
+            document.getElementById('error-banner').style.display='none';
+            let ok = true;
             const name = document.getElementById('name');
-            if (!name.value.trim()) {
-                document.getElementById('name-error').style.display = 'block';
-                isValid = false;
-            }
-
+            if (!name.value.trim()) { document.getElementById('name-error').style.display='block'; ok=false; }
             const email = document.getElementById('email');
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!email.value.trim() || !emailRegex.test(email.value)) {
-                document.getElementById('email-error').style.display = 'block';
-                isValid = false;
-            }
-
+            if (!email.value.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value)) { document.getElementById('email-error').style.display='block'; ok=false; }
             const subject = document.getElementById('subject');
-            if (!subject.value) {
-                document.getElementById('subject-error').style.display = 'block';
-                isValid = false;
-            }
-
+            if (!subject.value) { document.getElementById('subject-error').style.display='block'; ok=false; }
             const message = document.getElementById('message');
-            if (!message.value.trim()) {
-                document.getElementById('message-error').style.display = 'block';
-                isValid = false;
-            }
-
-            if (isValid) {
-                const submitBtn = this.querySelector('.submit-btn');
-                submitBtn.disabled = true;
-                submitBtn.textContent = 'Sending...';
-
-                const formData = new FormData(this);
-
-                fetch('send-email.php', {
-                    method: 'POST',
-                    body: formData
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        document.getElementById('success-message').style.display = 'block';
-                        this.reset();
-                        window.scrollTo({ top: 0, behavior: 'smooth' });
-                        setTimeout(() => {
-                            document.getElementById('success-message').style.display = 'none';
-                        }, 8000);
-                    } else {
-                        document.getElementById('error-banner').style.display = 'block';
-                        window.scrollTo({ top: 0, behavior: 'smooth' });
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    document.getElementById('error-banner').style.display = 'block';
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                })
-                .finally(() => {
-                    submitBtn.disabled = false;
-                    submitBtn.textContent = 'Send Message';
-                });
+            if (!message.value.trim()) { document.getElementById('message-error').style.display='block'; ok=false; }
+            if (ok) {
+                const btn = this.querySelector('.submit-btn');
+                btn.disabled=true; btn.textContent='Sending...';
+                fetch('send-email.php',{method:'POST',body:new FormData(this)})
+                .then(r=>r.json()).then(d=>{
+                    if(d.success){document.getElementById('success-message').style.display='block';this.reset();window.scrollTo({top:0,behavior:'smooth'});}
+                    else{document.getElementById('error-banner').style.display='block';window.scrollTo({top:0,behavior:'smooth'});}
+                }).catch(()=>{document.getElementById('error-banner').style.display='block';}).finally(()=>{btn.disabled=false;btn.textContent='Send Message';});
             }
         });
-
-        document.addEventListener('DOMContentLoaded', function () {
-            const menuToggle = document.getElementById('mobile-menu-toggle');
-            const mobileNav = document.getElementById('mobile-nav');
-            const overlay = document.getElementById('mobile-overlay');
-
-            if (menuToggle) {
-                menuToggle.addEventListener('click', function () {
-                    menuToggle.classList.toggle('active');
-                    mobileNav.classList.toggle('active');
-                    overlay.classList.toggle('active');
-                    document.body.style.overflow = mobileNav.classList.contains('active') ? 'hidden' : '';
-                });
-            }
-
-            if (overlay) {
-                overlay.addEventListener('click', function () {
-                    menuToggle.classList.remove('active');
-                    mobileNav.classList.remove('active');
-                    overlay.classList.remove('active');
-                    document.body.style.overflow = '';
-                });
-            }
-        });
-
         function performSearch() {
-            const searchInput = document.getElementById('search-input');
-            const searchTerm = searchInput.value.trim();
-            if (searchTerm) {
-                window.location.href = `products.html?search=${encodeURIComponent(searchTerm)}`;
-            } else {
-                window.location.href = 'products.html';
-            }
-        }
-
-        if (document.getElementById('search-input')) {
-            document.getElementById('search-input').addEventListener('keypress', function (e) {
-                if (e.key === 'Enter') performSearch();
-            });
+            const v = document.getElementById('search-input').value.trim();
+            window.location.href = v ? 'products.html?search=' + encodeURIComponent(v) : 'products.html';
         }
     </script>
-</body>
+<script>
+        // Mobile search toggle
+        (function() {
+            var isMobile = window.innerWidth <= 768;
+            if (!isMobile) return;
+            var searchIcon = document.querySelector('.search-icon');
+            var searchInput = document.getElementById('search-input');
+            if (!searchIcon || !searchInput) return;
+            searchIcon.style.cursor = 'pointer';
+            searchIcon.addEventListener('click', function(e) {
+                if (searchInput.classList.contains('mobile-expanded')) {
+                    var val = searchInput.value.trim();
+                    if (val) {
+                        window.location.href = 'products.html?search=' + encodeURIComponent(val);
+                    } else {
+                        searchInput.classList.remove('mobile-expanded');
+                        searchInput.blur();
+                    }
+                } else {
+                    searchInput.classList.add('mobile-expanded');
+                    setTimeout(function(){ searchInput.focus(); }, 50);
+                }
+            });
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.search-container')) {
+                    searchInput.classList.remove('mobile-expanded');
+                }
+            });
+        })();
+        </script>
 
+</body>
 </html>
