@@ -470,7 +470,32 @@
                     return words[start] || raw;
                 }
 
-                function isBagProduct(product) {
+                // ブランドの格付けスコア（高いほど上位表示）
+                const BRAND_PRESTIGE = {
+                    'HERMES': 100, 'CHANEL': 95, 'LOUIS VUITTON': 90, 'LV': 90,
+                    'DIOR': 85, 'CHRISTIAN DIOR': 85, 'CELINE': 80, 'GUCCI': 78,
+                    'PRADA': 75, 'FENDI': 72, 'BOTTEGA VENETA': 70, 'LOEWE': 68,
+                    'SAINT LAURENT': 65, 'YVES SAINT LAURENT': 65, 'YSL': 65,
+                    'GIVENCHY': 62, 'BALENCIAGA': 60, 'VALENTINO': 58,
+                    'BVLGARI': 55, 'BULGARI': 55, 'MONCLER': 52,
+                    'MCM': 48, 'BURBERRY': 46, 'COACH': 40,
+                };
+
+                function getPrestigeScore(product) {
+                    const brandKey = resolveDisplayBrand(product).toUpperCase();
+                    for (const [b, score] of Object.entries(BRAND_PRESTIGE)) {
+                        if (brandKey.includes(b)) return score;
+                    }
+                    return 30; // その他
+                }
+
+                function smartDefaultSort(products) {
+                    return [...products].sort((a, b) => {
+                        const scoreA = getPrestigeScore(a) * 1000 + Math.min(a.price, 5000);
+                        const scoreB = getPrestigeScore(b) * 1000 + Math.min(b.price, 5000);
+                        return scoreB - scoreA;
+                    });
+                }
                         const name = (product.name || '').toLowerCase();
                         return !NON_BAG_KEYWORDS.some(kw => name.includes(kw));
                 }
@@ -543,6 +568,7 @@
                         if (sort === 'price-low') currentProducts.sort((a, b) => a.price - b.price);
                         else if (sort === 'price-high') currentProducts.sort((a, b) => b.price - a.price);
                         else if (sort === 'brand') currentProducts.sort((a, b) => a.brand.localeCompare(b.brand));
+                        else currentProducts = smartDefaultSort(currentProducts); // default: prestige × price
 
                         displayProducts(currentProducts);
                 }
