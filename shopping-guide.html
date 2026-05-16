@@ -145,13 +145,14 @@
                 box-sizing: border-box !important;
             }
 
-            .logo {
+            .logo, h1.logo, .header .logo, .main-header .logo {
                 font-size: 18px !important;
                 white-space: nowrap !important;
                 margin: 0 !important;
                 padding: 0 !important;
                 line-height: 1 !important;
                 letter-spacing: 0 !important;
+                font-weight: 600 !important;
             }
 
             .search-container {
@@ -208,7 +209,7 @@
             .mobile-overlay { display: none !important; }
 
             /* body: ヘッダー高さ分(約68px)下げる */
-            body { padding-top: 90px !important; }
+            body { padding-top: 100px !important; }
         }
 
     </style>
@@ -354,7 +355,7 @@
             var header = document.querySelector('.header');
             if (!header || window.innerWidth > 768) return;
             var h = header.getBoundingClientRect().height;
-            document.body.style.paddingTop = h + 'px';
+            document.body.style.paddingTop = (h + 4) + 'px';
         }
         document.addEventListener('DOMContentLoaded', fixHeaderOffset);
         window.addEventListener('resize', fixHeaderOffset);
