@@ -137,9 +137,19 @@
                 width: 100% !important;
                 height: 100% !important;
                 object-fit: contain !important;
-                padding: 4px !important;
+                padding: 0 !important;
                 box-sizing: border-box !important;
                 display: block !important;
+            }
+            /* Remove white inner box by making product-image take full card width */
+            .featured-product-card .product-image {
+                aspect-ratio: 1 / 1 !important;
+                width: 100% !important;
+                overflow: hidden !important;
+                background: #f5f5f5 !important;
+                display: flex !important;
+                align-items: center !important;
+                justify-content: center !important;
             }
             .featured-product-card .product-title {
                 font-size: 11px !important;
