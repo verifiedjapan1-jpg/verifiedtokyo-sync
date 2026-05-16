@@ -120,10 +120,18 @@
                 grid-template-columns: repeat(2, 1fr) !important;
                 gap: 10px !important;
             }
-            /* Compact square image */
+            /* Image fills card width, compact height */
             .featured-product-card .product-image {
                 aspect-ratio: 1 / 1 !important;
-                max-height: 160px !important;
+                max-height: none !important;
+                width: 100% !important;
+            }
+            .featured-product-card .product-image img {
+                width: 100% !important;
+                height: 100% !important;
+                object-fit: contain !important;
+                padding: 6px !important;
+                box-sizing: border-box !important;
             }
             .featured-product-card .product-title {
                 font-size: 11px !important;
@@ -292,7 +300,7 @@
             .mobile-overlay { display: none !important; }
 
             /* body: ヘッダー高さ分(約68px)下げる */
-            body { padding-top: 68px !important; }
+            body { padding-top: 90px !important; }
         }
         }
 
@@ -643,6 +651,20 @@
         })();
         </script>
 
+
+        <script>
+        // Dynamically set body padding to match actual header height
+        function fixHeaderOffset() {
+            var header = document.querySelector('.header');
+            if (!header || window.innerWidth > 768) return;
+            var h = header.getBoundingClientRect().height;
+            document.body.style.paddingTop = h + 'px';
+        }
+        document.addEventListener('DOMContentLoaded', fixHeaderOffset);
+        window.addEventListener('resize', fixHeaderOffset);
+        // Run immediately too
+        fixHeaderOffset();
+        </script>
 </body>
 
 </html>
