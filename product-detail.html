@@ -44,8 +44,12 @@
         .back-link:hover { color: #1a1a1a; }
         .zoom-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 10000; justify-content: center; align-items: center; }
         .zoom-modal.active { display: flex; }
-        .zoom-modal img { max-width: 90%; max-height: 90vh; object-fit: contain; }
-        .zoom-close { position: absolute; top: 20px; right: 20px; color: white; font-size: 40px; cursor: pointer; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; }
+        .zoom-modal img { max-width: 90%; max-height: 90vh; object-fit: contain; user-select: none; }
+        .zoom-close { position: absolute; top: 20px; right: 20px; color: white; font-size: 40px; cursor: pointer; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; z-index: 10001; }
+        .zoom-prev, .zoom-next { position: absolute; top: 50%; transform: translateY(-50%); color: white; font-size: 36px; cursor: pointer; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.15); border-radius: 50%; z-index: 10001; user-select: none; }
+        .zoom-prev { left: 16px; }
+        .zoom-next { right: 16px; }
+        .zoom-counter { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); color: white; font-size: 13px; opacity: 0.7; }
         .no-product { text-align: center; padding: 100px 20px; }
 
         .desc-section { margin: 30px 0; padding: 25px; background: #f8f8f8; border-radius: 12px; }
@@ -252,13 +256,14 @@
                 box-sizing: border-box !important;
             }
 
-            .logo {
+            .logo, h1.logo, .header .logo, .main-header .logo {
                 font-size: 18px !important;
                 white-space: nowrap !important;
                 margin: 0 !important;
                 padding: 0 !important;
                 line-height: 1 !important;
                 letter-spacing: 0 !important;
+                font-weight: 600 !important;
             }
 
             .search-container {
@@ -315,7 +320,7 @@
             .mobile-overlay { display: none !important; }
 
             /* body: ヘッダー高さ分(約68px)下げる */
-            body { padding-top: 90px !important; }
+            body { padding-top: 100px !important; }
         }
         }
 
@@ -361,7 +366,10 @@
 
     <div class="zoom-modal" id="zoomModal">
         <div class="zoom-close" onclick="closeZoom()">&times;</div>
+        <div class="zoom-prev" onclick="zoomNav(-1)">&#8249;</div>
         <img id="zoomedImage" src="" alt="Zoomed product">
+        <div class="zoom-next" onclick="zoomNav(1)">&#8250;</div>
+        <div class="zoom-counter" id="zoomCounter"></div>
     </div>
 
     <footer style="background: white; padding: 60px 0; border-top: 1px solid #e5e5e5;">
@@ -662,16 +670,32 @@
             }
         }
 
+        let zoomImages = [];
+        let zoomIndex = 0;
+
         function changeImage(imageSrc, thumbnail) {
             document.getElementById('mainImage').src = imageSrc;
-            document.getElementById('zoomedImage').src = imageSrc;
             document.querySelectorAll('.thumbnail').forEach(t => t.classList.remove('active'));
             thumbnail.classList.add('active');
         }
 
         function openZoom(imageSrc) {
+            zoomImages = Array.from(document.querySelectorAll('.thumbnail img')).map(img => img.src);
+            if (!zoomImages.length) zoomImages = [imageSrc];
+            zoomIndex = zoomImages.indexOf(imageSrc);
+            if (zoomIndex < 0) zoomIndex = 0;
+            updateZoom();
             document.getElementById('zoomModal').classList.add('active');
-            document.getElementById('zoomedImage').src = imageSrc;
+        }
+
+        function updateZoom() {
+            document.getElementById('zoomedImage').src = zoomImages[zoomIndex];
+            document.getElementById('zoomCounter').textContent = (zoomIndex + 1) + ' / ' + zoomImages.length;
+        }
+
+        function zoomNav(dir) {
+            zoomIndex = (zoomIndex + dir + zoomImages.length) % zoomImages.length;
+            updateZoom();
         }
 
         function closeZoom() {
@@ -679,12 +703,25 @@
         }
 
         document.getElementById('zoomModal').addEventListener('click', function(e) {
-            if (e.target === this) closeZoom();
+            if (e.target === this || e.target === document.getElementById('zoomedImage')) closeZoom();
         });
 
         document.addEventListener('keydown', function(e) {
+            if (!document.getElementById('zoomModal').classList.contains('active')) return;
             if (e.key === 'Escape') closeZoom();
+            if (e.key === 'ArrowRight') zoomNav(1);
+            if (e.key === 'ArrowLeft') zoomNav(-1);
         });
+
+        // Touch swipe
+        let touchStartX = 0;
+        document.getElementById('zoomModal').addEventListener('touchstart', function(e) {
+            touchStartX = e.touches[0].clientX;
+        }, { passive: true });
+        document.getElementById('zoomModal').addEventListener('touchend', function(e) {
+            const diff = touchStartX - e.changedTouches[0].clientX;
+            if (Math.abs(diff) > 50) zoomNav(diff > 0 ? 1 : -1);
+        }, { passive: true });
     </script>
 
         <script>
@@ -725,7 +762,7 @@
             var header = document.querySelector('.header');
             if (!header || window.innerWidth > 768) return;
             var h = header.getBoundingClientRect().height;
-            document.body.style.paddingTop = h + 'px';
+            document.body.style.paddingTop = (h + 4) + 'px';
         }
         document.addEventListener('DOMContentLoaded', fixHeaderOffset);
         window.addEventListener('resize', fixHeaderOffset);
