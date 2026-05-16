@@ -117,25 +117,33 @@
 
             /* --- Featured grid: 2 columns on mobile --- */
             #featured-grid {
+                display: grid !important;
                 grid-template-columns: repeat(2, 1fr) !important;
-                gap: 10px !important;
+                gap: 8px !important;
             }
-            /* Image fills card width, compact height */
+            .featured-product-card {
+                border-radius: 8px !important;
+                overflow: hidden !important;
+            }
+            /* Image: square, fills edge to edge, no padding, no excess */
             .featured-product-card .product-image {
                 aspect-ratio: 1 / 1 !important;
-                max-height: none !important;
                 width: 100% !important;
+                overflow: hidden !important;
+                background: #f5f5f5 !important;
+                display: block !important;
             }
             .featured-product-card .product-image img {
                 width: 100% !important;
                 height: 100% !important;
                 object-fit: contain !important;
-                padding: 6px !important;
+                padding: 4px !important;
                 box-sizing: border-box !important;
+                display: block !important;
             }
             .featured-product-card .product-title {
                 font-size: 11px !important;
-                padding: 6px 8px 2px !important;
+                padding: 5px 8px 2px !important;
                 line-height: 1.4 !important;
             }
             .featured-product-card .product-brand-label {
@@ -144,7 +152,7 @@
             }
             .featured-product-card .product-price {
                 font-size: 13px !important;
-                padding: 3px 8px 10px !important;
+                padding: 2px 8px 8px !important;
                 font-weight: 700 !important;
             }
 
@@ -237,13 +245,14 @@
                 box-sizing: border-box !important;
             }
 
-            .logo {
+            .logo, h1.logo, .header .logo, .main-header .logo {
                 font-size: 18px !important;
                 white-space: nowrap !important;
                 margin: 0 !important;
                 padding: 0 !important;
                 line-height: 1 !important;
                 letter-spacing: 0 !important;
+                font-weight: 600 !important;
             }
 
             .search-container {
@@ -300,7 +309,7 @@
             .mobile-overlay { display: none !important; }
 
             /* body: ヘッダー高さ分(約68px)下げる */
-            body { padding-top: 90px !important; }
+            body { padding-top: 100px !important; }
         }
         }
 
@@ -658,7 +667,7 @@
             var header = document.querySelector('.header');
             if (!header || window.innerWidth > 768) return;
             var h = header.getBoundingClientRect().height;
-            document.body.style.paddingTop = h + 'px';
+            document.body.style.paddingTop = (h + 4) + 'px';
         }
         document.addEventListener('DOMContentLoaded', fixHeaderOffset);
         window.addEventListener('resize', fixHeaderOffset);
