@@ -186,14 +186,16 @@
                         .product-card {
                                 border-radius: 8px;
                         }
-                        .product-image {
-                                width: 100%;
-                                height: auto;
-                                aspect-ratio: 1 / 1;
-                                object-fit: cover;
-                                background: #f5f5f5;
-                                padding: 0;
-                                box-sizing: border-box;
+                        /* Force contain so bag is never cropped */
+                        .product-card .product-image,
+                        img.product-image {
+                                width: 100% !important;
+                                height: auto !important;
+                                aspect-ratio: 1 / 1 !important;
+                                object-fit: contain !important;
+                                background: #f5f5f5 !important;
+                                padding: 4px !important;
+                                box-sizing: border-box !important;
                         }
                         .product-info {
                                 padding: 10px 12px 12px;
