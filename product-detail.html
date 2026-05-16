@@ -18,7 +18,7 @@
 
         .product-detail-container {
             max-width: 1400px;
-            margin: 20px auto 60px;
+            margin: 0 auto 60px;
             padding: 0 40px;
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -97,7 +97,7 @@
                 grid-template-columns: 1fr;
                 gap: 20px;
                 padding: 0 16px;
-                margin: 20px auto 40px; /* reduced top margin for mobile header */
+                margin: 0 auto 40px; /* JS handles top offset */
             }
 
             /* Gallery: un-sticky on mobile */
@@ -315,7 +315,7 @@
             .mobile-overlay { display: none !important; }
 
             /* body: ヘッダー高さ分(約68px)下げる */
-            body { padding-top: 68px !important; }
+            body { padding-top: 90px !important; }
         }
         }
 
@@ -602,7 +602,7 @@
                 contentDiv.innerHTML = `
                     <div class="product-detail-container">
                         <div class="product-gallery">
-                            <div class="main-image-container" onclick="openZoom('${mainImage}')">
+                            <div class="main-image-container" onclick="openZoom(document.getElementById('mainImage').src)">
                                 <img src="${mainImage}" alt="${product.name}" class="main-image" id="mainImage">
                             </div>
                             <div class="thumbnail-grid">${thumbnailsHTML}</div>
@@ -664,6 +664,7 @@
 
         function changeImage(imageSrc, thumbnail) {
             document.getElementById('mainImage').src = imageSrc;
+            document.getElementById('zoomedImage').src = imageSrc;
             document.querySelectorAll('.thumbnail').forEach(t => t.classList.remove('active'));
             thumbnail.classList.add('active');
         }
@@ -717,5 +718,19 @@
         })();
         </script>
 
+
+        <script>
+        // Dynamically set body padding to match actual header height
+        function fixHeaderOffset() {
+            var header = document.querySelector('.header');
+            if (!header || window.innerWidth > 768) return;
+            var h = header.getBoundingClientRect().height;
+            document.body.style.paddingTop = h + 'px';
+        }
+        document.addEventListener('DOMContentLoaded', fixHeaderOffset);
+        window.addEventListener('resize', fixHeaderOffset);
+        // Run immediately too
+        fixHeaderOffset();
+        </script>
 </body>
 </html>
