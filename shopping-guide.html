@@ -212,7 +212,41 @@
             body { padding-top: 100px !important; }
         }
 
-    </style>
+    
+            /* Hide any stray search icons outside header */
+            body > .search-icon,
+            body > svg { display: none !important; }
+
+            /* Force nav-link to be small */
+            .main-nav .nav-link,
+            .main-nav a,
+            nav.main-nav a {
+                font-size: 11px !important;
+                padding: 8px 4px !important;
+                line-height: 1 !important;
+                text-transform: uppercase !important;
+                letter-spacing: 0.04em !important;
+                color: #333 !important;
+                text-decoration: none !important;
+                flex: 1 !important;
+                text-align: center !important;
+                white-space: nowrap !important;
+                display: block !important;
+            }
+
+            /* Hide mobile-menu-toggle completely */
+            .mobile-menu-toggle,
+            #mobile-menu-toggle {
+                display: none !important;
+            }
+
+            /* Hide the search input bar that appears below header */
+            .main-header ~ .search-icon,
+            .header ~ .search-icon {
+                display: none !important;
+            }
+
+        </style>
 </head>
 <body>
         <header class="header">
