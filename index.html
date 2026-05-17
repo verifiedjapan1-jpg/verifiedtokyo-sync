@@ -32,41 +32,36 @@
             transform: translateY(-5px);
             box-shadow: 0 5px 20px rgba(0,0,0,0.1);
         }
+        /* img直接 - productsページと同じ構造 */
         .featured-product-card .product-image {
             width: 100%;
-            aspect-ratio: 1;
-            overflow: hidden;
-            background: #f8f8f8;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .featured-product-card .product-image img {
-            width: 100%;
-            height: 100%;
+            height: 300px;
             object-fit: contain;
-            padding: 8px;
-            box-sizing: border-box;
+            background: #f8f8f8;
+            display: block;
+        }
+        .featured-product-card .product-info {
+            padding: 10px 15px 15px;
+        }
+        .featured-product-card .product-brand {
+            font-size: 11px;
+            color: #999;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 4px;
         }
         .featured-product-card .product-title {
             font-size: 14px;
             font-weight: 500;
             color: #333;
-            padding: 12px 15px 5px;
-            margin: 0;
-        }
-        .featured-product-card .product-brand-label {
-            font-size: 11px;
-            color: #999;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            padding: 8px 15px 0;
+            margin: 0 0 6px;
+            line-height: 1.4;
         }
         .featured-product-card .product-price {
             font-size: 18px;
             font-weight: 700;
             color: #1a1a1a;
-            padding: 5px 15px 15px;
+            margin: 0;
         }
         #featured-loading {
             text-align: center;
@@ -115,54 +110,35 @@
                 margin-bottom: 16px !important;
             }
 
-            /* --- Featured grid: same style as products page --- */
+            /* --- Featured grid: same as products page --- */
             #featured-grid {
                 display: grid !important;
                 grid-template-columns: repeat(2, 1fr) !important;
                 gap: 12px !important;
             }
-            .featured-product-card {
-                border: 1px solid #e0e0e0 !important;
-                border-radius: 8px !important;
-                overflow: hidden !important;
-                background: white !important;
-            }
             .featured-product-card .product-image {
                 width: 100% !important;
+                height: auto !important;
                 aspect-ratio: 1 / 1 !important;
-                overflow: hidden !important;
-                background: #f5f5f5 !important;
-                display: flex !important;
-                align-items: center !important;
-                justify-content: center !important;
-            }
-            .featured-product-card .product-image img {
-                width: 100% !important;
-                height: 100% !important;
                 object-fit: contain !important;
+                background: #f5f5f5 !important;
                 padding: 4px !important;
                 box-sizing: border-box !important;
+                display: block !important;
             }
-            .featured-product-card .product-brand-label {
+            .featured-product-card .product-info {
+                padding: 8px 10px 12px !important;
+            }
+            .featured-product-card .product-brand {
                 font-size: 10px !important;
-                color: #999 !important;
-                text-transform: uppercase !important;
-                letter-spacing: 1px !important;
-                padding: 8px 10px 0 !important;
             }
             .featured-product-card .product-title {
-                font-size: 12px !important;
-                font-weight: 500 !important;
-                color: #333 !important;
-                padding: 4px 10px 0 !important;
-                margin: 0 !important;
-                line-height: 1.4 !important;
+                font-size: 11px !important;
+                margin: 0 0 4px !important;
             }
             .featured-product-card .product-price {
-                font-size: 14px !important;
+                font-size: 13px !important;
                 font-weight: 700 !important;
-                color: #1a1a1a !important;
-                padding: 4px 10px 12px !important;
             }
 
             /* --- Brand grid: 2 columns on mobile --- */
@@ -519,12 +495,12 @@
 
                 grid.innerHTML = featuredProducts.map(product => `
                     <div class="featured-product-card" onclick="window.location.href='product-detail.html?id=${product.productId}'">
-                        <div class="product-image">
-                            <img src="${product.imageUrl}" alt="${product.name}" onerror="this.src='images/placeholder.jpg'">
+                        <img src="${product.imageUrl}" alt="${product.name}" class="product-image" onerror="this.src='images/placeholder.jpg'">
+                        <div class="product-info">
+                            <div class="product-brand">${resolveDisplayBrandIdx(product)}</div>
+                            <h3 class="product-title">${product.name}</h3>
+                            <p class="product-price">$${Math.ceil(product.price).toLocaleString()}</p>
                         </div>
-                        <div class="product-brand-label">${resolveDisplayBrandIdx(product)}</div>
-                        <h3 class="product-title">${product.name}</h3>
-                        <p class="product-price">$${Math.ceil(product.price).toLocaleString()}</p>
                     </div>
                 `).join('');
 
