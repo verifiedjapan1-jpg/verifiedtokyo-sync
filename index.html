@@ -365,7 +365,21 @@
                 display: none !important;
             }
 
-        </style>
+        
+        /* Hide any search icon that leaks outside header */
+        @media (max-width: 768px) {
+            body > .search-icon,
+            body > svg,
+            .search-container:not(.header .search-container) {
+                display: none !important;
+            }
+            /* Ensure search container stays in header */
+            .header .search-container {
+                position: static !important;
+                display: flex !important;
+            }
+        }
+    </style>
 </head>
 
 <body>
