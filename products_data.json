@@ -1628,7 +1628,7 @@
     "name": "CHANEL Black Vanity 2-Way Shoulder Handbag CH1871",
     "brand": "CHANEL",
     "price": 2032.0,
-    "available": true,
+    "available": false,
     "url": "https://t-secondhands.jp/ja/products/chanel-ブラックバニティ-2wayショルダハンドーバッグch1871",
     "imageUrl": "https://cdn.shopify.com/s/files/1/0672/4832/4807/files/IMG-1237.jpg?v=1765876890",
     "images": [
@@ -3288,7 +3288,7 @@
     "name": "CHANEL Matelassé Chain Shoulder Bag CH1985",
     "brand": "CHANEL",
     "price": 2781.0,
-    "available": true,
+    "available": false,
     "url": "https://t-secondhands.jp/ja/products/chanelマトラッセ-チェーンショルダーバック-ch1985",
     "imageUrl": "https://cdn.shopify.com/s/files/1/0672/4832/4807/files/IMG-1049.jpg?v=1765867753",
     "images": [
@@ -3418,7 +3418,7 @@
     "name": "CHANEL Matelassé Double-Face Chain Shoulder Bag CH2046",
     "brand": "CHANEL",
     "price": 3555.0,
-    "available": true,
+    "available": false,
     "url": "https://t-secondhands.jp/ja/products/chanel-matelasse-double-face-chain-shoulder-bag-ch2046",
     "imageUrl": "https://cdn.shopify.com/s/files/1/0672/4832/4807/files/IMG-2627.jpg?v=1770895584",
     "images": [
@@ -7548,7 +7548,7 @@
     "name": "GUCCI Lizard-effect Leather Diana Mini Tote Bag Handbag Orange Gold Hardware GU629",
     "brand": "GUCCI",
     "price": 2342.0,
-    "available": true,
+    "available": false,
     "url": "https://t-secondhands.jp/ja/products/gucci-lizard-effect-leather-diana-mini-tote-bag-handbag-orange-gold-hardware-gu629",
     "imageUrl": "https://cdn.shopify.com/s/files/1/0672/4832/4807/files/2026-05-20_16_12_28_7.jpg?v=1779278214",
     "images": [
@@ -9798,7 +9798,7 @@
     "name": "LOUIS VUITTON Monogram Coated Canvas Bumbag Belt Bag Brown Gold Hardware LO2075",
     "brand": "LOUIS",
     "price": 1748.0,
-    "available": false,
+    "available": true,
     "url": "https://t-secondhands.jp/ja/products/louis-vuitton-monogram-coated-canvas-bumbag-belt-bag-brown-gold-hardware-lo2075",
     "imageUrl": "https://cdn.shopify.com/s/files/1/0672/4832/4807/files/2026-05-02_18_04_46_11.jpg?v=1777745966",
     "images": [
@@ -10233,7 +10233,7 @@
     "name": "LOUIS VUITTON Monogram Handbag LO2144",
     "brand": "LOUIS",
     "price": 639.0,
-    "available": true,
+    "available": false,
     "url": "https://t-secondhands.jp/ja/products/louis-vuitton-モノグラムハンドバッグ-lo2144",
     "imageUrl": "https://cdn.shopify.com/s/files/1/0672/4832/4807/files/IMG-1534.jpg?v=1766042718",
     "images": [
