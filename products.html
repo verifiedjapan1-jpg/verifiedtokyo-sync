@@ -386,7 +386,69 @@
                 display: none !important;
             }
 
-        </style>
+        
+        /* Hide any search icon that leaks outside header */
+        @media (max-width: 768px) {
+            body > .search-icon,
+            body > svg,
+            .search-container:not(.header .search-container) {
+                display: none !important;
+            }
+            /* Ensure search container stays in header */
+            .header .search-container {
+                position: static !important;
+                display: flex !important;
+            }
+        }
+    
+        /* Desktop: search bar moved to right of nav menu */
+        @media (min-width: 769px) {
+            .main-header .container,
+            .header .container {
+                display: flex !important;
+                align-items: center !important;
+                gap: 30px !important;
+            }
+            .logo-nav-container {
+                display: flex !important;
+                align-items: center !important;
+                order: 1 !important;
+                flex: 0 0 auto !important;
+            }
+            .logo-nav-container .search-container {
+                display: none !important;
+            }
+            .main-nav {
+                order: 2 !important;
+                margin-left: auto !important;
+                display: flex !important;
+                align-items: center !important;
+                gap: 30px !important;
+            }
+            .header .search-container.desktop-right-search,
+            .main-header .search-container.desktop-right-search {
+                display: flex !important;
+                order: 3 !important;
+                align-items: center !important;
+                position: relative !important;
+            }
+            .desktop-right-search .search-input {
+                width: 220px !important;
+                padding: 8px 40px 8px 16px !important;
+                border: 1px solid #ddd !important;
+                border-radius: 999px !important;
+                font-size: 13px !important;
+                outline: none !important;
+            }
+            .desktop-right-search .search-icon {
+                position: absolute !important;
+                right: 12px !important;
+                top: 50% !important;
+                transform: translateY(-50%) !important;
+                cursor: pointer !important;
+            }
+        }
+    </style>
 </head>
 
 <body>
