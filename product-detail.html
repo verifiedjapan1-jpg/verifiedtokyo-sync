@@ -433,18 +433,10 @@
 
 <body>
     <header class="header">
-        <div class="main-header">
-            <div class="container">
-                <div class="logo-nav-container">
+        <div class="main-header" style="padding:0 20px;">
+            <div class="container" style="display:flex !important; align-items:center !important; gap:20px !important; flex-wrap:nowrap !important;">
+                <div class="logo-nav-container" style="flex-shrink:0;">
                     <h1 class="logo">Verified Tokyo</h1>
-                    <div class="search-container">
-                        <div class="search-icon">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <circle cx="11" cy="11" r="8" />
-                                <path d="M21 21l-4.35-4.35" />
-                            </svg>
-                        </div>
-                    </div>
                 </div>
                 <nav class="main-nav">
                     <a href="index.html" class="nav-link"><span class="nav-full">Home</span><span class="nav-short">Home</span></a>
@@ -452,6 +444,15 @@
                     <a href="shopping-guide.html" class="nav-link"><span class="nav-full">Shopping Guide</span><span class="nav-short">Guide</span></a>
                     <a href="contact.html" class="nav-link"><span class="nav-full">Contact</span><span class="nav-short">Contact</span></a>
                 </nav>
+                <div class="search-container desktop-right-search" style="display:flex !important; align-items:center; position:relative; margin-left:auto; flex-shrink:0;">
+                    <input type="text" class="search-input" id="search-input" placeholder="Search products...">
+                    <div class="search-icon" onclick="performSearch()">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8" />
+                            <path d="M21 21l-4.35-4.35" />
+                        </svg>
+                    </div>
+                </div>
             </div>
         </div>
     </header>
