@@ -50,8 +50,10 @@ jobs:
           server: ${{ secrets.FTP_HOST }}
           username: ${{ secrets.FTP_USER }}
           password: ${{ secrets.FTP_PASSWORD }}
-          server-dir: verifiedtokyo.com/public_html/
+          server-dir: /
           local-dir: ./
+          protocol: ftps
+          port: 21
           exclude: |
             **/.git*
             **/.git*/**
