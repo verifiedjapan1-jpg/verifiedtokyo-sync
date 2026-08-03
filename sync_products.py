@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """
 Auto-sync products from t-secondhands.jp via Shopify Collection API
+Fetches ALL pages until no new products found
 """
 import json
 import requests
@@ -12,21 +13,13 @@ BASE_URL = "https://t-secondhands.jp"
 def html_to_text(html):
     if not html:
         return ''
-    # ブロック要素の前後に改行を入れる
     html = re.sub(r'<br\s*/?>', '\n', html, flags=re.IGNORECASE)
     html = re.sub(r'<p[^>]*>', '\n', html, flags=re.IGNORECASE)
     html = re.sub(r'</p>', '\n', html, flags=re.IGNORECASE)
     html = re.sub(r'<li[^>]*>', '\n• ', html, flags=re.IGNORECASE)
     html = re.sub(r'</li>', '\n', html, flags=re.IGNORECASE)
-    html = re.sub(r'<h[1-6][^>]*>', '\n', html, flags=re.IGNORECASE)
-    html = re.sub(r'</h[1-6]>', '\n', html, flags=re.IGNORECASE)
-    html = re.sub(r'<div[^>]*>', '\n', html, flags=re.IGNORECASE)
-    html = re.sub(r'</div>', '\n', html, flags=re.IGNORECASE)
-    # 残りのHTMLタグを除去
     html = re.sub(r'<[^>]+>', '', html)
-    # HTMLエンティティを変換
     html = html.replace('&nbsp;', ' ').replace('&amp;', '&').replace('&lt;', '<').replace('&gt;', '>').replace('&#39;', "'").replace('&quot;', '"')
-    # 連続する空行を整理
     lines = [l.strip() for l in html.split('\n')]
     result = []
     prev_empty = False
@@ -44,29 +37,40 @@ def fetch_all_products():
     all_products = []
     seen_handles = set()
     page = 1
+    consecutive_no_new = 0  # Stop if 2 pages in a row have no new products
 
     while True:
         url = f"{BASE_URL}/collections/all/products.json?limit=250&page={page}"
         print(f"📦 Fetching page {page}: {url}")
 
         try:
-            r = requests.get(url, timeout=30, headers={'User-Agent': 'Mozilla/5.0'})
+            r = requests.get(url, timeout=60, headers={
+                'User-Agent': 'Mozilla/5.0 (compatible; ProductSync/1.0)'
+            })
+            
+            if r.status_code != 200:
+                print(f"❌ HTTP {r.status_code} on page {page}. Stopping.")
+                break
+
             data = r.json()
             products = data.get('products', [])
 
             if not products:
-                print(f"✅ No more products at page {page}")
+                print(f"✅ No products returned at page {page}. Done!")
                 break
 
+            new_on_this_page = 0
             for p in products:
                 handle = p['handle']
                 if handle in seen_handles:
                     continue
                 seen_handles.add(handle)
+                new_on_this_page += 1
 
                 variants = p.get('variants', [])
                 variant = variants[0] if variants else {}
                 price_jpy = float(variant.get('price', 0))
+                # $200 fixed markup + convert from JPY
                 price_usd = round(price_jpy / 155 + 200, 0)
 
                 available = any(v.get('available', False) for v in variants)
@@ -93,12 +97,26 @@ def fetch_all_products():
                 }
                 all_products.append(product)
 
-            print(f"  Page {page}: {len(products)} products")
+            print(f"  Page {page}: {len(products)} fetched, {new_on_this_page} new (total: {len(all_products)})")
+
+            if new_on_this_page == 0:
+                consecutive_no_new += 1
+                print(f"  ⚠️ No new products on this page ({consecutive_no_new}/2)")
+                if consecutive_no_new >= 2:
+                    print("✅ Stopping: 2 consecutive pages with no new products")
+                    break
+            else:
+                consecutive_no_new = 0
+
             page += 1
 
         except Exception as e:
             print(f"❌ Error on page {page}: {e}")
-            break
+            # Try to continue on error
+            page += 1
+            if page > 20:  # Safety limit
+                break
+            continue
 
     available_count = sum(1 for p in all_products if p['available'])
     print(f"\n🎯 Total: {len(all_products)} (Available: {available_count}, Sold out: {len(all_products) - available_count})")
@@ -122,6 +140,7 @@ def main():
     log_entry = {
         'timestamp': datetime.now().isoformat(),
         'total_products': len(products),
+        'available': sum(1 for p in products if p['available']),
     }
     try:
         with open('sync_log.json', 'r', encoding='utf-8') as f:
