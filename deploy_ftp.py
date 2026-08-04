@@ -18,7 +18,6 @@ try:
     ftp.prot_p()
     print(f'✅ Connected & authenticated! Web root directory (pwd): {ftp.pwd()}')
 
-    # Upload files directly to root directory (sub-FTP home directory is already public_html)
     files_to_upload = [
         'products_data.json',
         'products.html',
@@ -27,12 +26,13 @@ try:
         'shopping-guide.html',
         'product-detail.html',
         'styles.css',
-        'mobile-menu.js'
+        'mobile-menu.js',
+        '.htaccess'
     ]
 
     for filename in files_to_upload:
         if os.path.exists(filename):
-            print(f'📤 Uploading {filename} ({os.path.getsize(filename)} bytes) to web root...')
+            print(f'📤 Uploading {filename} ({os.path.getsize(filename)} bytes)...')
             with open(filename, 'rb') as f:
                 res = ftp.storbinary(f'STOR {filename}', f)
                 print(f'  ✅ Response for {filename}: {res}')
