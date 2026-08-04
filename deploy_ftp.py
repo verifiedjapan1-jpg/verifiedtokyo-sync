@@ -16,6 +16,7 @@ try:
     ftp = ftplib.FTP_TLS(host)
     ftp.login(user, passwd)
     ftp.prot_p()
+    ftp.set_pasv(True)
     print('✅ Connected & authenticated successfully!')
 
     files_to_upload = [
@@ -31,13 +32,19 @@ try:
 
     for filename in files_to_upload:
         if os.path.exists(filename):
-            print(f'📤 Uploading {filename}...')
+            filesize = os.path.getsize(filename)
+            print(f'📤 Uploading {filename} ({filesize} bytes)...')
             with open(filename, 'rb') as f:
-                ftp.storbinary(f'STOR {filename}', f)
+                ftp.storbinary(f'STOR {filename}', f, blocksize=65536)
             print(f'  ✅ {filename} uploaded successfully.')
+        else:
+            print(f'  ⚠️ {filename} not found, skipping.')
 
     ftp.quit()
     print('🎉 All files deployed to Xserver successfully!')
+
 except Exception as e:
     print(f'❌ FTP upload error: {e}')
+    import traceback
+    traceback.print_exc()
     sys.exit(1)
