@@ -43,11 +43,11 @@ jobs:
             echo "✅ No changes to commit"
           fi
 
-      - name: 📤 Deploy files to Xserver via FTPS
+      - name: 📤 Deploy files to Xserver via SSH
         env:
-          FTP_HOST: ${{ secrets.FTP_HOST }}
-          FTP_USER: ${{ secrets.FTP_USER }}
-          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         run: |
           python3 deploy_ftp.py
 
