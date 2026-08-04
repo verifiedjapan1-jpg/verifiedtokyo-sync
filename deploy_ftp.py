@@ -16,10 +16,7 @@ try:
     ftp = ftplib.FTP_TLS(host)
     ftp.login(user, passwd)
     ftp.prot_p()
-    print(f'✅ Connected & authenticated! Current directory (pwd): {ftp.pwd()}')
-    print(f'📂 Initial file list: {ftp.nlst()[:10]}')
 
-    # Check if target subdirectories exist (e.g. verifiedtokyo.com/public_html or public_html)
     dir_list = ftp.nlst()
     target_dir = None
     if 'verifiedtokyo.com' in dir_list:
@@ -32,7 +29,6 @@ try:
     if target_dir:
         print(f'📁 Changing remote directory to: {target_dir}')
         ftp.cwd(target_dir)
-        print(f'📍 New current directory: {ftp.pwd()}')
 
     files_to_upload = [
         'products_data.json',
@@ -47,10 +43,10 @@ try:
 
     for filename in files_to_upload:
         if os.path.exists(filename):
-            print(f'📤 Uploading {filename} to {ftp.pwd()}...')
+            print(f'📤 Uploading {filename} ({os.path.getsize(filename)} bytes)...')
             with open(filename, 'rb') as f:
-                ftp.storbinary(f'STOR {filename}', f)
-            print(f'  ✅ {filename} uploaded successfully.')
+                res = ftp.storbinary(f'STOR {filename}', f)
+                print(f'  Response for {filename}: {res}')
 
     ftp.quit()
     print('🎉 All files deployed to Xserver successfully!')
