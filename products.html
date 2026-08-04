@@ -496,6 +496,14 @@
                 <p id="product-count">Loading products...</p>
 
                 <div class="filters">
+                        <select class="filter-select" id="category-filter">
+                                <option value="">すべてのアイテム (All Items)</option>
+                                <option value="bags">バッグ (Bags)</option>
+                                <option value="wallets-accessories">お財布・小物 (Wallets & Accessories)</option>
+                                <option value="watches">ウォッチ (Watches)</option>
+                                <option value="apparel">ウェア・アパレル (Apparel & Clothing)</option>
+                                <option value="belts-scarves">ベルト・スカーフ (Belts & Scarves)</option>
+                        </select>
                         <select class="filter-select" id="brand-filter">
                                 <option value="">All Brands</option>
                         </select>
@@ -621,13 +629,18 @@
                 fetch('products_data.json')
                     .then(res => res.json())
                     .then(data => {
-                        allProducts = data.filter(isBagProduct);
+                        allProducts = data;
                         currentProducts = [...allProducts];
                         applyFilters();
                         initFilters();
 
                         const urlParams = new URLSearchParams(window.location.search);
+                        const categoryParam = urlParams.get('category');
                         const brandParam = urlParams.get('brand');
+                        if (categoryParam) {
+                            document.getElementById('category-filter').value = categoryParam;
+                            applyFilters();
+                        }
                         const searchParam = urlParams.get('search');
 
                         if (brandParam) {
@@ -672,12 +685,30 @@
                         }).join('');
                 }
 
-                function applyFilters() {
+                
+                const BAG_KEYWORDS = ['bag', 'tote', 'handbag', 'shoulder', 'backpack', 'clutch', 'boston', 'bucket', 'satchel', 'crossbody', 'briefcase', 'duffle', 'messenger', 'pochette', 'vanity', 'trunk'];
+                const WATCH_KEYWORDS = ['watch', 'clock', 'timepiece'];
+                const BELT_SCARF_KEYWORDS = ['belt', 'scarf', 'stole', 'muffler', 'necktie', ' tie '];
+                const APPAREL_KEYWORDS = ['jacket', 'coat', 'dress', 'top', 'shirt', 'pants', 'skirt', 'sweater', 'cardigan', 'suit', 'blazer', 'vest', 'hoodie', 'sweatshirt', 'tunic', 'outerwear', 'shoes', 'boots', 'sneaker', 'sandal', 'pumps', 'heels'];
+                const WALLET_ACC_KEYWORDS = ['wallet', 'purse', 'card case', 'card holder', 'coin case', 'coin purse', 'key case', 'key holder', 'keyring', 'keychain', 'charm', 'jewelry', 'ring', 'necklace', 'bracelet', 'earring', 'brooch', 'pouch'];
+
+                function getProductCategory(p) {
+                        const name = (p.name || '').toLowerCase();
+                        if (WATCH_KEYWORDS.some(k => name.includes(k))) return 'watches';
+                        if (BELT_SCARF_KEYWORDS.some(k => name.includes(k))) return 'belts-scarves';
+                        if (BAG_KEYWORDS.some(k => name.includes(k))) return 'bags';
+                        if (WALLET_ACC_KEYWORDS.some(k => name.includes(k))) return 'wallets-accessories';
+                        if (APPAREL_KEYWORDS.some(k => name.includes(k))) return 'apparel';
+                        return 'bags';
+                }
+function applyFilters() {
+                        const category = document.getElementById('category-filter').value;
                         const brand = document.getElementById('brand-filter').value;
                         const hideSoldOut = document.getElementById('hide-soldout').checked;
                         const sort = document.getElementById('sort-filter').value;
 
                         currentProducts = allProducts.filter(p => {
+                                if (category && getProductCategory(p) !== category) return false;
                                 if (brand && p.brand !== brand) return false;
                                 if (hideSoldOut && p.available === false) return false;
                                 return true;
@@ -700,6 +731,7 @@
                                 option.textContent = brand;
                                 brandFilter.appendChild(option);
                         });
+                        document.getElementById('category-filter').addEventListener('change', applyFilters);
                         brandFilter.addEventListener('change', applyFilters);
                         document.getElementById('sort-filter').addEventListener('change', applyFilters);
                         document.getElementById('hide-soldout').addEventListener('change', applyFilters);
