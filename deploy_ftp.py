@@ -1,53 +1,43 @@
 import os
 import sys
-import subprocess
+import ftplib
 
-host = os.environ.get('SSH_HOST')
-user = os.environ.get('SSH_USER')
-key = os.environ.get('SSH_PRIVATE_KEY')
+host = os.environ.get('FTP_HOST')
+user = os.environ.get('FTP_USER')
+passwd = os.environ.get('FTP_PASSWORD')
 
-if not host or not user or not key:
-    print('❌ Missing SSH environment variables!')
+if not host or not user or not passwd:
+    print('❌ Missing FTP environment variables!')
     sys.exit(1)
 
-# 秘密鍵を一時ファイルに保存
-key_path = '/tmp/deploy_key'
-with open(key_path, 'w') as f:
-    f.write(key)
-os.chmod(key_path, 0o600)
+print(f'🔌 Connecting to FTPS server: {host} as {user}...')
 
-remote_path = f'/home/xs365153/verifiedtokyo.com/public_html/'
+try:
+    ftp = ftplib.FTP_TLS(host)
+    ftp.login(user, passwd)
+    ftp.prot_p()
+    print('✅ Connected & authenticated successfully!')
 
-files_to_upload = [
-    'products_data.json',
-    'products.html',
-    'index.html',
-    'contact.html',
-    'shopping-guide.html',
-    'product-detail.html',
-    'styles.css',
-    'mobile-menu.js'
-]
-
-for filename in files_to_upload:
-    if not os.path.exists(filename):
-        print(f'⚠️ {filename} not found, skipping.')
-        continue
-    print(f'📤 Uploading {filename}...')
-    cmd = [
-        'scp',
-        '-P', '10022',
-        '-i', key_path,
-        '-o', 'StrictHostKeyChecking=no',
-        filename,
-        f'{user}@{host}:{remote_path}{filename}'
+    files_to_upload = [
+        'products_data.json',
+        'products.html',
+        'index.html',
+        'contact.html',
+        'shopping-guide.html',
+        'product-detail.html',
+        'styles.css',
+        'mobile-menu.js'
     ]
-    result = subprocess.run(cmd, capture_output=True, text=True)
-    if result.returncode == 0:
-        print(f'  ✅ {filename} uploaded successfully.')
-    else:
-        print(f'  ❌ Failed: {result.stderr}')
-        sys.exit(1)
 
-os.remove(key_path)
-print('🎉 All files deployed successfully!')
+    for filename in files_to_upload:
+        if os.path.exists(filename):
+            print(f'📤 Uploading {filename}...')
+            with open(filename, 'rb') as f:
+                ftp.storbinary(f'STOR {filename}', f)
+            print(f'  ✅ {filename} uploaded successfully.')
+
+    ftp.quit()
+    print('🎉 All files deployed to Xserver successfully!')
+except Exception as e:
+    print(f'❌ FTP upload error: {e}')
+    sys.exit(1)
