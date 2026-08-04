@@ -2,12 +2,12 @@ import os
 import sys
 import ftplib
 
-host = os.environ.get('FTP_HOST')
-user = os.environ.get('FTP_USER')
-passwd = os.environ.get('FTP_PASSWORD')
+host = os.environ.get('FTP_HOST') or os.environ.get('SSH_HOST') or 'sv16666.xserver.jp'
+user = os.environ.get('FTP_USER') or os.environ.get('SSH_USER') or 'deploy@verifiedtokyo.com'
+passwd = os.environ.get('FTP_PASSWORD') or os.environ.get('SSH_PASSWORD')
 
-if not host or not user or not passwd:
-    print('❌ Missing FTP environment variables!')
+if not passwd:
+    print('❌ Missing FTP_PASSWORD environment variable!')
     sys.exit(1)
 
 print(f'🔌 Connecting to FTPS server: {host} as {user}...')
