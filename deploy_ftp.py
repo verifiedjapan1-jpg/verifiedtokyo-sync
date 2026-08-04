@@ -16,20 +16,9 @@ try:
     ftp = ftplib.FTP_TLS(host)
     ftp.login(user, passwd)
     ftp.prot_p()
+    print(f'✅ Connected & authenticated! Web root directory (pwd): {ftp.pwd()}')
 
-    dir_list = ftp.nlst()
-    target_dir = None
-    if 'verifiedtokyo.com' in dir_list:
-        target_dir = 'verifiedtokyo.com/public_html'
-    elif 'verifdtokyo.com' in dir_list:
-        target_dir = 'verifdtokyo.com/public_html'
-    elif 'public_html' in dir_list:
-        target_dir = 'public_html'
-
-    if target_dir:
-        print(f'📁 Changing remote directory to: {target_dir}')
-        ftp.cwd(target_dir)
-
+    # Upload files directly to root directory (sub-FTP home directory is already public_html)
     files_to_upload = [
         'products_data.json',
         'products.html',
@@ -43,13 +32,13 @@ try:
 
     for filename in files_to_upload:
         if os.path.exists(filename):
-            print(f'📤 Uploading {filename} ({os.path.getsize(filename)} bytes)...')
+            print(f'📤 Uploading {filename} ({os.path.getsize(filename)} bytes) to web root...')
             with open(filename, 'rb') as f:
                 res = ftp.storbinary(f'STOR {filename}', f)
-                print(f'  Response for {filename}: {res}')
+                print(f'  ✅ Response for {filename}: {res}')
 
     ftp.quit()
-    print('🎉 All files deployed to Xserver successfully!')
+    print('🎉 All files deployed to Xserver web root successfully!')
 except Exception as e:
     print(f'❌ FTP upload error: {e}')
     sys.exit(1)
