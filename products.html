@@ -1,19 +1,16 @@
 <!DOCTYPE html>
+
 <html lang="en">
-
 <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Products | Verified Tokyo | Secondhand Brand Bags Online Store</title>
-        <meta name="description"
-                content="Verified Tokyo's list of secondhand brand bags. We offer a wide selection of popular brand bags including LOUIS VUITTON, CHANEL, GUCCI, and HERMES.">
-        <link rel="stylesheet" href="styles.css">
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;600;700&family=Noto+Sans+JP:wght@300;400;500;600&display=swap"
-                rel="stylesheet">
-
-        <style>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Products | Verified Tokyo | Secondhand Brand Bags Online Store</title>
+<meta content="Verified Tokyo's list of secondhand brand bags. We offer a wide selection of popular brand bags including LOUIS VUITTON, CHANEL, GUCCI, and HERMES." name="description"/>
+<link href="styles.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;600;700&amp;family=Noto+Sans+JP:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<style>
                 .products-container {
                         max-width: 1400px;
                         margin: 0 auto;
@@ -450,120 +447,108 @@
         }
     </style>
 </head>
-
 <body>
-        <header class="header">
-                <div class="main-header" style="padding:0 20px;">
-                        <div class="container" style="display:flex !important; align-items:center !important; gap:20px !important; flex-wrap:nowrap !important;">
-                                <div class="logo-nav-container" style="flex-shrink:0;">
-                                        <h1 class="logo">Verified Tokyo</h1>
-                                        
-                                </div>
-                                <nav class="main-nav">
-                                        <a href="index.html" class="nav-link"><span class="nav-full" data-i18n="Home">Home</span><span class="nav-short" data-i18n="Home">Home</span></a>
-                                        <a href="products.html" class="nav-link active"><span class="nav-full" data-i18n="Products">Products</span><span class="nav-short" data-i18n="Products">Products</span></a>
-                                        <a href="shopping-guide.html" class="nav-link"><span class="nav-full" data-i18n="Shopping Guide">Shopping Guide</span><span class="nav-short">Guide</span></a>
-                                        <a href="contact.html" class="nav-link"><span class="nav-full" data-i18n="Contact">Contact</span><span class="nav-short" data-i18n="Contact">Contact</span></a>
-                                </nav>
-                                <div class="search-container desktop-right-search" style="display:flex !important; align-items:center; position:relative; margin-left:auto; flex-shrink:0;">
-                                    <input type="text" class="search-input" id="search-input" placeholder="Search products..." data-i18n="Search products...">
-                                    <div class="search-icon" onclick="performSearch()">
-                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <circle cx="11" cy="11" r="8" />
-                                            <path d="M21 21l-4.35-4.35" />
-                                        </svg>
-                                    </div>
-                <div class="lang-curr-container" style="display:flex; gap:10px; margin-left:15px;">
-                    <select id="curr-selector" style="border:none; background:transparent; font-size:12px; cursor:pointer; outline:none; font-weight:600;">
-                        <option value="USD">USD $</option>
-                        <option value="JPY">JPY ¥</option>
-                        <option value="EUR">EUR €</option>
-                    </select>
-                    <select id="lang-selector" style="border:none; background:transparent; font-size:12px; cursor:pointer; outline:none; font-weight:600;">
-                        <option value="en">EN</option>
-                        <option value="ja">JP</option>
-                    </select>
-                </div>
-                                </div>
-                                
-                <div class="mobile-menu-toggle" id="mobile-menu-toggle">
-                                        <span></span>
-                                        <span></span>
-                                        <span></span>
-                                </div>
-                        </div>
-                
-                </div>
-        </header>
+<header class="header">
+<div class="main-header" style="padding:0 20px;">
+<div class="container" style="display:flex !important; align-items:center !important; gap:20px !important; flex-wrap:nowrap !important;">
+<div class="logo-nav-container" style="flex-shrink:0;">
+<h1 class="logo">Verified Tokyo</h1>
+</div>
+<nav class="main-nav">
+<a class="nav-link" href="index.html"><span class="nav-full" data-i18n="Home">Home</span><span class="nav-short" data-i18n="Home">Home</span></a>
+<a class="nav-link active" href="products.html"><span class="nav-full" data-i18n="Products">Products</span><span class="nav-short" data-i18n="Products">Products</span></a>
+<a class="nav-link" href="shopping-guide.html"><span class="nav-full" data-i18n="Shopping Guide">Shopping Guide</span><span class="nav-short">Guide</span></a>
+<a class="nav-link" href="contact.html"><span class="nav-full" data-i18n="Contact">Contact</span><span class="nav-short" data-i18n="Contact">Contact</span></a>
+</nav>
+<div class="search-container desktop-right-search" style="display:flex !important; align-items:center; position:relative; margin-left:auto; flex-shrink:0;">
+<input class="search-input" data-i18n="Search products..." id="search-input" placeholder="Search products..." type="text"/>
+<div class="search-icon" onclick="performSearch()">
+<svg fill="none" height="20" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="20">
+<circle cx="11" cy="11" r="8"></circle>
+<path d="M21 21l-4.35-4.35"></path>
+</svg>
+</div>
 
-        <div class="mobile-overlay" id="mobile-overlay"></div>
-        <nav class="mobile-nav" id="mobile-nav">
-                <a href="index.html" data-i18n="Home">Home</a>
-                <a href="products.html" data-i18n="Products">Products</a>
-                <a href="shopping-guide.html" data-i18n="Shopping Guide">Shopping Guide</a>
-                <a href="contact.html" data-i18n="Contact">Contact</a>
-        </nav>
-
-        <div class="products-container">
-                <h1>All Products</h1>
-                <p id="product-count">Loading products...</p>
-
-                <div class="filters">
-                        <select class="filter-select" id="category-filter">
-                                <option value="">All Categories</option>
-                                <option value="bags">Bags</option>
-                                <option value="wallets-accessories">Wallets & Accessories</option>
-                                <option value="watches">Watches</option>
-                                <option value="apparel">Apparel & Clothing</option>
-                                <option value="belts-scarves">Belts & Scarves</option>
-                        </select>
-                        <select class="filter-select" id="brand-filter">
-                                <option value="">All Brands</option>
-                        </select>
-                        <select class="filter-select" id="sort-filter">
-                                <option value="default">Default</option>
-                                <option value="price-low">Price: Low to High</option>
-                                <option value="price-high">Price: High to Low</option>
-                                <option value="brand">Brand</option>
-                        </select>
-                        <label class="availability-filter">
-                                <input type="checkbox" id="hide-soldout" checked>
+</div><div class="lang-curr-container" style="display:flex; gap:10px; margin-left:15px;">
+<select id="curr-selector" style="border:none; background:transparent; font-size:12px; cursor:pointer; outline:none; font-weight:600;">
+<option value="USD">USD $</option>
+<option value="JPY">JPY ¥</option>
+<option value="EUR">EUR €</option>
+</select>
+<select id="lang-selector" style="border:none; background:transparent; font-size:12px; cursor:pointer; outline:none; font-weight:600;">
+<option value="en">EN</option>
+<option value="ja">JP</option>
+</select>
+</div>
+<div class="mobile-menu-toggle" id="mobile-menu-toggle">
+<span></span>
+<span></span>
+<span></span>
+</div>
+</div>
+</div>
+</header>
+<div class="mobile-overlay" id="mobile-overlay"></div>
+<nav class="mobile-nav" id="mobile-nav">
+<a data-i18n="Home" href="index.html">Home</a>
+<a data-i18n="Products" href="products.html">Products</a>
+<a data-i18n="Shopping Guide" href="shopping-guide.html">Shopping Guide</a>
+<a data-i18n="Contact" href="contact.html">Contact</a>
+</nav>
+<div class="products-container">
+<h1>All Products</h1>
+<p id="product-count">Loading products...</p>
+<div class="filters">
+<select class="filter-select" id="category-filter">
+<option value="">All Categories</option>
+<option value="bags">Bags</option>
+<option value="wallets-accessories">Wallets &amp; Accessories</option>
+<option value="watches">Watches</option>
+<option value="apparel">Apparel &amp; Clothing</option>
+<option value="belts-scarves">Belts &amp; Scarves</option>
+</select>
+<select class="filter-select" id="brand-filter">
+<option value="">All Brands</option>
+</select>
+<select class="filter-select" id="sort-filter">
+<option value="default">Default</option>
+<option value="price-low">Price: Low to High</option>
+<option value="price-high">Price: High to Low</option>
+<option value="brand">Brand</option>
+</select>
+<label class="availability-filter">
+<input checked="" id="hide-soldout" type="checkbox"/>
                                 In Stock Only
                         </label>
-                </div>
-
-                <div class="products-grid" id="products-grid"></div>
-        </div>
-
-        <footer style="background: white; padding: 60px 0; border-top: 1px solid #e5e5e5;">
-                <div style="max-width: 1200px; margin: 0 auto; padding: 0 20px;">
-                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px;">
-                                <div>
-                                        <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 20px;">Verified Tokyo</h3>
-                                        <p style="color: #666; line-height: 1.6;">Premium secondhand luxury bags from Tokyo</p>
-                                </div>
-                                <div>
-                                        <h4 style="font-size: 14px; font-weight: 600; margin-bottom: 15px;">Quick Links</h4>
-                                        <ul style="list-style: none; padding: 0;">
-                                                <li style="margin-bottom: 10px;"><a href="index.html" style="color: #666; text-decoration: none;" data-i18n="Home">Home</a></li>
-                                                <li style="margin-bottom: 10px;"><a href="products.html" style="color: #666; text-decoration: none;" data-i18n="Products">Products</a></li>
-                                                <li style="margin-bottom: 10px;"><a href="shopping-guide.html" style="color: #666; text-decoration: none;" data-i18n="Shopping Guide">Shopping Guide</a></li>
-                                                <li style="margin-bottom: 10px;"><a href="contact.html" style="color: #666; text-decoration: none;" data-i18n="Contact">Contact</a></li>
-                                        </ul>
-                                </div>
-                                <div>
-                                        <img src="images/payment-methods.png" alt="Accepted Payment Methods"
-                                                style="max-width: 240px; width: 100%; height: auto;">
-                                </div>
-                        </div>
-                        <div style="text-align: center; padding-top: 20px; border-top: 1px solid #e5e5e5; margin-top: 40px;">
-                                <p style="font-size: 14px; color: #666;">&copy; 2026 Verified Tokyo. All rights reserved.</p>
-                        </div>
-                
-                </div>
-        </footer>
-
-        <script>
+</div>
+<div class="products-grid" id="products-grid"></div>
+</div>
+<footer style="background: white; padding: 60px 0; border-top: 1px solid #e5e5e5;">
+<div style="max-width: 1200px; margin: 0 auto; padding: 0 20px;">
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px;">
+<div>
+<h3 style="font-size: 18px; font-weight: 700; margin-bottom: 20px;">Verified Tokyo</h3>
+<p style="color: #666; line-height: 1.6;">Premium secondhand luxury bags from Tokyo</p>
+</div>
+<div>
+<h4 style="font-size: 14px; font-weight: 600; margin-bottom: 15px;">Quick Links</h4>
+<ul style="list-style: none; padding: 0;">
+<li style="margin-bottom: 10px;"><a data-i18n="Home" href="index.html" style="color: #666; text-decoration: none;">Home</a></li>
+<li style="margin-bottom: 10px;"><a data-i18n="Products" href="products.html" style="color: #666; text-decoration: none;">Products</a></li>
+<li style="margin-bottom: 10px;"><a data-i18n="Shopping Guide" href="shopping-guide.html" style="color: #666; text-decoration: none;">Shopping Guide</a></li>
+<li style="margin-bottom: 10px;"><a data-i18n="Contact" href="contact.html" style="color: #666; text-decoration: none;">Contact</a></li>
+</ul>
+</div>
+<div>
+<img alt="Accepted Payment Methods" src="images/payment-methods.png" style="max-width: 240px; width: 100%; height: auto;"/>
+</div>
+</div>
+<div style="text-align: center; padding-top: 20px; border-top: 1px solid #e5e5e5; margin-top: 40px;">
+<p style="font-size: 14px; color: #666;">© 2026 Verified Tokyo. All rights reserved.</p>
+</div>
+</div>
+</footer>
+<script>
                 let allProducts = [];
                 let currentProducts = [];
 
@@ -805,8 +790,7 @@ function applyFilters() {
                         };
                 });
         </script>
-
-        <script>
+<script>
         // Mobile search toggle
         (function() {
             var isMobile = window.innerWidth <= 768;
@@ -836,9 +820,7 @@ function applyFilters() {
             });
         })();
         </script>
-
-
-        <script>
+<script>
         // Dynamically set body padding to match actual header height
         function fixHeaderOffset() {
             var header = document.querySelector('.header');
@@ -851,7 +833,6 @@ function applyFilters() {
         // Run immediately too
         fixHeaderOffset();
         </script>
-    <script src="i18n.js"></script>
+<script src="i18n.js"></script>
 </body>
-
 </html>
