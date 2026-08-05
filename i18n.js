@@ -104,10 +104,18 @@ function formatPrice(productOrPrice) {
         val = Math.round(val / 100) * 100; // Round to nearest 100
         return `¥${val.toLocaleString()}`;
     } else if (currentCurr === 'EUR') {
-        let baseUsd = p.base_usd || (p.price - 300); // approximate if not present
-        const rate = exchangeRates ? (exchangeRates.rates['EUR'] || 0.92) : 0.92;
-        let eurBase = baseUsd * rate;
-        let val = Math.round((eurBase + 300) / 100) * 100; // Round to nearest 100
+        let jpyFinal = p.price_jpy_final;
+        if (!jpyFinal) {
+            const jpyRate = exchangeRates ? (exchangeRates.rates['JPY'] || 155) : 155;
+            jpyFinal = p.price * jpyRate;
+        }
+        jpyFinal = Math.round(jpyFinal / 100) * 100; // This is the +30000 JPY displayed price
+
+        const jpyRate = exchangeRates ? (exchangeRates.rates['JPY'] || 155) : 155;
+        const eurRate = exchangeRates ? (exchangeRates.rates['EUR'] || 0.92) : 0.92;
+        
+        let eurBase = jpyFinal * (eurRate / jpyRate);
+        let val = Math.round(eurBase / 100) * 100; // Round to nearest 100
         return `€${val.toLocaleString()}`;
     }
     
