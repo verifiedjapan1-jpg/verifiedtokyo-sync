@@ -665,8 +665,8 @@
                                 const cardClass = isSoldOut ? 'product-card sold-out' : 'product-card';
                                 const onclick = isSoldOut ? '' : `onclick="window.location.href='product-detail.html?id=${product.productId}'"`;
                                 const priceHTML = isSoldOut
-                                        ? `<div class="product-price sold-out-price">${formatPrice(product.price)}</div><div style="font-size:13px;color:#999;font-weight:600;" data-i18n="SOLD OUT">SOLD OUT</div>`
-                                        : `<div class="product-price">${formatPrice(product.price)}</div>`;
+                                        ? `<div class="product-price sold-out-price">${formatPrice(product)}</div><div style="font-size:13px;color:#999;font-weight:600;" data-i18n="SOLD OUT">SOLD OUT</div>`
+                                        : `<div class="product-price">${formatPrice(product)}</div>`;
                                 return `
                                     <div class="${cardClass}" ${onclick}>
                                         ${isSoldOut ? '<div class="sold-out-badge">Sold Out</div>' : ''}

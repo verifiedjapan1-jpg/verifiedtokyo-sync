@@ -40,24 +40,33 @@ def fetch_all_products():
     consecutive_no_new = 0  # Stop if 2 pages in a row have no new products
 
     while True:
-        url = f"{BASE_URL}/collections/all/products.json?limit=250&page={page}&currency=USD"
-        print(f"📦 Fetching page {page}: {url}")
+        url_usd = f"{BASE_URL}/collections/all/products.json?limit=250&page={page}&currency=USD"
+        url_jpy = f"{BASE_URL}/collections/all/products.json?limit=250&page={page}&currency=JPY"
+        print(f"📦 Fetching page {page}")
 
         try:
-            r = requests.get(url, timeout=60, headers={
-                'User-Agent': 'Mozilla/5.0 (compatible; ProductSync/1.0)'
-            })
+            r_usd = requests.get(url_usd, timeout=60, headers={'User-Agent': 'Mozilla/5.0'})
+            r_jpy = requests.get(url_jpy, timeout=60, headers={'User-Agent': 'Mozilla/5.0'})
             
-            if r.status_code != 200:
-                print(f"❌ HTTP {r.status_code} on page {page}. Stopping.")
+            if r_usd.status_code != 200 or r_jpy.status_code != 200:
+                print(f"❌ HTTP error on page {page}. Stopping.")
                 break
 
-            data = r.json()
-            products = data.get('products', [])
+            data_usd = r_usd.json()
+            data_jpy = r_jpy.json()
+            
+            products = data_usd.get('products', [])
+            products_jpy = data_jpy.get('products', [])
 
             if not products:
                 print(f"✅ No products returned at page {page}. Done!")
                 break
+                
+            jpy_prices = {}
+            for pj in products_jpy:
+                vj = pj.get('variants', [])
+                if vj:
+                    jpy_prices[pj['handle']] = float(vj[0].get('price', 0))
 
             new_on_this_page = 0
             for p in products:
@@ -71,7 +80,10 @@ def fetch_all_products():
                 variant = variants[0] if variants else {}
                 price_t_family_usd = float(variant.get('price', 0))
                 # T-Family USD price + $300 markup, then round to nearest $100
-                price_usd = round(price_t_family_usd + 300, -2)
+                price_usd_final = round(price_t_family_usd + 300, -2)
+                
+                price_t_family_jpy = jpy_prices.get(handle, 0)
+                price_jpy_final = round(price_t_family_jpy + 30000, -2)
 
                 available = any(v.get('available', False) for v in variants)
 
@@ -87,7 +99,10 @@ def fetch_all_products():
                     'id': len(all_products) + 1,
                     'name': title,
                     'brand': brand,
-                    'price': price_usd,
+                    'price': price_usd_final,
+                    'price_usd_final': price_usd_final,
+                    'price_jpy_final': price_jpy_final,
+                    'base_usd': price_t_family_usd,
                     'available': available,
                     'url': f"{BASE_URL}/ja/products/{handle}",
                     'imageUrl': image_url,
