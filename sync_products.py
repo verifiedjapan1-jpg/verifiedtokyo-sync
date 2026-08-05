@@ -70,8 +70,8 @@ def fetch_all_products():
                 variants = p.get('variants', [])
                 variant = variants[0] if variants else {}
                 price_t_family_usd = float(variant.get('price', 0))
-                # T-Family USD price + $300 markup
-                price_usd = round(price_t_family_usd + 300, 0)
+                # T-Family USD price + $300 markup, then round to nearest $100
+                price_usd = round(price_t_family_usd + 300, -2)
 
                 available = any(v.get('available', False) for v in variants)
 
