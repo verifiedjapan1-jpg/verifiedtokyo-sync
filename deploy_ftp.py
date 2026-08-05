@@ -27,6 +27,7 @@ try:
         'product-detail.html',
         'styles.css',
         'mobile-menu.js',
+        'i18n.js',
         '.htaccess'
     ]
 

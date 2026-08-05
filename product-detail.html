@@ -439,13 +439,13 @@
                     <h1 class="logo">Verified Tokyo</h1>
                 </div>
                 <nav class="main-nav">
-                    <a href="index.html" class="nav-link"><span class="nav-full">Home</span><span class="nav-short">Home</span></a>
-                    <a href="products.html" class="nav-link"><span class="nav-full">Products</span><span class="nav-short">Products</span></a>
-                    <a href="shopping-guide.html" class="nav-link"><span class="nav-full">Shopping Guide</span><span class="nav-short">Guide</span></a>
-                    <a href="contact.html" class="nav-link"><span class="nav-full">Contact</span><span class="nav-short">Contact</span></a>
+                    <a href="index.html" class="nav-link"><span class="nav-full" data-i18n="Home">Home</span><span class="nav-short" data-i18n="Home">Home</span></a>
+                    <a href="products.html" class="nav-link"><span class="nav-full" data-i18n="Products">Products</span><span class="nav-short" data-i18n="Products">Products</span></a>
+                    <a href="shopping-guide.html" class="nav-link"><span class="nav-full" data-i18n="Shopping Guide">Shopping Guide</span><span class="nav-short">Guide</span></a>
+                    <a href="contact.html" class="nav-link"><span class="nav-full" data-i18n="Contact">Contact</span><span class="nav-short" data-i18n="Contact">Contact</span></a>
                 </nav>
                 <div class="search-container desktop-right-search" style="display:flex !important; align-items:center; position:relative; margin-left:auto; flex-shrink:0;">
-                    <input type="text" class="search-input" id="search-input" placeholder="Search products...">
+                    <input type="text" class="search-input" id="search-input" placeholder="Search products..." data-i18n="Search products...">
                     <div class="search-icon" onclick="performSearch()">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <circle cx="11" cy="11" r="8" />
@@ -715,14 +715,14 @@
                         <div class="product-info">
                             <div class="product-brand">${resolveDisplayBrand(product)}</div>
                             <h1>${cleanProductTitle(product)}</h1>
-                            <div class="product-price">${formatUSD(product.price)}</div>
+                            <div class="product-price">${formatPrice(product.price)}</div>
 
                             <button id="buy-now-btn" class="buy-now-btn"
                                 onclick="buyNow('${product.name.replace(/'/g, "\\'")}', '${product.productId}', ${priceInt}, '${mainImage}')">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
                                 </svg>
-                                Buy Now — $${priceInt.toLocaleString()}
+                                <span data-i18n="Buy Now — ">Buy Now — </span>${formatPrice(product.price)}
                             </button>
 
                             <a href="https://www.entrupy.com/" target="_blank" rel="noopener noreferrer"
@@ -799,6 +799,27 @@
             document.getElementById('zoomModal').classList.remove('active');
         }
 
+        window.onLangCurrChange = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const productId = urlParams.get('id');
+            const product = products.find(p => p.productId === productId) ||
+                            products.find(p => String(p.id) === productId);
+            if (!product) return;
+
+            const priceElements = document.querySelectorAll('.product-price');
+            priceElements.forEach(el => el.innerHTML = formatPrice(product.price));
+
+            const buyBtn = document.getElementById('buy-now-btn');
+            if (buyBtn) {
+                buyBtn.innerHTML = `
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+                    </svg>
+                    <span data-i18n="Buy Now — ">${window.t ? window.t('Buy Now — ') : 'Buy Now — '}</span>${formatPrice(product.price)}
+                `;
+            }
+        };
+
         document.getElementById('zoomModal').addEventListener('click', function(e) {
             if (e.target === this || e.target === document.getElementById('zoomedImage')) closeZoom();
         });
@@ -866,5 +887,6 @@
         // Run immediately too
         fixHeaderOffset();
         </script>
+    <script src="i18n.js"></script>
 </body>
 </html>
