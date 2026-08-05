@@ -35,11 +35,14 @@ const TRANSLATIONS = {
 
 let currentLang = localStorage.getItem('vt_lang') || 'en';
 let currentCurr = localStorage.getItem('vt_curr') || 'USD';
-let exchangeRates = JSON.parse(localStorage.getItem('vt_rates') || 'null');
+let exchangeRates = null;
+try {
+    exchangeRates = JSON.parse(sessionStorage.getItem('vt_rates_v2') || 'null');
+} catch(e) {}
 
 async function fetchRates() {
-    if (exchangeRates && Date.now() - exchangeRates.timestamp < 1000 * 60 * 60) {
-        return;
+    if (exchangeRates && Date.now() - exchangeRates.timestamp < 1000 * 60 * 15) {
+        return; // Use cached for 15 mins
     }
     try {
         const res = await fetch('https://open.er-api.com/v6/latest/USD');
@@ -48,7 +51,7 @@ async function fetchRates() {
             rates: data.rates,
             timestamp: Date.now()
         };
-        localStorage.setItem('vt_rates', JSON.stringify(exchangeRates));
+        sessionStorage.setItem('vt_rates_v2', JSON.stringify(exchangeRates));
     } catch(e) {
         console.error('Failed to fetch rates', e);
         exchangeRates = { rates: { USD: 1, JPY: 155, EUR: 0.92 }, timestamp: Date.now() };
