@@ -34,23 +34,13 @@ def html_to_text(html):
     return '\n'.join(result).strip()
 
 def fetch_all_products():
-    # Fetch live JPY to USD exchange rate
-    try:
-        req = requests.get('https://open.er-api.com/v6/latest/JPY', timeout=10)
-        req.raise_for_status()
-        USD_RATE = req.json()['rates']['USD']
-        print(f"💱 Live Exchange Rate: 1 JPY = {USD_RATE} USD")
-    except Exception as e:
-        print(f"⚠️ Failed to fetch exchange rate, using default 1/155. Error: {e}")
-        USD_RATE = 1 / 155
-
     all_products = []
     seen_handles = set()
     page = 1
     consecutive_no_new = 0  # Stop if 2 pages in a row have no new products
 
     while True:
-        url = f"{BASE_URL}/collections/all/products.json?limit=250&page={page}"
+        url = f"{BASE_URL}/collections/all/products.json?limit=250&page={page}&currency=USD"
         print(f"📦 Fetching page {page}: {url}")
 
         try:
@@ -79,9 +69,9 @@ def fetch_all_products():
 
                 variants = p.get('variants', [])
                 variant = variants[0] if variants else {}
-                price_jpy = float(variant.get('price', 0))
+                price_t_family_usd = float(variant.get('price', 0))
                 # T-Family USD price + $300 markup
-                price_usd = round(price_jpy * USD_RATE + 300, 0)
+                price_usd = round(price_t_family_usd + 300, 0)
 
                 available = any(v.get('available', False) for v in variants)
 
