@@ -484,7 +484,7 @@
 <script>
         let products = [];
 
-        fetch('products_data.json')
+        fetch('products_data.json?v=' + new Date().getTime())
             .then(res => res.json())
             .then(data => {
                 products = data;
@@ -890,6 +890,6 @@
         // Run immediately too
         fixHeaderOffset();
         </script>
-<script src="i18n.js"></script>
+<script src="i18n.js?v=3"></script>
 </body>
 </html>

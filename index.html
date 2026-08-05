@@ -524,7 +524,7 @@
             return words.slice(start, start + 2).join(' ') || raw;
         }
 
-        fetch('products_data.json')
+        fetch('products_data.json?v=' + new Date().getTime())
             .then(res => res.json())
             .then(data => {
                 const featuredProducts = [];
@@ -758,6 +758,6 @@
         // Run immediately too
         fixHeaderOffset();
         </script>
-<script src="i18n.js"></script>
+<script src="i18n.js?v=3"></script>
 </body>
 </html>
