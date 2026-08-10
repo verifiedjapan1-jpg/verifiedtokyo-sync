@@ -297,4 +297,122 @@
 <a data-i18n="Products" href="products.html">Products</a>
 <a data-i18n="Shopping Guide" href="shopping-guide.html">Shopping Guide</a>
 <a data-i18n="Contact" href="contact.html">Contact</a>
-</nav></body></html>
+</nav>
+
+<div class="contact-container">
+        <div class="contact-header">
+            <h1>Contact Us</h1>
+            <p>Please fill in the following fields. Fields marked with * are required.</p>
+        </div>
+        <div class="success-message" id="success-message">✅ Thank you! We will get back to you within 24-48 hours.</div>
+        <div class="error-banner" id="error-banner">❌ Failed to send. Please email <a href="mailto:contact@verifiedtokyo.com">contact@verifiedtokyo.com</a></div>
+        <div class="contact-content">
+            <div class="contact-form">
+                <h2>Send us a message</h2>
+                <form id="contact-form" novalidate>
+                    <div class="form-group"><label for="name" class="required">Full Name</label><input type="text" id="name" name="name" required><span class="error-message" id="name-error">Please enter your full name</span></div>
+                    <div class="form-group"><label for="email" class="required">Email Address</label><input type="email" id="email" name="email" required><span class="error-message" id="email-error">Please enter a valid email</span></div>
+                    <div class="form-group"><label for="phone">Phone Number</label><input type="tel" id="phone" name="phone"><small>Optional - for faster response</small></div>
+                    <div class="form-group"><label for="subject" class="required">Subject</label>
+                        <select id="subject" name="subject" required>
+                            <option value="">-- Please Select --</option>
+                            <option value="product-inquiry">Product Inquiry</option>
+                            <option value="order-status">Order Status</option>
+                            <option value="shipping">Shipping & Delivery</option>
+                            <option value="payment">Payment Questions</option>
+                            <option value="returns">Returns & Exchanges</option>
+                            <option value="other">Other</option>
+                        </select>
+                        <span class="error-message" id="subject-error">Please select a subject</span>
+                    </div>
+                    <div class="form-group"><label for="message" class="required">Message</label><textarea id="message" name="message" required></textarea><span class="error-message" id="message-error">Please enter your message</span></div>
+                    <button type="submit" class="submit-btn">Send Message</button>
+                </form>
+            </div>
+            <div class="contact-info">
+                <h2>Contact Information</h2>
+                <div class="info-item"><h3>Email</h3><p><a href="mailto:contact@verifiedtokyo.com">contact@verifiedtokyo.com</a></p></div>
+                <div class="info-item"><h3>Business Hours</h3><p>Monday - Sunday: 9:00 - 21:00</p></div>
+                <div class="info-item"><h3>Response Time</h3><p>Within 24-48 hours during business days.</p></div>
+            </div>
+        </div>
+    </div>
+    <footer><div class="footer-container"><div style="text-align:center;padding:20px 0;"><p style="font-size:14px;color:#666;">© 2026 Verified Tokyo</p></div></div></footer>
+    <script>
+        document.getElementById('contact-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            document.querySelectorAll('.error-message').forEach(m => m.style.display='none');
+            document.getElementById('success-message').style.display='none';
+            document.getElementById('error-banner').style.display='none';
+            let ok = true;
+            const name = document.getElementById('name');
+            if (!name.value.trim()) { document.getElementById('name-error').style.display='block'; ok=false; }
+            const email = document.getElementById('email');
+            if (!email.value.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value)) { document.getElementById('email-error').style.display='block'; ok=false; }
+            const subject = document.getElementById('subject');
+            if (!subject.value) { document.getElementById('subject-error').style.display='block'; ok=false; }
+            const message = document.getElementById('message');
+            if (!message.value.trim()) { document.getElementById('message-error').style.display='block'; ok=false; }
+            if (ok) {
+                const btn = this.querySelector('.submit-btn');
+                btn.disabled=true; btn.textContent='Sending...';
+                fetch('send-email.php',{method:'POST',body:new FormData(this)})
+                .then(r=>r.json()).then(d=>{
+                    if(d.success){document.getElementById('success-message').style.display='block';this.reset();window.scrollTo({top:0,behavior:'smooth'});}
+                    else{document.getElementById('error-banner').style.display='block';window.scrollTo({top:0,behavior:'smooth'});}
+                }).catch(()=>{document.getElementById('error-banner').style.display='block';}).finally(()=>{btn.disabled=false;btn.textContent='Send Message';});
+            }
+        });
+        function performSearch() {
+            const v = document.getElementById('search-input').value.trim();
+            window.location.href = v ? 'products.html?search=' + encodeURIComponent(v) : 'products.html';
+        }
+    </script>
+<script>
+        // Mobile search toggle
+        (function() {
+            var isMobile = window.innerWidth <= 768;
+            if (!isMobile) return;
+            var searchIcon = document.querySelector('.search-icon');
+            var searchInput = document.getElementById('search-input');
+            if (!searchIcon || !searchInput) return;
+            searchIcon.style.cursor = 'pointer';
+            searchIcon.addEventListener('click', function(e) {
+                if (searchInput.classList.contains('mobile-expanded')) {
+                    var val = searchInput.value.trim();
+                    if (val) {
+                        window.location.href = 'products.html?search=' + encodeURIComponent(val);
+                    } else {
+                        searchInput.classList.remove('mobile-expanded');
+                        searchInput.blur();
+                    }
+                } else {
+                    searchInput.classList.add('mobile-expanded');
+                    setTimeout(function(){ searchInput.focus(); }, 50);
+                }
+            });
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.search-container')) {
+                    searchInput.classList.remove('mobile-expanded');
+                }
+            });
+        })();
+        </script>
+
+
+        <script>
+        // Dynamically set body padding to match actual header height
+        function fixHeaderOffset() {
+            var header = document.querySelector('.header');
+            if (!header || window.innerWidth > 768) return;
+            var h = header.getBoundingClientRect().height;
+            document.body.style.paddingTop = (h + 4) + 'px';
+        }
+        document.addEventListener('DOMContentLoaded', fixHeaderOffset);
+        window.addEventListener('resize', fixHeaderOffset);
+        // Run immediately too
+        fixHeaderOffset();
+        </script>
+<script src="i18n.js?v=3"></script>
+</body>
+</html>
