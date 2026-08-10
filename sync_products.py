@@ -33,6 +33,32 @@ def html_to_text(html):
             prev_empty = False
     return '\n'.join(result).strip()
 
+
+def extract_brand(title):
+    if not title: return 'UNKNOWN'
+    t = title.upper()
+    if t.startswith('AUTHENTIC '):
+        t = t[10:].strip()
+        title = title[10:].strip()
+    if t.startswith('LOUIS VUITTON') or t.startswith('LV '): return 'LOUIS VUITTON'
+    if t.startswith('BOTTEGA'): return 'BOTTEGA VENETA'
+    if t.startswith('CHRISTIAN DIOR') or t.startswith('DIOR'): return 'DIOR'
+    if t.startswith('CHRISTIAN LOUBOUTIN'): return 'CHRISTIAN LOUBOUTIN'
+    if t.startswith('DOLCE'): return 'DOLCE & GABBANA'
+    if t.startswith('SAINT LAURENT') or t.startswith('YVES SAINT LAURENT'): return 'SAINT LAURENT'
+    if t.startswith('JIMMY'): return 'JIMMY CHOO'
+    if t.startswith('CHLOÉ') or t.startswith('CHLOE'): return 'CHLOE'
+    if t.startswith('BURBERRY'): return 'BURBERRY'
+    if t.startswith('VAN CLEEF'): return 'VAN CLEEF & ARPELS'
+    if t.startswith('TIFFANY'): return 'TIFFANY & CO.'
+    if t.startswith('SALVATORE FERRAGAMO') or t.startswith('FERRAGAMO'): return 'FERRAGAMO'
+    if t.startswith('HERM'): return 'HERMES'
+    if t.startswith('STELLA MCCARTNEY') or t.startswith('STELLA'): return 'STELLA MCCARTNEY'
+    if t.startswith('MARC JACOBS') or t.startswith('MARC'): return 'MARC JACOBS'
+    if t.startswith('MIU MIU') or t.startswith('MIU'): return 'MIU MIU'
+    if t.startswith('TAG HEUER') or t.startswith('TAG'): return 'TAG HEUER'
+    return title.split()[0].upper() if title else 'UNKNOWN'
+
 def fetch_all_products():
     all_products = []
     seen_handles = set()
@@ -91,7 +117,7 @@ def fetch_all_products():
                 image_url = images[0] if images else ''
 
                 title = p.get('title', '').replace(' - T-Family', '').strip()
-                brand = title.split()[0].upper() if title else 'UNKNOWN'
+                brand = extract_brand(title)
 
                 description = html_to_text(p.get('body_html', ''))
 
