@@ -116,7 +116,7 @@
             .nav-short { display: inline !important; }
         }
 
-                /* ===== MOBILE: 2-ROW FIXED HEADER ===== */
+                                /* ===== MOBILE: 2-ROW FIXED HEADER ===== */
         @media (max-width: 768px) {
 
             .header {
@@ -130,20 +130,19 @@
             .main-header .container {
                 display: flex !important;
                 flex-direction: row !important;
-                flex-wrap: wrap !important;
+                flex-wrap: nowrap !important;
                 align-items: center !important;
-                justify-content: space-between !important;
-                padding: 10px 16px 0 !important;
-                height: auto !important;
+                justify-content: flex-start !important;
+                padding: 10px 16px !important;
+                height: 60px !important;
+                box-sizing: border-box !important;
             }
 
             .logo-nav-container {
                 display: flex !important;
-                flex-direction: row !important;
                 align-items: center !important;
                 padding: 0 !important;
                 border: none !important;
-                order: 1 !important;
                 flex: 0 0 auto !important;
             }
 
@@ -157,27 +156,42 @@
                 font-weight: 600 !important;
             }
 
-            .lang-curr-container {
-                order: 2 !important;
+            /* Push search to the right */
+            .search-container {
                 display: flex !important;
                 align-items: center !important;
-                margin-left: auto !important;
-                margin-right: 15px !important;
+                margin-left: auto !important; /* Pushes everything after it to the right */
+                margin-right: 12px !important;
                 flex: 0 0 auto !important;
+                order: 2 !important;
+            }
+            
+            .lang-curr-container {
+                display: flex !important;
+                align-items: center !important;
+                margin-right: 12px !important;
+                flex: 0 0 auto !important;
+                order: 3 !important;
             }
 
-            .search-container {
-                order: 3 !important;
+            .mobile-menu-toggle, #mobile-menu-toggle {
                 display: flex !important;
-                align-items: center !important;
-                margin: 0 !important;
+                flex-direction: column !important;
+                justify-content: space-between !important;
+                width: 24px !important;
+                height: 18px !important;
+                cursor: pointer !important;
+                z-index: 1001 !important;
                 flex: 0 0 auto !important;
+                order: 4 !important;
+                margin: 0 !important;
             }
+
             .search-input { display: none !important; }
             .search-input.mobile-expanded {
                 display: block !important;
                 position: fixed !important;
-                top: 68px !important;
+                top: 60px !important;
                 left: 0 !important; right: 0 !important;
                 width: 100% !important;
                 padding: 12px 16px !important;
@@ -192,38 +206,24 @@
                 outline: none !important;
             }
 
-            /* 2段目: ナビ */
+            /* Hide text nav links on mobile */
             .main-nav {
-                order: 4 !important;
-                display: flex !important;
-                flex-direction: row !important;
-                align-items: center !important;
-                justify-content: space-around !important;
+                display: none !important;
+            }
+
+            .mobile-menu-toggle span, #mobile-menu-toggle span {
+                display: block !important;
                 width: 100% !important;
-                padding: 0 !important;
-                margin: 10px -16px 0 -16px !important; /* stretch to edges if container has padding */
-                width: calc(100% + 32px) !important;
-                box-sizing: border-box !important;
-                border-top: 1px solid #e8e8e8 !important;
-                border-bottom: none !important;
+                height: 2px !important;
+                background-color: #1a1a1a !important;
+                border-radius: 2px !important;
+                transition: all 0.3s ease !important;
             }
 
-            .nav-link {
-                flex: 1 !important;
-                text-align: center !important;
-                font-size: 11px !important;
-                padding: 8px 4px !important;
-                white-space: nowrap !important;
-                line-height: 1 !important;
-                letter-spacing: 0.04em !important;
-            }
+            
 
-            .mobile-menu-toggle { display: none !important; }
-            .mobile-nav { display: none !important; }
-            .mobile-overlay { display: none !important; }
-
-            /* body: ヘッダー高さ分下げる */
-            body { padding-top: 85px !important; }
+            /* body: ヘッダー高さ分下げる (60px) */
+            body { padding-top: 60px !important; }
         }
 
     
