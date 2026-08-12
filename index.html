@@ -195,7 +195,7 @@
             }
         }
     
-                                /* ===== MOBILE: 2-ROW FIXED HEADER ===== */
+                                        /* ===== MOBILE: 2-ROW FIXED HEADER ===== */
         @media (max-width: 768px) {
 
             .header {
@@ -235,20 +235,18 @@
                 font-weight: 600 !important;
             }
 
-            /* Push search to the right */
+            /* Hide search completely on mobile */
             .search-container {
-                display: flex !important;
-                align-items: center !important;
-                margin-left: auto !important; /* Pushes everything after it to the right */
-                margin-right: 12px !important;
-                flex: 0 0 auto !important;
-                order: 2 !important;
+                display: none !important;
             }
+            .search-input, .search-icon { display: none !important; }
             
+            /* Push language/currency to the right */
             .lang-curr-container {
                 display: flex !important;
                 align-items: center !important;
-                margin-right: 12px !important;
+                margin-left: auto !important; /* Pushes everything after it to the right */
+                margin-right: 15px !important;
                 flex: 0 0 auto !important;
                 order: 3 !important;
             }
@@ -264,25 +262,7 @@
                 flex: 0 0 auto !important;
                 order: 4 !important;
                 margin: 0 !important;
-            }
-
-            .search-input { display: none !important; }
-            .search-input.mobile-expanded {
-                display: block !important;
-                position: fixed !important;
-                top: 60px !important;
-                left: 0 !important; right: 0 !important;
-                width: 100% !important;
-                padding: 12px 16px !important;
-                font-size: 16px !important;
-                border: none !important;
-                border-bottom: 2px solid #1a1a1a !important;
-                background: white !important;
-                z-index: 999 !important;
-                box-shadow: 0 4px 12px rgba(0,0,0,0.1) !important;
-                border-radius: 0 !important;
-                box-sizing: border-box !important;
-                outline: none !important;
+                background: transparent !important;
             }
 
             /* Hide text nav links on mobile */
@@ -297,9 +277,8 @@
                 background-color: #1a1a1a !important;
                 border-radius: 2px !important;
                 transition: all 0.3s ease !important;
+                margin: 0 !important;
             }
-
-            
 
             /* body: ヘッダー高さ分下げる (60px) */
             body { padding-top: 60px !important; }
