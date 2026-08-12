@@ -239,6 +239,11 @@
             .search-container {
                 display: none !important;
             }
+            /* Hide language/currency on header for mobile, they are moved to hamburger menu */
+            .header .lang-curr-container {
+                display: none !important;
+            }
+
             .search-input, .search-icon { display: none !important; }
             
             /* Push language/currency to the right */
@@ -336,6 +341,11 @@
             .logo-nav-container .search-container {
                 display: none !important;
             }
+            /* Hide language/currency on header for mobile, they are moved to hamburger menu */
+            .header .lang-curr-container {
+                display: none !important;
+            }
+
             .main-nav {
                 order: 2 !important;
                 margin-left: auto !important;
@@ -415,6 +425,18 @@
 <a data-i18n="Products" href="products.html">Products</a>
 <a data-i18n="Shopping Guide" href="shopping-guide.html">Shopping Guide</a>
 <a data-i18n="Contact" href="contact.html">Contact</a>
+
+<div class="lang-curr-container mobile-lang-curr" style="display:flex; gap:10px; padding:20px; border-top:1px solid #eee; margin-top:10px; flex-wrap: wrap;">
+    <select id="curr-selector" style="padding:8px; font-size:15px; border:1px solid #ccc; border-radius:4px; outline:none; background:white; color:#333; cursor:pointer; flex: 1;">
+        <option value="USD">USD $</option>
+        <option value="JPY">JPY ¥</option>
+        <option value="EUR">EUR €</option>
+    </select>
+    <select id="lang-selector" style="padding:8px; font-size:15px; border:1px solid #ccc; border-radius:4px; outline:none; background:white; color:#333; cursor:pointer; flex: 1;">
+        <option value="en">EN</option>
+        <option value="ja">JP</option>
+    </select>
+</div>
 </nav>
 <section class="hero">
 <div class="hero-carousel">
