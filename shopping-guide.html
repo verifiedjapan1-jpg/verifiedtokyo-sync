@@ -210,28 +210,9 @@
             body > .search-icon,
             body > svg { display: none !important; }
 
-            /* Force nav-link to be small */
-            .main-nav .nav-link,
-            .main-nav a,
-            nav.main-nav a {
-                font-size: 11px !important;
-                padding: 8px 4px !important;
-                line-height: 1 !important;
-                text-transform: uppercase !important;
-                letter-spacing: 0.04em !important;
-                color: #333 !important;
-                text-decoration: none !important;
-                flex: 1 !important;
-                text-align: center !important;
-                white-space: nowrap !important;
-                display: block !important;
-            }
+            
 
-            /* Hide mobile-menu-toggle completely */
-            .mobile-menu-toggle,
-            #mobile-menu-toggle {
-                display: none !important;
-            }
+            
 
             /* Hide the search input bar that appears below header */
             .main-header ~ .search-icon,
@@ -247,11 +228,7 @@
             .search-container:not(.header .search-container) {
                 display: none !important;
             }
-            /* Ensure search container stays in header */
-            .header .search-container {
-                position: static !important;
-                display: flex !important;
-            }
+            
         }
     
         /* Desktop: search bar moved to right of nav menu */
@@ -316,7 +293,7 @@
 <a class="nav-link active" href="shopping-guide.html"><span class="nav-full" data-i18n="Shopping Guide">Shopping Guide</span><span class="nav-short">Guide</span></a>
 <a class="nav-link" href="contact.html"><span class="nav-full" data-i18n="Contact">Contact</span><span class="nav-short" data-i18n="Contact">Contact</span></a>
 </nav>
-<div class="search-container desktop-right-search" style="display:flex !important; align-items:center; position:relative; margin-left:auto; flex-shrink:0;">
+<div class="search-container desktop-right-search" style="align-items:center; position:relative; margin-left:auto; flex-shrink:0;">
 <input class="search-input" data-i18n="Search products..." id="search-input" placeholder="Search products..." type="text"/>
 <div class="search-icon" onclick="performSearch()">
 <svg fill="none" height="20" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="20">
