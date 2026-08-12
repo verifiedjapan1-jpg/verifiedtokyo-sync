@@ -199,7 +199,7 @@
             }
         }
     
-        /* ===== MOBILE: 2-ROW FIXED HEADER ===== */
+                /* ===== MOBILE: 2-ROW FIXED HEADER ===== */
         @media (max-width: 768px) {
 
             .header {
@@ -212,21 +212,22 @@
 
             .main-header .container {
                 display: flex !important;
-                flex-direction: column !important;
-                align-items: stretch !important;
-                padding: 0 !important;
+                flex-direction: row !important;
+                flex-wrap: wrap !important;
+                align-items: center !important;
+                justify-content: space-between !important;
+                padding: 10px 16px 0 !important;
                 height: auto !important;
             }
 
-            /* 1段目: ロゴ＋検索 */
             .logo-nav-container {
                 display: flex !important;
                 flex-direction: row !important;
                 align-items: center !important;
-                justify-content: space-between !important;
-                padding: 10px 16px 8px !important;
-                border-bottom: none !important;
-                box-sizing: border-box !important;
+                padding: 0 !important;
+                border: none !important;
+                order: 1 !important;
+                flex: 0 0 auto !important;
             }
 
             .logo, h1.logo, .header .logo, .main-header .logo {
@@ -239,11 +240,21 @@
                 font-weight: 600 !important;
             }
 
+            .lang-curr-container {
+                order: 2 !important;
+                display: flex !important;
+                align-items: center !important;
+                margin-left: auto !important;
+                margin-right: 15px !important;
+                flex: 0 0 auto !important;
+            }
+
             .search-container {
-                flex-shrink: 0 !important;
+                order: 3 !important;
                 display: flex !important;
                 align-items: center !important;
                 margin: 0 !important;
+                flex: 0 0 auto !important;
             }
             .search-input { display: none !important; }
             .search-input.mobile-expanded {
@@ -264,15 +275,17 @@
                 outline: none !important;
             }
 
-            /* 2段目: ナビ — ボーダーは上のみ1本 */
+            /* 2段目: ナビ */
             .main-nav {
+                order: 4 !important;
                 display: flex !important;
                 flex-direction: row !important;
                 align-items: center !important;
                 justify-content: space-around !important;
                 width: 100% !important;
                 padding: 0 !important;
-                margin: 0 !important;
+                margin: 10px -16px 0 -16px !important; /* stretch to edges if container has padding */
+                width: calc(100% + 32px) !important;
                 box-sizing: border-box !important;
                 border-top: 1px solid #e8e8e8 !important;
                 border-bottom: none !important;
@@ -292,8 +305,8 @@
             .mobile-nav { display: none !important; }
             .mobile-overlay { display: none !important; }
 
-            /* body: ヘッダー高さ分(約68px)下げる */
-            body { padding-top: 100px !important; }
+            /* body: ヘッダー高さ分下げる */
+            body { padding-top: 85px !important; }
         }
         }
 
