@@ -16,7 +16,13 @@ try:
     ftp = ftplib.FTP_TLS(host)
     ftp.login(user, passwd)
     ftp.prot_p()
-    print(f'✅ Connected & authenticated! Web root directory (pwd): {ftp.pwd()}')
+    print(f'✅ Connected & authenticated! Initial directory (pwd): {ftp.pwd()}')
+    
+    try:
+        ftp.cwd('public_html')
+        print(f'✅ Changed directory to: {ftp.pwd()}')
+    except Exception as e:
+        print(f'⚠️ Could not change to public_html directory: {e}')
 
     files_to_upload = [
         'products_data.json',
