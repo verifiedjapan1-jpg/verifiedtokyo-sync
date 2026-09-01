@@ -1,0 +1,41 @@
+name: 🎬 Generate Instagram/TikTok Reels
+
+on:
+  workflow_dispatch:
+    inputs:
+      product_ids:
+        description: '商品ID（カンマ区切り、空欄なら初期12点）'
+        required: false
+        default: ''
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v4
+
+      - name: 🐍 Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: 🎞️ Install ffmpeg
+        run: sudo apt-get update && sudo apt-get install -y ffmpeg
+
+      - name: 📦 Install dependencies
+        run: pip install pillow requests
+
+      - name: 🎬 Generate reels
+        env:
+          PRODUCT_IDS: ${{ github.event.inputs.product_ids }}
+        run: |
+          cd scripts
+          python3 generate_reels.py
+
+      - name: 📤 Upload reels as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: verified-tokyo-reels
+          path: reels_out/*.mp4
+          retention-days: 14
