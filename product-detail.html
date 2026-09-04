@@ -418,7 +418,7 @@
 </div>
 <nav class="main-nav">
 <a class="nav-link" href="index.html"><span class="nav-full" data-i18n="Home">Home</span><span class="nav-short" data-i18n="Home">Home</span></a>
-<a class="nav-link" href="products.html"><span class="nav-full" data-i18n="Products">Products</span><span class="nav-short" data-i18n="Products">Products</span></a>
+<a class="nav-link active" href="products.html"><span class="nav-full" data-i18n="Products">Products</span><span class="nav-short" data-i18n="Products">Products</span></a>
 <a class="nav-link" href="shopping-guide.html"><span class="nav-full" data-i18n="Shopping Guide">Shopping Guide</span><span class="nav-short">Guide</span></a>
 <a class="nav-link" href="contact.html"><span class="nav-full" data-i18n="Contact">Contact</span><span class="nav-short" data-i18n="Contact">Contact</span></a>
 </nav>
@@ -442,9 +442,38 @@
 <option value="ja">JP</option>
 </select>
 </div>
+<div class="mobile-menu-toggle" id="mobile-menu-toggle" style="display: flex; align-items: center; justify-content: center;">
+    <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display: block !important; opacity: 1 !important; visibility: visible !important;">
+        <line x1="3" y1="6" x2="21" y2="6"></line>
+        <line x1="3" y1="12" x2="21" y2="12"></line>
+        <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+</div>
 </div>
 </div>
 </header>
+<div class="mobile-overlay" id="mobile-overlay"></div>
+<nav class="mobile-nav" id="mobile-nav">
+<a data-i18n="Home" href="index.html">Home</a>
+<a data-i18n="Products" href="products.html">Products</a>
+<a data-i18n="Shopping Guide" href="shopping-guide.html">Shopping Guide</a>
+<a data-i18n="Contact" href="contact.html">Contact</a>
+
+<div class="lang-curr-container mobile-lang-curr" style="display:flex; gap:10px; padding:20px; border-top:1px solid #eee; margin-top:10px; flex-wrap: wrap;">
+    <select id="curr-selector" style="padding:8px; font-size:15px; border:1px solid #ccc; border-radius:4px; outline:none; background:white; color:#333; cursor:pointer; flex: 1;">
+        <option value="USD">USD $</option>
+        <option value="JPY">JPY ¥</option>
+        <option value="EUR">EUR €</option>
+    </select>
+    <select id="lang-selector" style="padding:8px; font-size:15px; border:1px solid #ccc; border-radius:4px; outline:none; background:white; color:#333; cursor:pointer; flex: 1;">
+        <option value="en">EN</option>
+        <option value="ja">JP</option>
+    </select>
+</div>
+</nav>
+
+
+
 <div id="product-detail-content">
 <div class="no-product"><h2>Loading product...</h2></div>
 </div>
