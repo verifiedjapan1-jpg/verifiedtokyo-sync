@@ -122,7 +122,7 @@ def fetch_all_products():
                 description = html_to_text(p.get('body_html', ''))
 
                 product = {
-                    'id': len(all_products) + 1,
+                    'id': handle,
                     'name': title,
                     'brand': brand,
                     'price': price_usd_final,
