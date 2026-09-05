@@ -29,7 +29,7 @@ def download(url, path):
 
 def main():
     ids_env = os.environ.get("PRODUCT_IDS", "").strip()
-    ids = [int(x) for x in ids_env.split(",") if x.strip()] if ids_env else DEFAULT_IDS
+    ids = [x.strip() for x in ids_env.split(",") if x.strip()] if ids_env else DEFAULT_IDS
 
     data = json.load(open(DATA))
     by_id = {p["id"]: p for p in data}
