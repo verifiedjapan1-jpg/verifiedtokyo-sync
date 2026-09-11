@@ -536,14 +536,14 @@
                     }
 
                     grid.innerHTML = featuredProducts.map(product => `
-                        <div class="featured-product-card" onclick="window.location.href='product-detail.html?id=${product.productId}'">
+                        <a href="product-detail.html?id=${product.productId}" class="featured-product-card" style="text-decoration:none; color:inherit; display:block;">
                             <img src="${product.imageUrl}" alt="${product.name}" class="product-image" onerror="this.src='images/placeholder.jpg'">
                             <div class="product-info">
                                 <div class="product-brand">${resolveDisplayBrandIdx(product)}</div>
                                 <h3 class="product-title">${product.name}</h3>
                                 <p class="product-price">${formatPrice(product)}</p>
                             </div>
-                        </div>
+                        </a>
                     `).join('');
 
                     loading.style.display = 'none';

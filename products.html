@@ -656,12 +656,12 @@
                         grid.innerHTML = products.map(product => {
                                 const isSoldOut = product.available === false;
                                 const cardClass = isSoldOut ? 'product-card sold-out' : 'product-card';
-                                const onclick = isSoldOut ? '' : `onclick="window.location.href='product-detail.html?id=${product.productId}'"`;
+                                const hrefAttr = isSoldOut ? '' : `href="product-detail.html?id=${product.productId}"`;
                                 const priceHTML = isSoldOut
                                         ? `<div class="product-price sold-out-price">${formatPrice(product)}</div><div style="font-size:13px;color:#999;font-weight:600;" data-i18n="SOLD OUT">SOLD OUT</div>`
                                         : `<div class="product-price">${formatPrice(product)}</div>`;
                                 return `
-                                    <div class="${cardClass}" ${onclick}>
+                                    <a class="${cardClass}" ${hrefAttr} style="text-decoration:none; color:inherit; display:block;">
                                         ${isSoldOut ? '<div class="sold-out-badge">Sold Out</div>' : ''}
                                         <img src="${product.imageUrl}"
                                              alt="${product.name}"
@@ -672,7 +672,7 @@
                                             <h3 class="product-title">${cleanProductTitle(product)}</h3>
                                             ${priceHTML}
                                         </div>
-                                    </div>
+                                    </a>
                                 `;
                         }).join('');
                 }
