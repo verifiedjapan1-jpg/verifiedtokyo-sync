@@ -867,7 +867,7 @@
     "price_usd_final": 400.0,
     "price_jpy_final": 50000.0,
     "base_usd": 130.0,
-    "available": true,
+    "available": false,
     "url": "https://t-secondhands.jp/ja/products/authentic-burberrys-vintage-balmacaan-coat-beige-with-nova-check-lining-bu1103",
     "imageUrl": "https://cdn.shopify.com/s/files/1/0672/4832/4807/files/IMG_7995-Photoroom.jpg?v=1771853786",
     "images": [
@@ -5114,7 +5114,7 @@
     "price_usd_final": 4500.0,
     "price_jpy_final": 675600.0,
     "base_usd": 4187.0,
-    "available": true,
+    "available": false,
     "url": "https://t-secondhands.jp/ja/products/chanel-caviar-leather-classic-flap-shoulder-bag-iridescent-metallic-purple-iridescent-hardware-ch2291",
     "imageUrl": "https://cdn.shopify.com/s/files/1/0672/4832/4807/files/2026-09-26_12_27_45.png?v=1790398249",
     "images": [
@@ -10675,7 +10675,7 @@
     "price_usd_final": 600.0,
     "price_jpy_final": 80000.0,
     "base_usd": 325.0,
-    "available": true,
+    "available": false,
     "url": "https://t-secondhands.jp/ja/products/coach-patent-leather-pocket-hobo-shoulder-bag-black-silver-hardware-co31",
     "imageUrl": "https://cdn.shopify.com/s/files/1/0672/4832/4807/files/2026-09-24_21_16_59_2.png?v=1790402609",
     "images": [
