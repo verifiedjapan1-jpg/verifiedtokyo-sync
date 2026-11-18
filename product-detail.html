@@ -93,6 +93,48 @@
         .buy-now-btn:disabled { background: #aaa; cursor: not-allowed; transform: none; }
         .buy-now-btn svg { width: 20px; height: 20px; }
 
+        .shipping-consent-box {
+            margin: 0 0 14px;
+            padding: 12px 14px;
+            background: #f9f9f9;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            transition: border-color 0.2s, background 0.2s;
+        }
+        .shipping-consent-box.consent-error {
+            border-color: #dc2626;
+            background: #fef2f2;
+        }
+        .shipping-consent-label {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            cursor: pointer;
+            font-size: 13px;
+            line-height: 1.5;
+            color: #333;
+            user-select: none;
+        }
+        .shipping-consent-label input[type="checkbox"] {
+            margin-top: 3px;
+            width: 17px;
+            height: 17px;
+            flex-shrink: 0;
+            accent-color: #1a1a1a;
+            cursor: pointer;
+        }
+        .shipping-consent-error-msg {
+            display: none;
+            color: #dc2626;
+            font-size: 12px;
+            font-weight: 600;
+            margin-top: 6px;
+            padding-left: 27px;
+        }
+        .shipping-consent-box.consent-error .shipping-consent-error-msg {
+            display: block;
+        }
+
         /* ===== MOBILE OVERRIDES ===== */
         @media (max-width: 768px) {
 
@@ -510,13 +552,31 @@
         }
 
         function buyNow(productName, productId, price, imageUrl) {
+            const consentBox = document.getElementById('shipping-consent-box');
+            const consentCheckbox = document.getElementById('shipping-consent-checkbox');
+            if (consentCheckbox && !consentCheckbox.checked) {
+                if (consentBox) {
+                    consentBox.classList.add('consent-error');
+                    consentBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+                return;
+            }
+            if (consentBox) {
+                consentBox.classList.remove('consent-error');
+            }
             const btn = document.getElementById('buy-now-btn');
             btn.disabled = true;
             btn.textContent = 'Processing...';
             const form = document.createElement('form');
             form.method = 'POST';
             form.action = 'checkout.php';
-            const fields = { product_name: productName, product_id: productId, price: Math.ceil(price), image_url: imageUrl };
+            const fields = {
+                product_name: productName,
+                product_id: productId,
+                price: Math.ceil(price),
+                image_url: imageUrl,
+                shipping_agreed: 'I understand that each item is inspected and prepared after payment, and will ship within 7–10 business days.'
+            };
             Object.entries(fields).forEach(([key, value]) => {
                 const input = document.createElement('input');
                 input.type = 'hidden';
@@ -730,6 +790,14 @@
                             <div class="product-brand">${resolveDisplayBrand(product)}</div>
                             <h1>${cleanProductTitle(product)}</h1>
                             <div class="product-price">${formatPrice(product)}</div>
+
+                            <div id="shipping-consent-box" class="shipping-consent-box">
+                                <label class="shipping-consent-label">
+                                    <input type="checkbox" id="shipping-consent-checkbox" onchange="document.getElementById('shipping-consent-box').classList.remove('consent-error')">
+                                    <span>I understand that each item is inspected and prepared after payment, and will ship within 7–10 business days.</span>
+                                </label>
+                                <div class="shipping-consent-error-msg">Please check this box to confirm the shipping schedule before purchasing.</div>
+                            </div>
 
                             <button id="buy-now-btn" class="buy-now-btn"
                                 onclick="buyNow('${product.name.replace(/'/g, "\\'")}', '${product.productId}', ${priceInt}, '${mainImage}')">
